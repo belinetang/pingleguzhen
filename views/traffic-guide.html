@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_旅游交通'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--banner-->
+<div class="d-banner">
+    <div class="banner-img js_towlevelbanner">
+    </div>
+</div>
+
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<div class="main center overflow">
+    <ul class="trcffic-list js_traffic">
+
+    </ul>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+</body>
+<!--导游类型-->
+<script type="text/template" id="listTemp">
+    {{each(i) list}}
+    {{if i%2 === 0}}
+    <li class="item color${i+1}">
+        <a href="traffic-details.html?channelCode=${channelCode}&code=lyzs&anchor=${titleColor}" title="${name}" class="traffic-list tg-fl">
+            <img src="${channelImage || 'image/zw.jpg'}">
+        </a>
+        <div class="traffic-content">
+            <a class="traffic-title">
+                <span class="daq-icon icon-plan">{{html icon}}</span>
+                <span class="tit-name">${name}</span>
+            </a>
+            <p class="traffic-text" title="${summary}">${tools.ellipsisContent(summary,120) || '暂无数据'} </p>
+            <p class="ticket">${ticketName}</p>
+            <p class="clearfix fw">
+                {{each ticketService}}
+                <a href="${url || 'javascript:;'}" class="fl" target="view_window">
+                    <img src="${img}" alt="">
+                </a>
+                {{/each}}
+            </p>
+            <a href="traffic-details.html?channelCode=${channelCode}&code=lyzs&anchor=${titleColor}" class="see-details">查看详情</a>
+        </div>
+    </li>
+    {{else}}
+    <li class="item color${i+1}">
+        <a href="traffic-details.html?channelCode=lyzs&code=lyzs&anchor=${titleColor}" title="${name}" class="traffic-list tg-fr">
+            <img src="${channelImage || 'image/zw.jpg'}">
+        </a>
+        <div class="traffic-content">
+            <a class="traffic-title">
+                <span class="daq-icon icon-plan">{{html icon}}</span>
+                <span class="tit-name">${name}</span>
+            </a>
+            <p class="traffic-text" title="${summary}">${tools.ellipsisContent(summary,120) || '暂无数据'} </p>
+            <p class="ticket">${ticketName}</p>
+            <p class="clearfix fw">
+                {{each ticketService}}
+                <a href="${url || 'javascript:;'}" class="fl" target="view_window">
+                    <img src="${img}" alt="">
+                </a>
+                {{/each}}
+            </p>
+            <a href="traffic-details.html?channelCode=${channelCode}&code=lyzs&anchor=${titleColor}" class="see-details">查看详情</a>
+        </div>
+    </li>
+    {{/if}}
+    {{/each}}
+</script>
+<script>
+    var traffic_guideJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.getTrafficList();
+        },
+        // 获取交通列表
+        getTrafficList: function () {
+            var _this = this;
+            var $listTmpl = $("#listTemp");
+            var $listWrapper = $('.trcffic-list');
+            $listWrapper.empty();
+            $('.page').empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'traffic/list',
+                data: {
+                    channelCode: 'lyjt'
+                }
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+
+                        var icon = ['&#xe757;','&#xe75a;','&#xe759;','&#xe75b;', '&#xe758;'];
+                        var ticketName = ['机票预订','火车票预订及查询','公路与汽车服务','出租与汽车服务','市区公交服务'];
+                        var ticketService = [
+                            [
+                                {url:"http://www.ctrip.com/?utm_source=baidu&utm_medium=cpc&utm_campaign=baidu81&campaign=CHNbaidu81&adid=index&gclid=&isctrip=T",img:'./image/dd_cli0.jpg',alt:''},
+                                {url:"http://www.qunar.com/?tab=hotel&ex_track=auto_4e0d874a",img:'./image/dd_cli1.jpg',alt:''},
+                                {url:"http://www.elong.com/?semid=ppzqbaidu",img:'./image/dd_cli2.jpg',alt:''}
+                            ],
+                            [
+                                {url:"http://www.ctrip.com/?utm_source=baidu&utm_medium=cpc&utm_campaign=baidu81&campaign=CHNbaidu81&adid=index&gclid=&isctrip=T",img:'./image/dd_cli0.jpg',alt:''},
+                                {url:"http://www.qunar.com/?tab=hotel&ex_track=auto_4e0d874a",img:'./image/dd_cli1.jpg',alt:''},
+                                {url:"http://www.elong.com/?semid=ppzqbaidu",img: './image/dd_cli2.jpg',alt:''}
+                            ],
+                            [
+                                {url:"http://www.ctrip.com/?utm_source=baidu&utm_medium=cpc&utm_campaign=baidu81&campaign=CHNbaidu81&adid=index&gclid=&isctrip=T",img:'./image/dd_cli0.jpg',alt:''},
+                                {url:"http://www.qunar.com/?tab=hotel&ex_track=auto_4e0d874a",img:'./image/dd_cli1.jpg',alt:''},
+                                {url:"http://www.elong.com/?semid=ppzqbaidu",img:'./image/dd_cli2.jpg',alt:''}
+                            ],
+                            [
+                                {url:"http://www.ctrip.com/?utm_source=baidu&utm_medium=cpc&utm_campaign=baidu81&campaign=CHNbaidu81&adid=index&gclid=&isctrip=T",img:'./image/dd_cli0.jpg',alt:''},
+                                {url:"http://www.qunar.com/?tab=hotel&ex_track=auto_4e0d874a",img:'./image/dd_cli1.jpg',alt:''},
+                                {url:"http://www.elong.com/?semid=ppzqbaidu",img:'./image/dd_cli2.jpg',alt:''}
+                            ],
+                            [
+
+                            ]
+                        ];
+                        for (var i = 0;i < res.datas.length;i++){
+                            res.datas[i].titleColor = "color" + (i+1);
+                            res.datas[i].icon = icon[i];
+                            if (i % 2 === 0){
+                                res.datas[i].classNames = 'tg-fl'
+                            }else{
+                                res.datas[i].classNames = 'tg-fr'
+                            }
+                            res.datas[i].ticketName = ticketName[i];
+                            res.datas[i].ticketService =  ticketService[i];
+                        }
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    }
+    $(function () {
+        traffic_guideJs.init()
+    })
+</script>
+</html>

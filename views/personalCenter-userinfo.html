@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content bg-w">
+            <div class="nearorder p18">
+                <div class="person-title user-css clearfix">
+                    <h3 class="fl">个人资料</h3>
+                </div>
+                <div class="userinfo-wrapper clearfix js_info">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="infoTemp">
+    <div class="user-avator">
+        <a href="personalCenter-editAvator.html?html=personalCenter-userinfo.html"><img src="${ data.head || 'image/userinfo-avator-default.png'}" alt=""></a>
+    </div>
+    <div class="userinfo-right clearfix">
+        <div class="left-c">
+            <p class="td td-l">昵称：</p>
+            <p class="td td-l">真实姓名：</p>
+            <p class="td td-l">手机号：</p>
+            <p class="td td-l">电子邮箱：</p>
+            <p class="td td-l">性别：</p>
+            <p class="td td-l">出生日期：</p>
+            <p class="td td-l">所在地：</p>
+            <p class="td td-l">常出发城市：</p>
+            <p class="td td-l">个人简介：</p>
+        </div>
+        <div class="right-c">
+            <div class="td">
+                <input type="text" placeholder="请出入昵称" class="ipt1 nickname" value="${data.nickname}"  maxlength="18">
+            </div>
+            <div class="td">
+                <input type="text" placeholder="请输入真实姓名" class="ipt1 name" value="${data.name}"  maxlength="18">
+            </div>
+            <div class="td">
+                <input type="text" placeholder="请输入手机号" class="ipt1 phone" value="${data.phone}" maxlength="18">
+            </div>
+            <div class="td">
+                <input type="text" placeholder="请输入电子邮箱" class="ipt1 email" value="${data.email}"  maxlength="32">
+            </div>
+            <div class="td sex-box">
+                <span  class="sex-select">
+                    <input type="radio" id="man" {{if data.gender === 0}}checked{{/if}} name="sex" data-sex="0">
+                    <label for="man">男</label>
+                </span>
+                <span for="women" class="sex-select">
+                    <input type="radio" id="women" {{if data.gender === 1}}checked{{/if}} name="sex" data-sex="1">
+                    <label for="women">女</label>
+                </span>
+            </div>
+            <div class="td">
+                <div class="daq-date">
+                    <input class="date" id="start" placeholder="请选择您的生日" lay-key="1" value="${ data.birthday}" readonly="readonly">
+                    <i class="sysfont date-icon"></i>
+                </div>
+            </div>
+            <div class="td">
+                <div class="select-city" id="js_pro"></div>
+            </div>
+            <div class="td">
+                <div class="select-city" id="js_pro1"></div>
+            </div>
+            <div class="td td-intro">
+                <textarea class="user-intro" name="" id="" placeholder="请输入个人简介" maxlength="150">${ data.summary }</textarea>
+            </div>
+        </div>
+    </div>
+    <p class="tip">我们郑重承诺：我们将尊重您的个人隐私，您的个人信息不会被公开。</p>
+    <div class="btn-wrap">
+        <a href="javascript:void(0);" class="save-btn">保存</a>
+    </div>
+</script>
+<script>
+  var infoJs = {
+      params: {
+          token: tools.getCookie('token'),
+          locationcity: '',
+          startcity: '',
+          summary:'',
+          birthday:'',
+          phone:'',
+          nickname:'',
+          name:'',
+          email:'',
+          gender:''
+      },
+      init: function () {
+          this.loadInfo();
+      },
+      eventBind: function () {
+          var _this = this;
+          $('.save-btn').click(function () {
+              _this.updateinfo(_this.params)
+          });
+          laydate.render({
+              elem: '#start',
+              done: function(value){
+                _this.params.birthday = value
+              }
+          });
+          $('.email').blur(function () {
+              var email = $(this).val();
+              if(!tools.validate(email , 'email')){
+                  $(this).val('');
+                  alert('请正确输入电子邮箱');
+              }
+          });
+          $('.phone').blur(function () {
+              var email = $(this).val();
+              if(!tools.validate(email , 'phone')){
+                  $(this).val('');
+                  alert('请正确输入11位手机号码');
+              }
+          })
+
+      },
+      loadInfo: function () {
+          var _this = this,
+              $box = $('.js_info');
+          var loading = tools.loading($box);
+          tools.request({
+              url: 'userInfo/getUserInfo',
+              data: {
+                  token: _this.params.token
+              }
+          },function (result) {
+              loading.clean();
+              if(result.code === 0){
+                  $box.empty();
+                  var data = result.data;
+                  $('#infoTemp').tmpl({data: data}).appendTo($box);
+                  var locationCityJson = result.data.locationCityJson; //所在城市Json
+                  var startCityJson = result.data.startCityJson;  //	出发城市城市Json
+                  var locationCityData = [],startCityData = [];
+                  if(locationCityJson.provRegion!==""){
+                      locationCityData.push({region:locationCityJson.provRegion,name:locationCityJson.provRegionName});
+                      switch (locationCityJson.provRegion){
+                          case '110000':
+                              locationCityData.push({region:'110100',name:'北京市直辖市'});
+                              break;
+                          case '120000':
+                              locationCityData.push({region:'120100',name:'天津市直辖市'});
+                              break;
+                          case '310000':
+                              locationCityData.push({region:'310100',name:'上海市直辖市'});
+                              break;
+                          case '500000':
+                              locationCityData.push({region:'500100',name:'重庆市直辖市'});
+                              break;
+                      }
+                  }
+                  if(locationCityJson.cityRegion!==""){
+                      locationCityData.push({region:locationCityJson.cityRegion,name:locationCityJson.cityRegionName});
+                  }
+                  if(locationCityJson.distRegion!==""){
+                      locationCityData.push({region:locationCityJson.distRegion,name:locationCityJson.distRegionName});
+                  }
+                  if(startCityJson.provRegion!==""){
+                      startCityData.push({region:startCityJson.provRegion,name:startCityJson.provRegionName});
+                      switch (startCityJson.provRegion){
+                          case '110000':
+                              startCityData.push({region:'110100',name:'北京市直辖市'});
+                              break;
+                          case '120000':
+                              startCityData.push({region:'120100',name:'天津市直辖市'});
+                              break;
+                          case '310000':
+                              startCityData.push({region:'310100',name:'上海市直辖市'});
+                              break;
+                          case '500000':
+                              startCityData.push({region:'500100',name:'重庆市直辖市'});
+                              break;
+                      }
+                  }
+                  if(startCityJson.cityRegion!==""){
+                      startCityData.push({region:startCityJson.cityRegion,name:startCityJson.cityRegionName});
+                  }
+                  if(startCityJson.distRegion!==""){
+                      startCityData.push({region:startCityJson.distRegion,name:startCityJson.distRegionName});
+                  }
+                  _this.loadAdress(locationCityData,startCityData);
+                  _this.eventBind();
+              }else{
+                  $box.html(tools.TRY_REFRESH)
+              }
+          })
+      },
+      loadAdress: function (locationcity,startcity) {
+          var _this = this;
+          $('#js_pro').daqCitySelect({
+              defaults: locationcity,
+              className: 'select-city',
+              callback: function (data) {
+                  _this.params.locationcity = data[data.length-1].value;
+                  switch (_this.params.locationcity){
+                      case '110100':
+                          _this.params.locationcity = '110000';
+                          break;
+                      case '120100':
+                          _this.params.locationcity = '120000';
+                          break;
+                      case '310100':
+                          _this.params.locationcity = '310000';
+                          break;
+                      case '500100':
+                          _this.params.locationcity = '500000';
+                          break;
+                  }
+              }
+          });
+          $('#js_pro1').daqCitySelect({
+              defaults: startcity,
+              className: 'select-city',
+              callback: function (data) {
+                  _this.params.startcity = data[data.length-1].value;
+                  switch (_this.params.locationcity){
+                      case '110100':
+                          _this.params.locationcity = '110000';
+                          break;
+                      case '120100':
+                          _this.params.locationcity = '120000';
+                          break;
+                      case '310100':
+                          _this.params.locationcity = '310000';
+                          break;
+                      case '500100':
+                          _this.params.locationcity = '500000';
+                          break;
+                  }
+              }
+          });
+      },
+      updateinfo:function (option) {
+          option.summary = $('.user-intro').val();
+          option.phone = $('.phone').val();
+          option.nickname = $('.nickname').val();
+          option.email = $('.email').val();
+          option.name = $('.name').val();
+          option.gender = $("input:radio:checked").attr('data-sex');
+          //修改用户信息
+          tools.request({
+              url:'userInfo/updateUserInfo',
+              data:{
+                  token: option.token,
+                  locationcity: option.locationcity || '',
+                  startcity: option.startcity || '',
+                  summary: option.summary || '',
+                  birthday: option.birthday || '',
+                  phone: option.phone || '',
+                  nickname: option.nickname || '',
+                  name: option.name || '',
+                  email: option.email || '',
+                  gender: option.gender || ''
+              }
+          },function (result) {
+              if(result.code === 0){
+                  alert("恭喜，修改成功！");
+                  window.location.reload();
+              }else{
+                  alert(result.message)
+              }
+          })
+      }
+  }
+  $(function () {
+      infoJs.init();
+  })
+</script>
+</body>
+</html>

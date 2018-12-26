@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_购物车填写订单'})%>
+    <!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-21 -->
+</head>
+<body>
+
+<div class="c-f-o">
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <div class="cart-header">
+        <div class="cart-header-mid">
+            <div class="center clearfix">
+                <a href="index.html" class="logo">
+                    <img src="./image/logo.png" alt="河北移动全域旅游平台">
+                </a>
+                <div class="steps clearfix">
+                    <div class="step sp1 active">
+                        <span>确认订单</span>
+                        <i></i>
+                    </div>
+                    <div class="step sp2">
+                        <span>付款到商城</span>
+                        <i></i>
+                    </div>
+                    <div class="step sp3">
+                        <span>完成</span>
+                        <i></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--收货地址-->
+    <div class="receiver">
+        <div class="center">
+            <h3 class="tit">确认收货地址</h3>
+            <div class="receiver-wrapper">
+                <div class="receiver-container js_receiver"></div>
+            </div>
+            <h3 class="tit">确认订单信息</h3>
+            <div class="js_order"></div>
+        </div>
+    </div>
+</div>
+<!--添加收货人地址-->
+<div class="js_addReceiver" style="display: none;">
+    <div class="cart-add-recevier-wrapper">
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;收货人姓名：</div>
+            <div class="r">
+                <input type="text" class="ipt js_name">
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;联系手机：</div>
+            <div class="r">
+                <input type="text" class="ipt js_tel">
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;所在区域：</div>
+            <div class="r">
+                <div class="select-city"></div>
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;详细地址：</div>
+            <div class="r">
+                <textarea name="" id="" cols="30" rows="3" class="js_addr"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+
+<script type="text/template" id="receiverTmpl">
+    <ul class="receiver-list">
+        {{each(i,e) list}}
+        {{if e.isDefault}}
+        <li class="receiver-card active" data-areaid="${e.areaId}">
+            <div class="redict">寄送至</div>
+            <div class="address-box">
+                <label for="addresslabel${i}" class="js_addr_radio {{if i==0}}active{{/if}}">
+                    <input type="radio" name="address" id="addresslabel${i}">
+                    <i class="radio-img"></i>
+                    <span title="${e.areaName}${address}">${e.areaName} ${tools.ellipsisContent(address,40)}（</span>
+                    <span>${e.consignee}</span>
+                    <span>收）</span>
+                    <span>${e.phone}</span>
+                </label>
+                <em class="default">默认地址</em>
+                <a href="javascript:void(0);" class="set-default js_set_default">设置为默认地址</a>
+                <a class="modify js_modify_addr" href="javascript:void(0);" data-idx="${i}" data-id="${e.id}">修改地址</a>
+            </div>
+        </li>
+        {{else}}
+        <li class="receiver-card {{if i>=3}}hide{{/if}}">
+            <div class="redict">寄送至</div>
+            <div class="address-box">
+                <label for="addresslabel${i}" class="js_addr_radio" data-idx="${i}">
+                    <input type="radio" name="address" id="addresslabel${i}">
+                    <i class="radio-img"></i>
+                    <span title="${e.areaName}${address}">${areaName} ${tools.ellipsisContent(address,40)}（</span>
+                    <span>${e.consignee}</span>
+                    <span>收）</span>
+                    <span>${e.phone}</span>
+                </label>
+                <em class="default">默认地址</em>
+                <a href="javascript:void(0);" class="set-default js_set_default" data-idx="${i}">设置为默认地址</a>
+                <a class="modify" href="javascript:void(0);">修改地址</a>
+            </div>
+        </li>
+        {{/if}}
+        {{/each}}
+    </ul>
+    <div class="btn-bar">
+        <a href="javascript:void(0);" class="more-addr-btn js_more_btn {{if list.length < 3}}hide{{/if}}">使用其他地址</a>
+        <a href="javascript:void(0);" class="add-receiver js_add_1 js_add_btn {{if list.length >= 3}}hide{{/if}}">使用新地址</a>
+    </div>
+</script>
+<script type="text/template" id="noReceiverTmpl">
+<div class="no-receiver">
+    <img src="../image/cart-fill-order-icon1.png" alt="暂无收获地址">
+    <div class="txt">
+        <p>您还没有添加常用收货地址哦~</p>
+        <a href="javascript:void(0);" class="add-receiver js_add_1">新增地址</a>
+    </div>
+</div>
+</script>
+<script type="text/template" id="popReceiverTmpl">
+    <div class="cart-add-recevier-wrapper">
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;收货人姓名：</div>
+            <div class="r">
+                <input type="text" class="ipt js_name">
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;联系手机：</div>
+            <div class="r">
+                <input type="text" class="ipt js_tel">
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;所在区域：</div>
+            <div class="r">
+                <div class="select-city"></div>
+            </div>
+        </div>
+        <div class="tr clearfix">
+            <div class="l"><i>*</i>&nbsp;详细地址：</div>
+            <div class="r">
+                <textarea cols="30" rows="3" class="js_addr"></textarea>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="orderTmpl">
+    <!--店铺、商品区域-->
+    <div class="order-info">
+        <div class="th clearfix">
+            <div class="td td-chk">&nbsp;</div>
+            <div class="td td-item">商品信息</div>
+            <div class="td td-info">&nbsp;</div>
+            <div class="td td-price">单价</div>
+            <div class="td td-sum">数量</div>
+            <div class="td td-yh">&nbsp;</div>
+            <div class="td td-amout">小计</div>
+            <div class="td td-sty">配送方式</div>
+        </div>
+        <ul class="order-item-tab">
+            <li class="tr clearfix">
+                <div class="td td-chk">&nbsp;
+                </div>
+                <div class="td td-item">
+                    <div class="item-card clearfix">
+                        <a href="javascript:void(0);" class="img">
+                            <img src="${data.cover || './image/zw.jpg'}" alt="${data.name}">
+                        </a>
+                        <a href="specialty-detail.html?id=${data.pid}" class="item-tit" title="${data.name}">${tools.ellipsisContent(data.name,24)}</a>
+                    </div>
+                </div>
+                <div class="td td-info">
+                    <div class="item-info">${data.specific}：${data.skuTitle}</div>
+                </div>
+                <div class="td td-price">
+                    <p class="item-price">&yen;${data.price}</p>
+                </div>
+                <div class="td td-sum">
+                    <p class="item-sum">${data.quantity}</p>
+                </div>
+                <div class="td td-yh">
+                    <p class="item-yh">&nbsp;</p>
+                </div>
+                <div class="td td-amout">
+                    <p class="item-amout">&yen;${tools.math(data.price, data.quantity).mul}</p>
+                </div>
+                <div class="td td-sty">
+                    <p class="item-sty">快递</p>
+                </div>
+            </li>
+        </ul>
+        <div class="order-ext clearfix">
+            <div class="ext-l">
+                <span>给卖家留言：</span>
+                <input type="text" placeholder="选填" class="js_memo">
+            </div>
+            <div class="ext-r clearfix">
+                <div class="ext-r-3">
+                    <!--<p class="ext-r-p">-￥10.00</p>-->
+                    <p class="ext-r-p">&yen;<i class="js_deliverFee">0</i></p>
+                    <p class="ext-r-p color6">&yen;<i class="js_totalAmount">0</i></p>
+                </div>
+                <div class="ext-r-2">
+                    <!--<div class="ext-r-p">-->
+                        <!--<div class="select">-->
+                            <!--<p class="txt">满100减10</p>-->
+                            <!--<i></i>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <p class="ext-r-p">运费：快递</p>
+                    <p class="ext-r-p">合计（含运费）:</p>
+                </div>
+                <div class="ext-r-1">
+                    <!--<p class="ext-r-p">使用优惠券：</p>-->
+                    <p class="ext-r-p"></p>
+                    <p class="ext-r-p"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--支付区域-->
+    <div class="pay-con clearfix">
+        <div class="pay-btn-wrapper">
+            <div class="money-con">
+                <span>实付金额：</span>
+                <span class="orange">&yen;<i class="js_totalAmount">0</i></span>
+            </div>
+            <div class="div-btn-container clearfix">
+                <a href="specialty-list.html?channelCode=tcgw&code=tcgw" class="go-cart-btn">返回特产列表</a>
+                <a href="javascript:void (0);" class="submit-btn js_submit">提交订单</a>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+    var cart = {
+        init: function () {
+            var _this = this;
+            this.sku_idx = tools.getUrlParams('sku_idx');
+            this.quantity = tools.getUrlParams('quantity');
+            this.areaId = '';
+            this.citySelects = [];
+            this.editReceiverData = {};
+            this.receiverListData = [];
+            this.productsDatas = [];
+            this.pid = tools.getUrlParams('id');
+            this.receiverIsLoad = false;
+            this.productsIsLoad = false;
+            this.loadProducts();
+            this.getReceiver();
+            // 没有收货地址时的新增收货地址
+            $(document).on('click', '.js_add_1', function () {
+                _this.addReciverPop('add');
+            });
+            // 编辑收货地址
+            $(document).on('click', '.js_modify_addr', function(){
+                var id = $(this).attr('data-id');
+                _this.getPreEdit(id);
+            });
+            // 选中收获地址
+            $(document).on('click', '.js_addr_radio', function (e) {
+                 e.stopPropagation();
+                if($(this).is('.active')){
+                    return false;
+                }
+                var flag = confirm('更换地址后，您需要重新确认订单信息');
+                if(flag) {
+                    var idx = $(this).attr('data-idx');
+                    _this.setDefaultReceiver(idx, 'change');
+                }
+                return false;
+            });
+            // 设置默认地址
+            $(document).on('click', '.js_set_default', function(){
+                var idx = $(this).attr('data-idx');
+                _this.setDefaultReceiver(idx);
+            });
+            // 使用其他地址
+            $(document).on('click', '.js_more_btn', function(){
+                $(this).addClass('hide');
+                $('.receiver-card').removeClass('hide');
+                $('.js_add_btn').removeClass('hide');
+            });
+            // 点击保存订单
+            $(document).on('click', '.js_submit', function(){
+                if($(this).is('.disabled')){
+                    return false;
+                }
+                _this.saveOrder()
+            });
+        },
+        loadProducts: function(){
+            var _this = this;
+            $('.js_order').renderHtml({
+                url: 'ds/qiandnApi/specialty/view',
+                type: true,
+                loading:true,
+                params: {
+                    pid: this.pid
+                },
+                template: $('#orderTmpl'),
+                callback: function(data){
+                    data = data.products;
+                    if(data.productImages && data.productImages.length > 0) {
+                        data.cover = data.productImages[0].thumbnail;
+                    }
+                    data.skuTitle = data.sku[_this.sku_idx].title;
+                    data.quantity = _this.quantity;
+                    data.pid = _this.pid;
+                    data.price = data.sku[_this.sku_idx].price;
+                    _this.price = data.price;
+                    _this.specification = data.sku[_this.sku_idx].specification;
+
+                    return data;
+                },
+                complete: function(res) {
+                    _this.productsIsLoad = true;
+                }
+            })
+        },
+        // 获取收货人地址
+        getReceiver: function(){
+            var _this = this;
+            $('.js_receiver').renderHtml({
+                url: 'ds/qiandnApi/specialty/receiver',
+                type: true,
+                params: {
+                    token: tools.getCookie('token')
+                },
+                size:20,
+                loading: true,
+                template: $('#receiverTmpl'),
+                noDataTmpl: $('#noReceiverTmpl'),
+                callback: function(data){
+                    return data;
+                },
+                complete: function(res){
+                    _this.receiverIsLoad = true;
+                    _this.receiverListData = res.datas;
+                    var timer = setInterval(function(){
+                        if(_this.productsIsLoad && _this.receiverIsLoad) {
+                            clearInterval(timer);
+                            if(res.datas.length === 0) {
+                                $('.js_submit').addClass('disabled');
+                            } else {
+                                $('.js_submit').removeClass('disabled');
+                            }
+                        }
+                    },200);
+                    _this.getMoney();
+                }
+            })
+        },
+        // 添加联系人弹框
+        addReciverPop: function(type, data){
+            var addHtml = $('#popReceiverTmpl').tmpl({data: data});
+            var title = {
+                add: '创建地址',
+                edit: '修改地址'
+            }[type];
+            var btnName = {
+                add: '创建',
+                edit: '修改'
+            }[type];
+            var _this = this;
+            $.dialog({
+                title: title,
+                // message: $('.js_addReceiver').html(),
+                message: addHtml,
+                width: 794,
+                height: 550,
+                mask: true,
+                footer: true,
+                ready: function(){
+                    $('.ui-dialog-wrap .select-city').daqCityPickerCascade({
+                        className: '.select-city',
+                        callback: function(data){
+                            _this.citySelects = data;
+                        }
+                    });
+                    if(type === 'edit') {
+                        var $popWrapper = $('.ui-dialog-wrap');
+                        // 姓名
+                        $popWrapper.find('.js_name').val(data.consignee);
+                        // 电话
+                        $popWrapper.find('.js_tel').val(data.phone);
+                        // 地址
+                        $popWrapper.find('.js_addr').val(data.address);
+                        // 三级联动区域
+                        setTimeout(function(){
+                            var area = data.areaInfos;
+                            var address = area.firstJson.areaName;
+                            address = area.secondJson ? address + '/' + area.secondJson.areaName : address;
+                            address = area.lastJson ? address + '/' + area.lastJson.areaName : address;
+                            $popWrapper.find('.select-city .text').html(address);
+                        },200);
+                    }
+                },
+                buttons: [
+                    {
+                        text : btnName,
+                        className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                        callback:function(){
+                            if(type === 'add') {
+                                _this.addReciver();
+                            } else {
+                                _this.editReciver();
+                            }
+                            return false;
+                        }
+                    },
+                    {
+                        text :'取消',
+                        className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                        callback: function(){}
+                    }
+                ]
+
+            });
+        },
+        // 添加地址
+        addReciver: function(){
+            var _this = this;
+            var $popWrapper = $('.ui-dialog-wrap');
+            var name = $.trim($popWrapper.find('.js_name').val());
+            var tel = $.trim($popWrapper.find('.js_tel').val());
+            var addr = $.trim($popWrapper.find('.js_addr').val());
+
+            if(!tools.regMatch(name, 'name')){
+                $.toast({
+                    text: '收货人姓名长度为2~16位',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(!tools.regMatch(tel, 'phone')){
+                $.toast({
+                    text: '请输入正确的手机号',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(!addr.length){
+                $.toast({
+                    text: '请输入正确的详细地址',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(_this.citySelects.length === 0) {
+                $.toast({
+                    text: '请选择所在区域',
+                    delay: 1400
+                });
+                return false;
+            }
+            var lastRegion = _this.citySelects[_this.citySelects.length-1].value;
+            _this.getAreaId(lastRegion, function(areaId){
+                var params = {
+                    url: 'ds/qiandnApi/specialty/addReceiver',
+                    type: true,
+                    data: {
+                        token: tools.getCookie('token'),
+                        address: addr,
+                        consignee: name,
+                        isDefault: true,
+                        areaId: areaId,
+                        phone: tel
+                    }
+                };
+                tools.request(params, function(res){
+                    if(res.code === 0) {
+                        $.toast({
+                            text: '创建地址成功'
+                        });
+                        _this.getReceiver();
+                        $('.ui-dialog-mask').trigger('click');
+                    } else if(res.code === 1) {
+                        $.toast({
+                            text: res.message
+                        })
+                    } else {
+                        tools.doLogin();
+                    }
+                });
+            });
+        },
+        // 通过region获取areaid
+        getAreaId: function (region, callback) {
+            var params = {
+                url: 'ds/qiandnApi/common/areaByCitys',
+                type: true,
+                data: {
+                    code: region
+                }
+            };
+            tools.request(params, function(res){
+                if(res.code === 0) {
+                    callback && callback(res.data.area[0].code);
+                } else {
+                    $.toast({
+                        text: res.message
+                    });
+                }
+            });
+        },
+        // 获取需要编辑的联系人信息
+        getPreEdit: function(id){
+            var _this = this;
+            var params = {
+                url: 'ds/qiandnApi/specialty/preEdit',
+                type: true,
+                data: {
+                    id: id,
+                    token: tools.getCookie('token')
+                }
+            };
+            tools.request(params, function (res) {
+                if(res.code === 0) {
+                    var data = res.data.receiver;
+                    _this.editReceiverData = data;
+                    _this.addReciverPop('edit', data);
+                } else {
+                    $.toast({
+                        text: res.message
+                    });
+                }
+            })
+        },
+        // 更新收货地址
+        editReciver: function(){
+            var _this = this;
+            var $popWrapper = $('.ui-dialog-wrap');
+            var name = $.trim($popWrapper.find('.js_name').val());
+            var tel = $.trim($popWrapper.find('.js_tel').val());
+            var addr = $.trim($popWrapper.find('.js_addr').val());
+
+            if(!tools.regMatch(name, 'name')){
+                $.toast({
+                    text: '收货人姓名长度为2~16位',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(!tools.regMatch(tel, 'phone')){
+                $.toast({
+                    text: '请输入正确的手机号',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(!addr.length){
+                $.toast({
+                    text: '请输入正确的详细地址',
+                    delay: 1400
+                });
+                return false;
+            }
+            if(_this.citySelects.length === 0 && $popWrapper.find('.select-city .text').html() === '请选择') {
+                $.toast({
+                    text: '请选择所在区域',
+                    delay: 1400
+                });
+                return false;
+            }
+            var lastRegion = '';
+            _this.editReceiverData.address = addr;
+            _this.editReceiverData.consignee = name;
+            _this.editReceiverData.phone = tel;
+            if(_this.citySelects.length !== 0) {
+                lastRegion = _this.citySelects[_this.citySelects.length-1].value;
+                _this.getAreaId(lastRegion, function(areaId){
+                    _this.saveEdit(areaId)
+                });
+            } else {
+                if(_this.editReceiverData.areaInfos.lastJson) {
+                    _this.saveEdit(_this.editReceiverData.areaInfos.lastJson.areaId);
+                } else if (_this.editReceiverData.areaInfos.secondJson) {
+                    _this.saveEdit(_this.editReceiverData.areaInfos.secondJson.areaId);
+                } else {
+                    _this.saveEdit(_this.editReceiverData.areaInfos.firstJson.areaId);
+                }
+            }
+        },
+        // 收货地址进行保存操作
+        saveEdit: function(areaId, type){
+            var _this = this;
+            var toastText = '修改地址成功';
+            if(type === 'setDefault') {
+                toastText = '设置默认地址成功'
+            }
+            if(type === 'change'){
+                toastText = '更换地址成功'
+            }
+            var params = {
+                url: 'ds/qiandnApi/specialty/editReceiver',
+                type: true,
+                data: {
+                    id: _this.editReceiverData.id,
+                    token: tools.getCookie('token'),
+                    address: _this.editReceiverData.address,
+                    consignee: _this.editReceiverData.consignee,
+                    isDefault: true,
+                    areaId: areaId,
+                    phone: _this.editReceiverData.phone
+                }
+            };
+            tools.request(params, function(res){
+                if(res.code === 0) {
+                    $.toast({
+                        text: toastText,
+                        delay: 1500
+                    });
+                    $('.ui-dialog-mask').trigger('click');
+                    _this.getReceiver();
+                    _this.editReceiverData = {};
+                } else if(res.code === 1) {
+                    $.toast({
+                        text: res.message
+                    })
+                } else {
+                    tools.doLogin();
+                }
+            });
+        },
+        // 设置第一条以后的收货地址为默认地址
+        setDefaultReceiver: function(idx, type){
+            var _this = this;
+            var data = _this.receiverListData[idx];
+            _this.editReceiverData.id = data.id;
+            _this.editReceiverData.address = data.address;
+            _this.editReceiverData.consignee = data.consignee;
+            _this.editReceiverData.phone = data.phone;
+            type = type || 'setDefault';
+            _this.saveEdit(data.areaId, type);
+        },
+        // 计算总价
+        getMoney: function(){
+            var _this = this;
+            getM();
+            // 动态监测收货地址和产品列表是否加载完成
+            function getM () {
+                if(_this.receiverIsLoad && _this.productsIsLoad) {
+                    getM2();
+                } else {
+                    setTimeout(getM, 100);
+                }
+            }
+            // 收货地址和产品列表加载完成后执行
+            function getM2() {
+                var $activeCard = $('.receiver-card.active');
+                var flag = ($activeCard.length > 0);
+                if(flag){
+                    var areaId = $activeCard.attr('data-areaid');
+                    _this.areaId = areaId;
+                }
+                var params = {
+                    url: 'ds/qiandnApi/specialty/getMoney',
+                    type: true,
+                    data: {
+                        specification: _this.specification,
+                        pid: _this.pid,
+                        areaId: areaId,
+                        quantity: _this.quantity,
+                        token: tools.getCookie('token')
+                    }
+                };
+                _this.getMoneyRequest(params, flag);
+            }
+        },
+        // 获取总价请求
+        getMoneyRequest: function(params, flag){
+            var _this = this;
+            tools.request(params, function(res){
+                if(res.code === 0) {
+                    if(flag) {
+                        $('.js_totalAmount').html(res.data.amount);
+                        $('.js_deliverFee').html(res.data.freight);
+                    } else {
+                        $('.js_totalAmount').html(res.data.amount);
+                    }
+                    _this.totalAmount = res.data.amount;
+                } else if (res.code === 1) {
+                    $.toast({
+                        text: res.message
+                    });
+                } else {
+                    tools.doLogin();
+                }
+            });
+        },
+        // 保存订单
+        saveOrder: function(){
+            var _this = this;
+            var orderData = {
+                guideNo: '',
+                guideName: '',
+                guideIdCard: '',
+                contactPinyin: '',
+                memo: $('.js_memo').val(),
+                price: _this.price,
+                areaId: _this.areaId,
+                contactPhone: _this.receiverListData[0].phone,
+                specification: _this.specification,
+                contactAddress: _this.receiverListData[0].areaName + _this.receiverListData[0].address,
+                quantity: _this.quantity,
+                contactName: _this.receiverListData[0].consignee,
+                totalAmount: _this.totalAmount
+            };
+            var params = {
+                url: 'ds/qiandnApi/specialty/save-specialty-order',
+                type: true,
+                data: {
+                    token: tools.getCookie('token'),
+                    orderData: JSON.stringify(orderData),
+                    pid: _this.pid
+                }
+            };
+            tools.request(params, function(res){
+                if(res.code === 0) {
+                    window.location.replace('specialty-pay.html?id=' + res.data.orderId)
+                } else if(res.code ===2) {
+                    tools.doLogin();
+                } else {
+                    $.toast({
+                        text: res.message
+                    })
+                }
+            });
+        }
+    };
+    $(function(){
+        cart.init();
+    });
+</script>
+</body>
+</html>

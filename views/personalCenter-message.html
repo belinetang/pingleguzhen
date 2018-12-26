@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content min680 bg-w">
+            <div class="nearorder  p18">
+                <div class="person-title clearfix">
+                    <h3 class="fl">
+                        消息中心
+                    </h3>
+                    <span class="fr">
+                        <!--<a href="javascript:;" class="all-btn"><i class="icon-all"></i>全选</a>-->
+                        <a href="javascript:;" class="js_allread">全设为已读</a>
+                    </span>
+                </div>
+                <div class="message-box">
+                    <ul class="js_list">
+
+                    </ul>
+                </div>
+            </div>
+            <div class="page">
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="listTmp">
+    {{each list}}
+    <li>
+        <p class="clearfix title"><a class="fl js_sey" href="javascript:;" data-id="${id}">系统消息 [<i class="status {{if status === 0}}st{{/if}}">{{if status === 0}}已读{{else}}未读{{/if}}</i>]</a><span class="fr">${ createtime }</span></p>
+        <p class="message-content">
+            {{html content}}
+            <i class="up-icon"></i>
+        </p>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var message = {
+        init: function () {
+            this.parmas = {
+                page: 1,
+                limitPage: 9,
+                token: tools.getCookie('token')
+            };
+            this.loadList();
+
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.js_sey').click(function () {
+                var my = $(this),
+                    id = my.attr("data-id");
+                if(!my.hasClass('st')){
+                    _this.readMessageById(id,my)
+                }
+                my.parent().parent().addClass("curr").siblings('li').removeClass('curr');
+            });
+            $('.js_allread').click(function () {
+                $.dialog({
+                    title: '温馨提示',
+                    message: '<p style="font-size:14px;color:#666;">确认要设置全部消息为已读吗？</p>',
+                    width: 300,
+                    height: 200,
+                    mask: true,
+                    footer: true,
+                    buttons: [
+                        {
+                            text :'确定',
+                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                            callback:function(){
+                                _this.readMessage();
+                            }
+                        },
+                        {
+                            text :'取消',
+                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                            callback: function(){}
+                        }
+                    ]
+
+                });
+            })
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_list'),
+                loading = tools.loading($box);
+            tools.request({
+                url: 'userInfo/getAllMessage',
+                data: _this.parmas
+            },function (result) {
+                loading.clean();
+                $box.empty();
+                if(result.code === 0){
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#listTmp').tmpl({list: list}).appendTo($box);
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.parmas.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        _this.eventBind();
+                    }else{
+                        $box.html(tools.NO_DATA1);
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH1);
+                }
+            })
+        },
+        //标记已读
+        readMessageById: function (id,elem) {
+            tools.request({
+                url: 'userInfo/readMessageById',
+                data: {
+                    token: tools.getCookie('token'),
+                    id: id
+                }
+            },function (result) {
+                if(result.code === 0){
+                    elem.find("i").addClass('st').html("已读");
+                }
+            })
+        },
+        readMessage: function () {
+            var _this = this;
+            tools.request({
+                url: 'userInfo/readMessage',
+                data: {
+                    token: tools.getCookie('token')
+                }
+            },function (result) {
+                if(result.code === 0){
+                    _this.loadList();
+                }
+            })
+        }
+    }
+    $(function () {
+        message.init();
+    })
+</script>
+</body>
+</html>

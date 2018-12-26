@@ -1,0 +1,95 @@
+<!--页尾-->
+<div class="footer" >
+    <div class="foot">
+        <div class="footnav-list">
+            <div class="center">
+                <ul class="foot-nav clearfix" id="footNav">
+                </ul>
+            </div>
+        </div>
+        <div class="copyrightbox">
+            <div class="center">
+                <div class="copyright">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/template" id="copyright">
+    <p class="foot-dis">
+        ${data.more.copyrightInfo}
+    </p>
+    <p class="foot-dis">
+        <a href="http://www.daqsoft.com/" target="_blank">${data.more.copyright}</a>
+    </p>
+</script>
+<!--页尾栏目列表-->
+<script type="text/template" id="navListTmpl2">
+    {{each datas}}
+    <li>
+        <a href="${url}">${name}</a>
+    </li>
+    {{/each}}
+</script>
+
+<script>
+    var link = {
+        init:function () {
+            this.copyright();
+            this.loadNavList2();
+        },
+        //获取 页尾信息
+        copyright:function () {
+            var $listTmpl = $("#copyright");
+            var $listWrapper = $('.copyright');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: '/siteConfig/getInfo'
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    $listTmpl.tmpl({data: res.data}).appendTo($listWrapper);
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            });
+        },
+        // 读取栏目列表
+        loadNavList2: function () {
+
+            var _this = this;
+            var $listTmpl = $("#navListTmpl2");
+            var $listWrapper = $('.foot-nav');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'siteChannel/list',
+                data:{
+                    page:1,
+                    limitPage:10,
+                    channelCode:'wzlm'
+                }
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        var datas = res.datas
+                        $listTmpl.tmpl({datas: datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    };
+    $(function () {
+       link.init();
+    });
+</script>
+

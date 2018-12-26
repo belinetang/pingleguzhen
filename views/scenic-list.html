@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_景区列表'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<div class="scenicp">
+</div>
+
+
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+<!--景区门票列表-->
+<script type="text/template" id="sceneryTemp">
+    <!--景区门票介绍-->
+    <div class="mp-title">
+        <div class="imgbox">
+            <img src="${list.logo}" alt="${list.sceneryName}">
+        </div>
+        <div class="fontbox">
+            <p class="title">${list.sceneryName}<i>AAAA</i></p>
+            <p class="address"><span class="font">景点地址：</span>${list.address || '暂无数据'}</p>
+            <p class="summary"><span class="font">景点介绍：</span>${tools.ellipsisContent(list.summary, 120) || '暂无数据'}<span class="moresummary">查看详情</span></p>
+        </div>
+    </div>
+    <!--景区列表-->
+    <ul class="scenicp-list center">
+        <li class="tr-header">
+            <div class="td1">门票类型</div>
+            <div class="td2">市场价</div>
+            <div class="td3">今日价格</div>
+            <div class="td4"></div>
+        </li>
+        {{each list.products}}
+        <li class="tr-list">
+            <div class="td1">
+                <p class="mp-type" title="${productType}">${tools.ellipsisContent(productType, 16)}</p>
+                <p class="font" title="${productName}">${tools.ellipsisContent(productName,24)}</p>
+            </div>
+            <div class="td2">￥${marketPrice}</div>
+            <div class="td3"><span>&yen;</span>${sellPrice}</div>
+            <div class="td4">
+                <a href="scenic-detail2.html?channelCode=jqmp&code=jqmp&id=${productId}">立即预订</a>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+</script>
+<script>
+    var indexJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.getSceneryList(); // 获取门票列表
+        },
+        // 获取门票列表
+        getSceneryList: function () {
+            var _this = this;
+            var $listTmpl = $("#sceneryTemp");
+            var $listWrapper = $('.scenicp');
+            $listWrapper.empty();
+            var params = {
+                url: 'sceneryProduct/list',
+                data: {}
+            };
+            tools.request(params, function(res){
+                console.log(res)
+                // res.data.summary = '的萨达是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,是打撒大声地,是打的萨达是打反而问问,的萨达是打撒大声地,是打的萨达是打反而问问,'
+                $listTmpl.tmpl({list: res.data}).appendTo($listWrapper);
+                _this.seeFullSummary(res);
+            })
+        },
+        //查看景区简介全部
+        seeFullSummary: function (res) {
+            var _this = this;
+            $('.moresummary').click(function () {
+                $.dialog({
+                    title: res.data.sceneryName,
+                    message: res.data.summary,
+                    width: 700,
+                    height: 300,
+                    mask: true,
+                    footer: false
+                });
+            })
+        },
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_特产购物列表'})%>
+    <!-- 页面设计：陈建波| 页面重构：汤继轩 | 前端开发：何小贵 | 创建：2018-8-09 -->
+</head>
+<body>
+<!--页尾-->
+<%-include("common/header.html")%>
+<%-include("common/nav.html")%>
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<!--筛选模块-->
+<div class="goods-screen-box">
+    <!--关键词 筛选-->
+    <ul class="time-screening center">
+        <li class="keyword">
+            关键词：
+            <input type="text" placeholder="输入关键词" class="js_keyword">
+        </li>
+        <li>
+            <i class="hotel-search js_search">搜索</i>
+        </li>
+    </ul>
+    <!--条件筛选-->
+    <div class="selection-conditions center clearfix">
+        <!--商品类别-->
+        <div class="js_tags"></div>
+        <!--价格选择-->
+        <div class="price-box clearfix">
+            <label>价格选择</label>
+            <ul class="price clearfix">
+                <li><i class="js_price curr" data-min="" data-max="">全部</i></li>
+                <li><i class="js_price" data-min="0" data-max="100">&yen;0-100</i></li>
+                <li><i class="js_price" data-min="101" data-max="300">&yen;101-300</i></li>
+                <li><i class="js_price" data-min="301" data-max="99999">&yen;300以上</i></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--排序-->
+<div class="goods-sort center">
+    <span class="curr js_sort" data-type="all">综合排序<i class="daq-icon">&#xe649;</i></span>
+    <span class="js_sort" data-type="sale">销量<i class="daq-icon">&#xe649;</i></span>
+    <span class="js_sort" data-type="price">价格<i class="daq-icon">&#xe649;</i></span>
+</div>
+<!--酒店列表 + 分页-->
+<div class="js_specailty_list"></div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="tagsTmpl">
+    <div class="region-box clearfix">
+        <label>商品类别</label>
+        <ul class="region clearfix">
+            <li><i class="js_tag curr" data-id="">全部</i></li>
+            {{each list}}
+            <li><i class="js_tag" data-id="${id}">${name}</i></li>
+            {{/each}}
+        </ul>
+    </div>
+</script>
+<script type="text/template" id="listTmpl">
+    <!--酒店列表 + 分页 -->
+    <ul class="goods-list clearfix">
+        {{each list}}
+        <li>
+            <div class="imgbox">
+                <a href="specialty-detail.html?id=${pid}&channelCode=tcgw&code=tcgw">
+                    <img src="${logoFourToThree || './image/zw.jpg'}" alt="${name}" onerror="tools.errImg(this)">
+                </a>
+            </div>
+            <p class="title">
+                <a href="specialty-detail.html?id=${pid}&channelCode=tcgw&code=tcgw" title="${name}">${ tools.ellipsisContent(name,13)}</a>
+            </p>
+            <p class="font clearfix"><span class="price">&yen;<span>${sellPrice}</span></span><span class="buyed">已售${sales}</span></p>
+        </li>
+        {{/each}}
+    </ul>
+    <!--分页 S-->
+    <!--<div class="page">-->
+        <!--<a class="first-page">首页</a>-->
+        <!--<a class="page-up">上一页</a>-->
+        <!--<a class="curr">1</a>-->
+        <!--<a>2</a>-->
+        <!--<a>3</a>-->
+        <!--<a>4</a>-->
+        <!--<a class="page-down">下一页</a>-->
+        <!--<a class="last-page">末页</a>-->
+    <!--</div>-->
+    <!--分页 E-->
+</script>
+<script>
+var specialty = {
+    init: function(){
+        tools.setTowLevelBanner();
+        this.specialtyParams = {
+            maxPrice: '',
+            minPrice: '',
+            priceSort: '',
+            clazz: '',
+            searchValue: '',
+            salesSort: '',
+            page: 1,
+            limitPage: 12
+        };
+        this.loadTags();
+        this.loadList();
+        this.priceClick();
+        this.sortClick();
+        this.searchClick();
+    },
+    // 获取标签分类 （特产分类全部为顶级分类）
+    loadTags: function(){
+        var _self = this;
+        var $tagsWrapper = $('.js_tags');
+        var $tagsTmpl = $('#tagsTmpl');
+        var params = {
+            url: 'ds/qiandnApi/specialty/classify',
+            type: true  // 使用电商接口
+        };
+        // 获取顶级分类
+        tools.request(params, function(res){
+            if(res.code ===0 ) {
+                if(res.datas && res.datas.length) {
+                    $.each(res.datas, function(i, e){
+                        if(e.name === '特产') {
+                            var id = e.id;
+                            // 获取特产下面的分类
+                            tools.request({
+                                url: 'ds/qiandnApi/specialty/classify',
+                                type: true,
+                                data: {
+                                    id: id
+                                }
+                            },function (data) {
+                                if (data.code === 0) {
+                                    if (data.datas && data.datas.length > 0) {
+                                        $tagsTmpl.tmpl({list: data.datas}).appendTo($tagsWrapper);
+                                    } else {
+                                        $listWrapper.html(tools.NO_DATA);
+                                    }
+                                } else {
+                                    $listWrapper.html(tools.TRY_REFRESH);
+                                }
+                                _self.tagsClick();
+                            });
+                        }
+                    });
+                }
+            } else {
+                $tagsWrapper.html(tools.TRY_REFRESH);
+            }
+            // tagsClick();
+        });
+    },
+    // 分类按钮点击事件
+    tagsClick: function () {
+        var _self = this;
+        var $tags = $('.js_tag');
+        $tags.on('click', function(){
+            $tags.removeClass('curr');
+            $(this).addClass('curr');
+            _self.specialtyParams.clazz = $(this).attr('data-id');
+            _self.specialtyParams.page = 1;
+            _self.loadList();
+        });
+    },
+    // 价格选择点击
+    priceClick: function () {
+        var _self = this;
+        var $prices = $('.js_price');
+        $prices.on('click', function(){
+            $prices.removeClass('curr');
+            $(this).addClass('curr');
+            _self.specialtyParams.maxPrice = $(this).attr('data-max');
+            _self.specialtyParams.minPrice = $(this).attr('data-min');
+            _self.loadList();
+        });
+    },
+    // 排序  价格销量都为降序查询
+    sortClick: function(){
+        var _self = this;
+        var $prices = $('.js_sort');
+        $prices.on('click', function(){
+            $prices.removeClass('curr');
+            $(this).addClass('curr');
+            var type = $(this).attr('data-type');
+            switch (type) {
+                case 'all':
+                    _self.specialtyParams.priceSort = "";
+                    _self.specialtyParams.salesSort = "";
+                    break;
+                case 'price':
+                    _self.specialtyParams.priceSort = "desc";
+                    _self.specialtyParams.salesSort = "";
+                    break;
+                case 'sale':
+                    _self.specialtyParams.priceSort = "";
+                    _self.specialtyParams.salesSort = "desc";
+                    break;
+            }
+            _self.loadList();
+        });
+    },
+    // 关键词搜索
+    searchClick: function(){
+        var _self = this;
+        var $keyword = $('.js_keyword');
+        $('.js_search').on("click", function(){
+            var val = $.trim($keyword.val());
+            // if(val.length == 0) return false;
+            _self.specialtyParams.page = 1;
+            _self.specialtyParams.searchValue = val;
+            _self.loadList();
+        });
+        $keyword.on('keydown', function(e){
+            e = e || e.event;
+            if(e.keyCode === 13) {
+                $('.js_search').trigger('click');
+            }
+        });
+    },
+    // 获取列表
+    loadList: function(){
+        var _self = this;
+        var $listTmpl = $("#listTmpl");
+        var $listWrapper = $('.js_specailty_list');
+        $listWrapper.renderHtml({
+            url: 'ds/qiandnApi/specialty/list',
+            type: true,
+            params: this.specialtyParams,
+            size:12,
+            loading: true,
+            template: $listTmpl,
+            pagination: true
+        });
+    }
+};
+$(function(){
+    specialty.init();
+});
+</script>
+</body>
+</html>

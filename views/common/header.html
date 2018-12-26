@@ -1,0 +1,322 @@
+<div class="header">
+    <div class="header-top clearfix">
+        <div class="center">
+            <p class="fl top-left clearfix">
+                <span class="fl">欢迎来到平乐古镇·天台山旅游电子商务平台</span>
+                <span class="loginbtn fl">
+                    <a href="login.html">请登录</a>
+                    <a href="register.html">免费注册</a>
+                </span>
+            </p>
+            <div class="fr top-right clearfix">
+                <p class="fl account"></p>
+                <ul class="fl top-center">
+                    <li class="center-order">
+                        个人中心 <i class="daq-icon">&#xe6af;</i>
+                        <ul class="centerMenu">
+                            <li>
+                                <a href="./personalCenter-index.html">个人主页</a>
+                            </li>
+                            <li>
+                                <a href="./personalCenter-userinfo.html">账号管理</a>
+                            </li>
+                            <li>
+                                <a href="./personalCenter-allorder.html?type=all">订单管理</a>
+                            </li>
+                            <li class="backLogin">
+                                <a href="javascript:;">退出登录</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="cart-con js_cart_con fl">
+                    <span class="js_nav_go_cart"><i class="daq-icon">&#xe6d4;</i>购物车<em class="js_nav_cart_num"></em></span>
+                    <div class="cart-down js_nav_cart_wraper"></div>
+                </div>
+                <!--<div class="fl right-ewm">-->
+                    <!--<img src="../../image/phone-icon.png" alt="">-->
+                    <!--<a href="javascript:;">平乐古镇·天台山旅游电子商务平台客户端</a>-->
+                    <!--<img src="../../image/ewm-s.png" alt="">-->
+                    <!--<p class="ewm">-->
+                        <!--<img src="../../image/ewm.png" alt="">-->
+                    <!--</p>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    <div class="header-middle">
+        <div class="center clearfix">
+            <a href="index.html?channelCode=index"><img src="../../image/logo.png" alt="" class="logo fl"></a>
+            <div class="search fr">
+                <div class="search-content clearfix">
+                    <input type="text" placeholder="请输入你要搜索的关键词" class="fl search-input js_nav_search_ipt">
+                    <button class="fl search-btn js_nav_search_btn">搜索</button>
+                </div>
+                <ul class="header-nav js_serch_tip"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/template" id="navCartNoDataTmpl">
+    <div class="cart-no-data">
+        <img src="../../image/nav-cart-no.png" alt="购物车暂无数据">购物车中还没有商品，赶紧选购吧！
+    </div>
+</script>
+<script type="text/template" id="navCartDataTmpl">
+    <div class="cart-datas">
+        <h3>最新加入的商品</h3>
+        <ul class="c-l">
+            {{each list}}
+            <li class="cc clearfix">
+                <div class="c-l-l fl">
+                    <a class="" href="specialty-detail.html?id=${pid}&channelCode=lytc&code=tcgw" title="${pName}"><img src="${image || './image/zw.jpg'}" alt=""></a>
+                </div>
+                <a class="c-l-c fl" href="specialty-detail.html?id=${pid}&channelCode=lytc&code=tcgw" title="${pName}">${tools.ellipsisContent(pName, 18)}</a>
+                <div class="c-l-r fr">
+                    <p>&yen;${price}×${quantity}</p>
+                    <div class="c-l-r-b">
+                        <a href="javascript:void(0)" class="js_nav_cart_item" data-itemid="${itemId}">删除</a>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        <div class="c-bottom clearfix">
+            <p class="fl">共<span class="js_nav_cart_num"></span>件商品&nbsp;&nbsp;共计：&nbsp;<span class="red-font">&yen; <i class="js_nav_cart_total"></i></span></p>
+            <a href="javascript:;" class="fr js_nav_go_cart">去购物车</a>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="serach_keyword_tipsTmpl">
+{{each list}}
+<li class="fl">
+    <a href="${url}">${title}</a>
+</li>
+{{/each}}
+</script>
+<script>
+    var headJs = {
+        init:function () {
+          this.requestHead();
+          this.searchFun();
+          this.cartClick();
+          this.cartRender();
+          this.searchInfo();
+          this.backTop();
+         },
+        requestHead:function () {
+            var tokenThis = tools.getCookie('token')
+            if( tokenThis !== null ) {
+                $('.account').html('您好,'+tools.getCookie('account').replace(/^(\d{4})\d{4}(\d+)/,"$1****$2"));
+                $('.loginbtn').css('display',"none");
+                $('.top-center').css('display',"block");
+                $('.js_cart_con').css('display', 'block');
+            } else {
+                $('.loginbtn').css('display',"block");
+                $(".account").html('');
+            }
+            $('.backLogin').on('click',function () {
+                var headParams = {
+                    url: 'member/loginOut',
+                    data:{
+                        token:tokenThis
+                    }
+                };
+                tools.request(headParams,function (result) {
+                    tools.delCookie('token');
+                    tools.delCookie('login_Ac');
+                    $('.loginbtn').css('display',"block");
+                    $('.top-center').css('display',"none");
+                    $(".account").html('');
+                    $('.js_cart_con').css('display', 'none');
+                    window.location.href = "index.html";
+                })
+            })
+        },
+        // 搜索功能
+        searchFun: function () {
+            // input框按回车
+            $('.js_nav_search_ipt').on('keyup', function(e){
+                e = e || window.event;
+                if(e.keyCode === 13) {
+                    var keyword = $(this).val();
+                    if(keyword && $.trim(keyword).length) {
+                        keywords = encodeURI(encodeURI(keyword));
+                        window.location.href = 'search.html?keywords=' + keywords;
+                    }
+                }
+            });
+            // 搜索按钮
+            $('.js_nav_search_btn').on('click', function(){
+                var keyword = $('.js_nav_search_ipt').val();
+                if(keyword && $.trim(keyword).length) {
+                    keywords = encodeURI(encodeURI(keyword));
+                    window.location.href = 'search.html?keywords=' + keywords;
+                }
+            });
+        },
+        // 购物车相关数据加载
+        cartRender: function(){
+            if(tools.getCookie('token')){
+                $('.js_nav_cart_wraper').renderHtml({
+                    url: 'ds/qiandnApi/cart/list',
+                    type: true,
+                    params: {
+                        token: tools.getCookie('token')
+                    },
+                    size: 100,
+                    noDataTmpl: $("#navCartNoDataTmpl"),
+                    template: $("#navCartDataTmpl"),
+                    loading: true,
+                    callback: function(data){
+                        return data;
+                    },
+                    complete: function(res){
+                        if(res.page){
+                            $('.js_nav_cart_num').html(res.page.total);
+                        } else{
+                            $('.js_nav_cart_num').empty();
+                        }
+                        var datas = res.datas;
+                        var total = 0;
+                        for(var i=0, len = datas.length; i< len; i++){
+                            var d = datas[i];
+                            total = tools.math(tools.math(d.quantity, d.price).mul, total).add;
+                        }
+                        $('.js_nav_cart_total').html(total);
+                    }
+                })
+            }
+        },
+        // 购物车相关点击事件
+        cartClick: function(){
+            var _this = this;
+            // js_nav_cart_num  js_nav_go_cart
+            // 点击购物车跳转
+            $(document).on('click', '.js_nav_go_cart',function(){
+                var token = tools.getCookie('token');
+                if(token){
+                    window.location.href = 'cart.html';
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+
+            // 购物车删除按钮
+            $(document).on('click', '.js_nav_cart_item', function () {
+                var idx = $(this).attr('data-itemid');
+                $.dialog({
+                    title: '删除宝贝',
+                    message: '<p style="font-size:14px;color:#666;">确认要删除该宝贝吗？</p>',
+                    width: 300,
+                    height: 200,
+                    mask: true,
+                    footer: true,
+                    buttons: [
+                        {
+                            text :'确定',
+                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                            callback:function(){
+                                deleteItem(idx);
+                            }
+                        },
+                        {
+                            text :'取消',
+                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                            callback: function(){}
+                        }
+                    ]
+
+                });
+            });
+
+            // 从购物车中删除
+            function deleteItem(idx) {
+                var params = {
+                    url: 'ds/qiandnApi/cart/delete',
+                    type: true,
+                    data: {
+                        itemIds: idx,
+                        token: tools.getCookie('token')
+                    }
+                };
+                tools.request(params, function (res) {
+                    if(res.code === 0) {
+                        $.daqMessage({
+                            text: '已删除宝贝',
+                            skin: 1,
+                            position: 'center',
+                            time: 1000
+                        });
+                        _this.cartRender();
+                    } else if(res.code === 2) {
+                        tools.doLogin();
+                    } else {
+                        $.daqMessage({
+                            text: res.message,
+                            skin: 1,
+                            position: 'center',
+                            time: 1000
+                        });
+                    }
+                });
+            }
+        },
+        // 搜索下面关键字获取  读取配置文件
+        searchInfo: function(){
+            var params = {
+                url: 'config/config'
+            };
+            tools.request(params, function(res){
+                $('#serach_keyword_tipsTmpl').tmpl({list: res.page.header.serach_keyword_tips}).appendTo($('.js_serch_tip'));
+            });
+        },
+        // 除首页外,返回顶部按钮
+        backTop: function () {
+            var channelCode = tools.getUrlParams('channelCode');
+            if(channelCode !== 'index') {
+                $('body').append('<i class="backtop-box"></i>')
+                $('.backtop-box').click(function () {
+                    $('html,body').animate({scrollTop: 0}, 200);
+                })
+                $(window).scroll(function () {
+                    scrollT = $(window).scrollTop();
+                    if ( scrollT >= 500) {
+                        $('.backtop-box').css('display','block')
+                    } else {
+                        $('.backtop-box').css('display','none')
+                    }
+                });
+            }
+        }
+    };
+    $(function () {
+        headJs.init();
+        var url = window.location.href;//当前页面
+        // if(url.indexOf("index.html") !='-1'){
+        //     $(".header-middle").css("background","#E4F7FE")
+        // }
+        window.NavCartRender = headJs.cartRender;
+    })
+</script>

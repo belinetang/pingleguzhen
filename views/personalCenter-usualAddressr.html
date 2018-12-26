@@ -1,0 +1,527 @@
+<!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：胡琳浚 | 创建：2018-8-7 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content min680 bg-w">
+            <div class="nearorder p18">
+                <div class="person-title mar24 clearfix">
+                    <h3 class="fl">
+                        常用地址
+                    </h3>
+                </div>
+                <div class="usual-address js-list">
+                </div>
+                <div class="contacts js-no">
+                </div>
+                <div class="page"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="personalCenter-max add-address">
+    <div class="content">
+        <div class="person-title mar24 clearfix">
+            <h3 class="fl">
+                新增常用地址
+            </h3>
+            <i class="daq-icon fr close">&#xe656;</i>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                收货人姓名：
+            </p>
+            <input type="text" class="name js_name" maxlength="18">
+            <span class="warning"><i>!</i>收货人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系手机：
+            </p>
+            <input type="text" class="phone js_phone" maxlength="11">
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                所在地区：
+            </p>
+            <div class="td fl areaId js_areaId">
+                <div class="select-city" id="js_pro"></div>
+            </div>
+            <span class="warning"><i>!</i>请选择所在地区</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                详细地址：
+            </p>
+            <textarea class="address js_address" maxlength="80"></textarea>
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+            </p>
+            <a href="javascript:;" class="sub js_sub">提交</a>
+            <a href="javascript:;" class="cancel close">取消</a>
+        </div>
+    </div>
+</div>
+<div class="personalCenter-max add-update-address">
+    <div class="content">
+        <div class="person-title mar24 clearfix">
+            <h3 class="fl">
+                修改常用地址
+            </h3>
+            <i class="daq-icon fr close">&#xe656;</i>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                收货人姓名：
+            </p>
+            <input type="text" class="name js_update_name" maxlength="18">
+            <span class="warning"><i>!</i>收货人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系手机：
+            </p>
+            <input type="text" class="phone js_update_phone" maxlength="11">
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                所在地区：
+            </p>
+            <div class="td fl areaId js_update_areaId">
+                <div class="select-city js_city" id="js_update_pro"></div>
+            </div>
+            <span class="warning"><i>!</i>请选择所在地区</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                详细地址：
+            </p>
+            <textarea class="address js_update_address" maxlength="80"></textarea>
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+            </p>
+            <a href="javascript:;" class="sub js_sub_update" data-id="">修改</a>
+            <a href="javascript:;" class="cancel close">取消</a>
+        </div>
+    </div>
+</div>
+<!--列表-->
+<script type="text/template" id="adressListTemp">
+        <p class="usual-btn js-add-btn">
+            <img src="image/address-icon.png" alt="">
+            <span>新增常用地址</span>
+        </p>
+        <div class="title clearfix">
+            <p class="name fl">姓名</p>
+            <p class="city fl">所在地</p>
+            <p class="address fl">详细地址</p>
+            <p class="phone fl">电话/手机</p>
+            <p class="handle fl">操作</p>
+        </div>
+        <ul class="address-message">
+            {{each list}}
+            <li class="clearfix">
+                <p class="name fl" title="${consignee}">${ tools.ellipsisContent(consignee,6) }</p>
+                <p class="city fl" title="${areaName}">${ tools.ellipsisContent(areaName,6) }</p>
+                <p class="address fl" title="${address}">${ tools.ellipsisContent(address,20) }</p>
+                <p class="phone fl">${ phone }</p>
+                <p class="handle fl" data-id="${id}">
+                                <span class="default-address {{if isDefault}}active{{/if}}">
+                                    默认地址
+                                    <img src="image/active.png" alt="">
+                                </span>
+                    <a href="javascript:;" class="js_update" data-consignee="${consignee}" data-address="${address}" data-phone="${phone}" data-id="${id}" data-areaId="${areaId}" data-areaName="${areaName}">修改</a>
+                    <a href="javascript:;" class="delbtn">删除</a>
+                </p>
+            </li>
+            {{/each}}
+        </ul>
+</script>
+<!--暂无-->
+<script type="text/template" id="noTemp">
+        <p class="tit">您还没有添加常用收货地址哦~</p>
+        <p class="txt">常用收货地址信息可以帮助您快速填写订单及发票的邮寄信息</p>
+        <div class="btn-box">
+            <a href="javascript:void(0);" class="contacts-add-btn js-add-btn">新增地址</a>
+        </div>
+</script>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script>
+    var address = {
+        params: {
+            token: tools.getCookie('token'),
+            page: 1,
+            limitPage: 6
+        },
+        Addparams: {
+            address: '',
+            consignee: '',
+            areaId: '',
+            phone: '',
+            token: tools.getCookie('token')
+        },
+        UpdateParams: {
+            address: '',
+            consignee: '',
+            areaId: '',
+            phone: '',
+            id: '',
+            token: tools.getCookie('token')
+        },
+        state:{
+          flag: true
+        },
+        init: function () {
+            this.getAddress();
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.js_name,.js_phone,.js_address,.js_update_name,.js_update_phone,.js_update_address').blur(function () {
+                if(!tools.validate($(this).val(), 'require')){
+                    $(this).parent().find('.warning').addClass('curr');
+                }else{
+                    $(this).parent().find('.warning').removeClass('curr');
+                }
+            });
+            $(".js-add-btn").click(function () {
+                if($(document).width() <1540) {
+                    $('.personalCenter-max.add-address .content').css("margin-top", "64px");
+                }
+                $('.add-address').show();
+            });
+            $('.js_update').click(function() {
+                if($(document).width() <1540) {
+                    $('.add-update-address .content').css("top",'-124px');
+                }
+            })
+            $(".close").click(function () {
+                $('.add-address,.add-update-address').hide();
+            });
+            $('#js_pro').daqCityPickerCascade({
+                className: 'select-city',
+                callback: function (data) {
+                    $('.js_areaId').parent().find('.warning').removeClass('curr');
+                    _this.areaByCitys(data[data.length-1].value);
+                }
+            });
+            $('#js_update_pro').daqCityPickerCascade({
+                className: 'select-city',
+                callback: function (data) {
+                    $('.js_update_areaId').parent().find('.warning').removeClass('curr');
+                    _this.areaByCitys(data[data.length-1].value);
+                }
+            });
+        },
+        getAddress: function () {
+            var _this = this;
+            var loading = tools.loading($('.js-list'));
+            tools.request({
+                url:'ds/qiandnApi/specialty/receiver',
+                data: _this.params,
+                type: true
+            },function (result) {
+                loading.clean();
+                $('.js-list').empty();
+                $('.js-no').empty();
+                if(result.code === 0) {
+                    var list = result.datas;
+                    $('.js-list').empty();
+                    if(list.length > 0){
+                        $('#adressListTemp').tmpl({list: list}).appendTo('.js-list');
+                        $('.js-list').show();
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.params.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.getAddress();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        //设置默认
+                        $('.default-address').click(function () {
+                            if($(this).hasClass("active")){
+                                $.dialog({
+                                    title: '温馨提示',
+                                    message: '<p style="font-size:14px;color:#666;">当前地址已是默认地址</p>',
+                                    width: 300,
+                                    height: 200,
+                                    mask: true,
+                                    footer: true,
+                                    buttons: [
+                                        {
+                                            text :'确定',
+                                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                            callback:function(){
+                                            }
+                                        }
+                                    ]
+
+                                });
+                            }else{
+                                var id = $(this).parent().attr("data-id");
+                                $.dialog({
+                                    title: '温馨提示',
+                                    message: '<p style="font-size:14px;color:#666;">确认要设置当前地址为默认地址？</p>',
+                                    width: 300,
+                                    height: 200,
+                                    mask: true,
+                                    footer: true,
+                                    buttons: [
+                                        {
+                                            text :'确定',
+                                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                            callback:function(){
+                                                _this.setDefault(id);
+                                            }
+                                        },
+                                        {
+                                            text :'取消',
+                                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                                            callback: function(){}
+                                        }
+                                    ]
+
+                                });
+                            }
+                        })
+                        //删除
+                        $('.delbtn').click(function () {
+                            var id = $(this).parent().attr("data-id");
+                            $.dialog({
+                                title: '删除宝贝',
+                                message: '<p style="font-size:14px;color:#666;">确认要删除该宝贝吗？</p>',
+                                width: 300,
+                                height: 200,
+                                mask: true,
+                                footer: true,
+                                buttons: [
+                                    {
+                                        text :'确定',
+                                        className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                        callback:function(){
+                                            _this.deleteReceiver(id);
+                                        }
+                                    },
+                                    {
+                                        text :'取消',
+                                        className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                                        callback: function(){}
+                                    }
+                                ]
+
+                            });
+                        })
+                        //修改
+                        $('.js_update').click(function () {
+                            var my = $(this);
+                            $('.js_city .text').html(my.attr('data-areaName'));
+                            _this.UpdateParams.address = my.attr('data-address');
+                            _this.UpdateParams.id = my.attr('data-id');
+                            _this.UpdateParams.phone = my.attr('data-phone');
+                            _this.UpdateParams.consignee = my.attr('data-consignee');
+                            _this.UpdateParams.areaId = my.attr('data-areaId');
+                            $('.add-update-address').show();
+                             _this.editReceiver();
+                        })
+                    }else{
+                        $('#noTemp').tmpl({list: list}).appendTo('.js-no');
+                        $('.js-no').show();
+                    }
+                    _this.eventBind();
+                    $('.js_sub').click(function () {
+                        if(_this.state.flag){
+                            _this.addAdress();
+                        }
+                    });
+                }else{
+
+                }
+            })
+        },
+        addAdress: function () {
+           var $name = $('.js_name'),
+                $phone = $('.js_phone'),
+                $address = $('.js_address'),
+                $areaId = $('.js_areaId'),
+                _this = this ;
+            _this.state.flag = false;
+           if(!tools.validate($name.val(), 'require')){
+               $name.parent().find('.warning').addClass('curr');
+               $name.focus();
+               return false;
+           }
+            if(!tools.validate($phone.val(), 'phone')){
+                $phone.parent().find('.warning').addClass('curr');
+                $phone.focus();
+                return false;
+            }
+            if(_this.Addparams.areaId === ''){
+                $areaId.parent().find('.warning').addClass('curr');
+                return false;
+            }
+            if(!tools.validate($address.val(), 'require')){
+                $address.parent().find('.warning').addClass('curr');
+                $address.focus();
+                return false;
+            }
+            _this.Addparams.address = $address.val();
+            _this.Addparams.consignee = $name.val();
+            _this.Addparams.phone = $phone.val();
+            tools.request({
+                url: 'ds/qiandnApi/specialty/addReceiver',
+                data: _this.Addparams,
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $name.val('');
+                    $phone.val('');
+                    $address.val('');
+                    $('.areaId > .text').html('请选择');
+                    _this.state.flag = true;
+                    $('.add-address').hide();
+                    _this.getAddress();
+                }else{
+                    alert(result.message);
+                }
+            });
+        },
+        areaByCitys: function (code) {
+            var _this = this;
+            tools.request({
+                url: 'ds/qiandnApi/common/areaByCitys',
+                data:{
+                    code: code
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    _this.Addparams.areaId = result.data.area[0].code;
+                }else{
+                    alert(result.message);
+                }
+            })
+        },
+        setDefault: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'ds/qiandnApi/specialty/setDefault',
+                data:{
+                    id: id,
+                    token: tools.getCookie("token")
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $.toast({
+                        text: '设置默认地址成功'
+                    })
+//                    $btn.addClass('active').parent().parent().siblings('li').find('.default-address').removeClass('active');
+                    _this.getAddress();
+                }else{
+                    alert(result.message);
+                }
+            })
+        },
+        deleteReceiver: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'ds/qiandnApi/specialty/deleteReceiver',
+                data:{
+                    id: id,
+                    token: tools.getCookie("token")
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    _this.getAddress();
+                }else{
+                    alert(result.message);
+                }
+            })
+        },
+        editReceiver: function () {
+            var $name = $('.js_update_name'),
+                $phone = $('.js_update_phone'),
+                $address = $('.js_update_address'),
+                $areaId = $('.js_update_areaId'),
+                _this = this ;
+            $name.val(_this.UpdateParams.consignee);
+            $phone.val(_this.UpdateParams.phone);
+            $address.val(_this.UpdateParams.address);
+            $('.js_sub_update').click(function () {
+                if(!tools.validate($name.val(), 'require')){
+                    $name.parent().find('.warning').addClass('curr');
+                    $name.focus();
+                    return false;
+                }
+                if(!tools.validate($phone.val(), 'phone')){
+                    $phone.parent().find('.warning').addClass('curr');
+                    $phone.focus();
+                    return false;
+                }
+                if(_this.UpdateParams.areaId === ''){
+                    $areaId.parent().find('.warning').addClass('curr');
+                    return false;
+                }
+                if(!tools.validate($address.val(), 'require')){
+                    $address.parent().find('.warning').addClass('curr');
+                    $address.focus();
+                    return false;
+                }
+                _this.UpdateParams.address = $address.val();
+                _this.UpdateParams.consignee = $name.val();
+                _this.UpdateParams.phone = $phone.val();
+                tools.request({
+                    url: 'ds/qiandnApi/specialty/editReceiver',
+                    data: {
+                        address: $address.val() || _this.UpdateParams.address,
+                        consignee: $name.val() || _this.UpdateParams.consignee,
+                        areaId: _this.UpdateParams.areaId,
+                        phone: $phone.val() || _this.UpdateParams.phone,
+                        id: _this.UpdateParams.id,
+                        token: tools.getCookie('token')
+                    },
+                    type: true
+                },function (result) {
+                    if(result.code === 0){
+                        $('.add-update-address').hide();
+                        _this.getAddress();
+                    }else{
+                        alert(result.message);
+                    }
+                });
+            })
+        }
+    };
+    $(function () {
+        address.init();
+    });
+</script>
+</body>
+</html>

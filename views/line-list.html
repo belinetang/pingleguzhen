@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_线路列表'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--当前位置-->
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <!--筛选模块-->
+    <div class="line-screen-box">
+        <!--类型选择-->
+        <!--<ul class="columntype clearfix">-->
+            <!--<li><a href="scenic-list.html?channelCode=rmjd&code=wzhb">热门景点</a></li>-->
+            <!--<li><a href="hotel-list.html?channelCode=jdzs&code=wzhb">酒店住宿</a></li>-->
+            <!--<li class="curr"><a href="line-list.html?channelCode=lyxl&code=wzhb">旅游线路</a></li>-->
+            <!--<li><a href="food-list.html?channelCode=tsms&code=wzhb">特色美食</a></li>-->
+            <!--<li><a href="specialty-list.html?channelCode=lytc&code=wzhb">旅游特产</a></li>-->
+        <!--</ul>-->
+        <!--入住 退房 关键词 筛选-->
+        <ul class="time-screening center">
+            <li class="keyword">
+                游玩天数 ：
+                <input type="text" placeholder="请输入游玩天数" class="js_days">
+                天
+            </li>
+            <li class="keyword">
+                关键词 ：
+                <input type="text" placeholder="输入关键词" class="js_name">
+            </li>
+            <li>
+                <i class="line-search">搜索</i>
+            </li>
+        </ul>
+        <!--条件筛选-->
+        <div class="selection-conditions center clearfix">
+            <!--区县选择-->
+            <!--<div class="region-box clearfix">-->
+                <!--<label>区县选择</label>-->
+                <!--<ul class="region clearfix close">-->
+
+                <!--</ul>-->
+                <!--<i class="region-openicon">展开 <i class="daq-icon">&#xe66f;</i></i>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;热门景点&ndash;&gt;-->
+            <!--<div class="hotline-box clearfix">-->
+                <!--<label>热门景点</label>-->
+                <!--<ul class="hotline clearfix close">-->
+
+                <!--</ul>-->
+                <!--<i class="hot-openicon">展开 <i class="daq-icon">&#xe66f;</i></i>-->
+            <!--</div>-->
+            <!--价格选择-->
+            <div class="price-box clearfix">
+                <label>价格选择</label>
+                <ul class="price clearfix">
+                    <li class="curr"  data-min="" data-max="">全部</li>
+                    <li data-min="0" data-max="100">&yen;0-100</li>
+                    <li data-min="100" data-max="300">&yen;100-300</li>
+                    <li data-min="300" data-max="">&yen;300以上</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--线路列表-->
+    <ul class="line-list center">
+
+    </ul>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--区域模板-->
+    <script type="text/template" id="regionsTemp">
+        <li class="curr" data-id="">全部</li>
+        {{each list}}
+        <li data-id="${region}">${name}</li>
+        {{/each}}
+    </script>
+    <!--酒店列表模板-->
+    <script type="text/template" id="listTmpl">
+        <!--线路列表 + 分页 -->
+        <ul class="line-list clearfix">
+            {{each list}}
+            <li>
+                <div class="imgbox">
+                    <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl">
+                        <img src="${cover || 'image/zw.jpg'}" alt="">
+                    </a>
+                </div>
+                <div class="fontbox">
+                    <p class="title" title="${productName}"><a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl">${tools.ellipsisContent(productName,56)}</a></p>
+                    <i class="linetag">${daysAndNights}</i>
+                </div>
+                <div class="price-box">
+                    <p>&yen;<span>${minSellPrice}</span>起</p>
+                    <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl">查看详情</a>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        <!--分页 S-->
+        <div class="page">
+            <a class="first-page">首页</a>
+            <a class="page-up">上一页</a>
+            <a class="curr">1</a>
+            <a>2</a>
+            <a>3</a>
+            <a>4</a>
+            <a class="page-down">下一页</a>
+            <a class="last-page">末页</a>
+        </div>
+        <!--分页 E-->
+    </script>
+    <!--热门景区模板-->
+    <script type="text/template" id="hotScenicTemp">
+        <li class="curr">全部</li>
+        {{each list}}
+        <li data-latitude="${latitude}" data-longitude="${longitude}" data-id="${resourceCode}">${name}</li>
+        {{/each}}
+    </script>
+<script>
+    var indexJs = {
+        init: function () {
+            this.lineParams = {
+                page: 1,
+                limitPage: 9,
+                region: '',
+                priceStart: '',
+                priceEnd: '',
+                days: '',
+                name: ''
+            };
+            tools.setTowLevelBanner();
+            this.setRegionOpenicon();
+            this.setHotOpenicon();
+            this.setGeekerLayDate();
+            this.loadList();// 线路列表
+            this.loadRegions(); // 区县选择
+            this.setPrice(); //价格筛选
+            this.laodHotScenic(); // 热门景点筛选
+            this.hotelSearch();//  搜索线路
+        },
+        // 区县选择状态
+        regionOpenType:0,
+        //热门景点状态
+        hotOpenType:0,
+        // 设置区县选择 收起和展开
+        setRegionOpenicon: function () {
+            var _this = this;
+            $(".region-openicon").click(function () {
+                if(_this.regionOpenType === 1){
+                    $('.region').addClass('close')
+                    _this.regionOpenType =0;
+                    $(this).html('展开 <i class="daq-icon">&#xe66f;</i>')
+                }else{
+                    $('.region').removeClass('close')
+                    _this.regionOpenType =1;
+                    $(this).html('收起 <i class="daq-icon">&#xe670;</i>')
+                }
+            })
+        },
+        // 设置热门景点 收起和展开
+        setHotOpenicon: function () {
+            var _this = this;
+            $(".hot-openicon").click(function () {
+                if(_this.hotOpenType === 1){
+                    $('.hothotel').addClass('close')
+                    _this.hotOpenType =0;
+                    $(this).html('展开 <i class="daq-icon">&#xe66f;</i>')
+                }else{
+                    $('.hothotel').removeClass('close')
+                    _this.hotOpenType =1;
+                    $(this).html('收起 <i class="daq-icon">&#xe670;</i>')
+                }
+            })
+        },
+        // 设置时间选择控件
+        setGeekerLayDate: function () {
+            var start =  laydate.render({
+                elem: '#start',
+                change: function () {
+                    alert('sdxc')
+                },
+                done: function(value, date){
+                    if(value !== ''){
+                        end.config.min.year = date.year;
+                        end.config.min.month = date.month-1;
+                        end.config.min.date = date.date;
+                    }else{
+                        end.config.min.year = '';
+                        end.config.min.month = '';
+                        end.config.min.date = '';
+                    }
+                }
+            });
+            var end = laydate.render({
+                elem: '#end',
+                change: function () {
+                    alert('asd')
+                },
+                done: function(value, date){
+                    if (value !== ''){
+                        start.config.max.year = date.year;
+                        start.config.max.month = date.month-1;
+                        start.config.max.date = date.date;
+                    } else {
+                        start.config.max.year = '';
+                        start.config.max.month = '';
+                        start.config.max.date = '';
+                    }
+                }
+            });
+
+            //当前时间
+            // 获取当前时间转换成标准时间格式
+            var mydate = dateToString(new Date());
+
+            function dateToString(now){
+                var year = now.getFullYear();
+                var month =(now.getMonth() + 1).toString();
+                var day = (now.getDate()).toString();
+                var hour = (now.getHours()).toString();
+                var minute = (now.getMinutes()).toString();
+                var second = (now.getSeconds()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                if (hour.length == 1) {
+                    hour = "0" + hour;
+                }
+                if (minute.length == 1) {
+                    minute = "0" + minute;
+                }
+                if (second.length == 1) {
+                    second = "0" + second;
+                }
+//            var dateTime = year + "-" + month + "-" + day +" "+ hour +":"+minute+":"+second;
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            }
+        },
+        // 获取线路列表
+        loadList: function(){
+            var _self = this;
+            var $listTmpl = $("#listTmpl");
+            var $listWrapper = $('.line-list');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'line/pclist',
+                data: this.lineParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        for(var i = 0; i< res.datas.length; i++) {
+                            if(res.datas[i].productImages.length>0) {
+                                res.datas[i].cover = res.datas[i].productImages[0].source
+                            }
+                        }
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        //  初始化分页
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _self.lineParams.page = data.page;
+                                $(window).scrollTop(0);
+                                _self.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            });
+        },
+        // 价格筛选
+        setPrice: function () {
+            var _this= this;
+            $('.price li').on('click', function () {
+                _this.lineParams.priceStart = $(this).attr('data-min')
+                _this.lineParams.priceEnd = $(this).attr('data-max')
+                $(this).addClass('curr').siblings().removeClass('curr')
+                _this.loadList();
+            })
+        },
+        // 获取地区列表
+        loadRegions: function () {
+            var _this = this;
+            var $listTmpl = $("#regionsTemp");
+            var $listWrapper = $('.region');
+            $listWrapper.empty();
+            var params = {
+                url: 'common/siteRegions',
+                data: {}
+            };
+            tools.request(params, function(res){
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.region li').on('click', function () {
+                    _this.lineParams.region = $(this).attr('data-id')
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.loadList();
+                })
+            })
+        },
+        // 热门景点列表
+        laodHotScenic: function() {
+            var _this = this;
+            var $listTmpl = $("#hotScenicTemp");
+            var $listWrapper = $('.hotline');
+            $listWrapper.empty();
+            var params = {
+                url: 'common/recommondScenerys',
+                data: {}
+            };
+            tools.request(params, function(res){
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.hotline li').on('click', function () {
+                    _this.lineParams.hotScenery  = $(this).attr('data-id');
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.loadList();
+                })
+            })
+        },
+        // 线路条件搜索
+        hotelSearch: function () {
+            var _this =this;
+            $('.line-search').click(function () {
+                _this.lineParams.page =1;
+                _this.lineParams.days = $('.js_days').val();
+                _this.lineParams.name = $('.js_name').val();
+                _this.loadList();
+            })
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_首页'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <div class="index-banner">
+
+    </div>
+    <div class="index-content">
+        <ul class="left-title" style="left: 50%; margin-left: 600px; top: 200px;">
+            <!--<li class="curr clearfix scenic">-->
+                <!--<a href="javascript:;" data-name="scenic">-->
+                    <!--<span>景区</span>-->
+                    <!--<p class="nonetitle">景区门票</p>-->
+                <!--</a>-->
+            <!--</li>-->
+            <li class="clearfix hotel">
+                <a href="javascript:;" data-name="hotel">
+                    <span>酒店</span>
+                    <p class="nonetitle">酒店住宿</p>
+                </a>
+            </li>
+            <li class="clearfix food">
+                <a href="javascript:;" data-name="food">
+                    <span>美食</span>
+                    <p class="nonetitle">特色美食</p>
+                </a>
+            </li>
+            <li class="clearfix good">
+                <a href="javascript:;" data-name="good">
+                    <span>特产</span>
+                    <p class="nonetitle">特产购物</p>
+                </a>
+            </li>
+            <li class="clearfix line">
+                <a href="javascript:;" data-name="line">
+                    <span>线路</span>
+                    <p class="nonetitle">精选线路</p>
+                </a>
+            </li>
+            <li class="clearfix return-top">
+                <a href="javascript:;" data-name="top">
+                    <p><i class="daq-icon">&#xe6b0;</i></p>
+                    <span>TOP</span>
+                </a>
+            </li>
+        </ul>
+        <!-- 景区门票 -->
+        <!--<div class="index-scenic center" id="scenic">-->
+            <!--<div class="clearfix">-->
+                <!--<div class="scenic-title fl">-->
+                    <!--<img src="image/mp-icon.png" alt="">-->
+                    <!--<span class="big"><span>景区</span>门票</span>-->
+                    <!--<span class="small">丰富多彩的创意行程 让您的旅途更加有趣</span>-->
+                <!--</div>-->
+                <!--<div class="fr clearfix ">-->
+                    <!--<ul class="common-ul fl clearfix js_regions_scenic">-->
+
+                    <!--</ul>-->
+                    <!--<a href="scenic-list.html?channelCode=jqmp&code=jqmp" class="more fl">更多</a>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="scenic-content clearfix">-->
+                <!--<div class="scenic-left fl js_scenic_Advertisement">-->
+
+                <!--</div>-->
+                <!--<ul class="index-scenic-list clearfix js_scenic">-->
+
+                <!--</ul>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- 宜居住宿 -->
+        <div class="index-scenic index-hotel center" id="hotel">
+            <div class="clearfix">
+                <div class="scenic-title fl">
+                    <img src="image/hotel-icon.png" alt="">
+                    <span class="big"><span>酒店</span>住宿</span>
+                    <span class="small">意想不到的惊喜优惠 让您high不停</span>
+                </div>
+                <div class="fr clearfix ">
+                    <ul class="common-ul fl clearfix js_regions_hotel">
+
+                    </ul>
+                    <a href="hotel-list.html?channelCode=jdzs&code=jdzs" class="more fl">更多</a>
+                </div>
+            </div>
+            <div class="scenic-content clearfix">
+                <div class="scenic-left fl js_hotel_Advertisement">
+                    <a href="javascript:;">
+                        <!--<img src="image/hotel-adv.jpg" alt="">-->
+                        <span class="adv">广告</span>
+                    </a>
+                </div>
+                <ul class="index-scenic-list clearfix  js_hotel">
+                </ul>
+            </div>
+        </div>
+        <!--特色美食-->
+        <div class="index-scenic index-food center" id="food">
+            <div class="clearfix">
+                <div class="scenic-title fl">
+                    <img src="image/food-icon.png" alt="">
+                    <span class="big"><span>特色</span>美食</span>
+                    <span class="small">意想不到的惊喜优惠 让您high不停</span>
+                </div>
+                <div class="fr clearfix ">
+                    <ul class="common-ul fl clearfix js_regions_food">
+
+                    </ul>
+                    <a href="food-list.html?channelCode=tsms&code=tsms" class="more fl">更多</a>
+                </div>
+            </div>
+            <div class="food-content clearfix">
+                <div class="food-left fl js_food_Advertisement">
+                    <a href="javascript:;">
+                        <!--<img src="image/hotel-adv.jpg" alt="">-->
+                        <span class="adv">广告</span>
+                    </a>
+                </div>
+                <ul class="index-food-list clearfix  js_food">
+                </ul>
+            </div>
+        </div>
+        <!--特产购物-->
+        <div class="index-scenic index-good center" id="good">
+            <div class="clearfix">
+                <div class="scenic-title fl">
+                    <img src="image/good-icon.png" alt="">
+                    <span class="big"><span>特产</span>购物</span>
+                    <span class="small">意想不到的惊喜优惠 让您high不停</span>
+                </div>
+                <div class="fr clearfix ">
+                    <ul class="common-ul fl clearfix js_regions_good">
+
+                    </ul>
+                    <a href="specialty-list.html?channelCode=tcgw&code=tcgw" class="more fl">更多</a>
+                </div>
+            </div>
+            <div class="food-content clearfix">
+                <div class="food-left fl js_good_Advertisement">
+                    <a href="javascript:;">
+                        <!--<img src="image/hotel-adv.jpg" alt="">-->
+                        <span class="adv">广告</span>
+                    </a>
+                </div>
+                <ul class="index-food-list clearfix  js_good">
+                </ul>
+            </div>
+        </div>
+        <!-- 精选线路 -->
+        <div class="index-scenic center index-line" id="line">
+            <div class="clearfix">
+                <div class="scenic-title fl">
+                    <img src="image/line-icon.png" alt="">
+                    <span class="big"><span>精选</span>线路</span>
+                    <span class="small">非常特色的主题旅游 为您带来更多的美好体验</span>
+                </div>
+                <div class="fr clearfix ">
+                    <ul class="common-ul fl clearfix js_regions_line">
+
+                    </ul>
+                    <a href="line-list.html?channelCode=lyxl&code=lyxl" class="more fl">更多</a>
+                </div>
+            </div>
+            <div class="scenic-content clearfix">
+                <div class="scenic-left fl js_line_Advertisement">
+                    <a href="javascript:;">
+                        <!--<img src="image/line-adv.jpg" alt="">-->
+                        <span class="adv">广告</span>
+                    </a>
+                </div>
+                <ul class="index-scenic-list clearfix js_line">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--品质口号-->
+    <div class="pingzhi-box">
+        <ul class="center pinzhi">
+            <li><i class="daq-icon">&#xe6df;</i>价格公正，安心购买</li>
+            <li><i class="daq-icon">&#xe73d;</i>品质保证，放心出行</li>
+            <li><i class="daq-icon">&#xe63a;</i>产品丰富，一站式服务</li>
+            <li><i class="daq-icon">&#xe6e0;</i>专属客服，24小时服务</li>
+        </ul>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <script type="text/javascript" src="js/lib/jquery.flexslider-min.js"></script>
+    <!--banner模板-->
+    <script type="text/template" id="bannerTemp">
+        <div id="flexslider" class="flexslider">
+            <ul class="slides">
+                {{each list}}
+                {{if url}}
+                <li><a href="${url}" target="_blank"><img src="${image}" alt=""></a></li>
+                {{else}}
+                <li><a href="javascript:;"><img src="${image}" alt=""></a></li>
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+
+    </script>
+
+    <!--活动模板-->
+    <script type="text/template" id="actTemp">
+        {{each list}}
+        <li class="banner-news fl">
+            <a href="act-detail.html?id=${id}&code=jchd&channelCode=zthd">
+                <img src="${cover || 'image/zw.jpg'}" alt="">
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <!--景区门票模板-->
+    <script type="text/template" id="scenicTicketTemp">
+        {{each list}}
+        <li class="fl">
+            <a href="scenic-detail2.html?channelCode=jqmp&code=jqmp&id=${id}">
+                <div class="img">
+                    <img src="${imageTwoToOne || 'image/zw.jpg'}" alt="">
+                </div>
+                <div class="clearfix">
+                    <p class="name fl" title="${name}">${tools.ellipsisContent(name,10)}</p>
+
+                </div>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <!--酒店模板-->
+    <script type="text/template" id="hotelTemp">
+        {{each list}}
+        <li class="fl">
+            <a href="hotel-detail.html?channelCode=jdzs&id=${id}&code=jdzs">
+                <div class="img">
+                    <img src="${picture  || 'image/zw.jpg'}" alt="">
+                </div>
+                <div class="clearfix">
+                    <p class="name fl" title="${name}">${tools.ellipsisContent(name,10)}</p>
+                    <p class="price fr"><span>&yen;</span>${prices || '暂无价格'}</p>
+                </div>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <!--美食模板-->
+    <script type="text/template" id="foodTemp">
+        {{each list}}
+        <li class="${lastliclass}">
+            <div class="imgbox">
+                <a href="food-detail.html?id=${pid}&channelCode=tsms&code=tsms">
+                    <img src="${logoFourToThree || 'image/zw.jpg'}" alt="${name}">
+                </a>
+            </div>
+            <p class="title font" title="${name}">
+                <a href="javascript:;">
+                    ${tools.ellipsisContent(name, 10)}
+                </a>
+                <span class="price">&yen;<span>${minSellPrice || '暂无价格'}</span></span>
+            </p>
+        </li>
+        {{/each}}
+    </script>
+    <!--特产模板-->
+    <script type="text/template" id="goodTemp">
+        {{each list}}
+        <li class="${lastliclass}">
+            <div class="imgbox">
+                <a href="specialty-detail.html?id=${pid}&channelCode=tcgw&code=tcgw">
+                    <img src="${logoFourToThree || 'image/zw.jpg'}" alt="${name}">
+                </a>
+            </div>
+            <p class="title font" title="${name}">
+                <a href="javascript:;">
+                    ${tools.ellipsisContent(name, 10)}
+                </a>
+                <span class="price">&yen;<span>${sellPrice || '暂无价格'}</span></span>
+            </p>
+        </li>
+        {{/each}}
+    </script>
+    <!--地区列表模板-->
+    <script type="text/template" id="regionsTemp">
+        {{each list}}
+        <li class="fl" data-value="${region}" data-type="${type}">${name}</li>
+        {{/each}}
+    </script>
+    <!--精选线路模板-->
+    <script type="text/template" id="lineTemp">
+        {{each list}}
+        <li class="fl">
+            <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl">
+                <div class="img">
+                    {{if logoTwoToOne}}
+                    <img src="${logoTwoToOne}" alt="${productName}">
+                    {{else}}
+                    <img src="image/zw.jpg" alt="${productName}">
+                    {{/if}}
+                </div>
+                <div class="clearfix">
+                    <p class="name" title="${productName}">${tools.ellipsisContent(productName,28)}</p>
+                    <p class="price"><span>&yen;</span>${minSellPrice || '暂无价格'}</p>
+                </div>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <!--攻略游记模板-->
+    <script type="text/template" id="travelsTemp">
+        {{each list}}
+        <li class="fl clearfix">
+            <div class="note-img fl">
+                <a href="note-detail.html?id=${id}&code=yjgl&channelCode=yjgl">
+                    <img src="${coverTwoToOne|| 'image/zw.jpg'}" alt="">
+                </a>
+            </div>
+            <div class="note-intro fl">
+                <h2 class="title" title="${title}"><a href="note-detail.html?id=${id}&code=yjgl&channelCode=yjgl">${tools.ellipsisContent(title,25)}</a></h2>
+                <p class="dis" title="${digest}">${tools.ellipsisContent(digest,25)}</p>
+                <div class="note-small">
+                                <span>
+                                    <i class="daq-icon">&#xe637;</i>
+                                    ${viewCount}
+                                </span>
+                    <span>
+                                    <i class="daq-icon">&#xe643;</i>
+                                    ${givepoint}
+                                </span>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </script>
+    <!--目的地推荐模板-->
+    <script type="text/template" id="destinationListTemp">
+        {{each list}}
+        <li class="destination-li">
+            <a href="destination-detail.html?code=mdd&id=${id}&channelCode=mdd">
+            <img src="${cover || 'image/zw.jpg'}" alt="" class="list-img">
+            <div class="content">
+                <h2>${regionName}</h2>
+                <p>${tools.ellipsisContent(introduction,65) || '暂无简介'}</p>
+            </div>
+            <img src="image/position.png" alt="" class="pos-icon">
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <!--景区门票广告位模板-->
+    <script type="text/template" id="scenicAdvertisementTemp">
+        {{if list[0].url !== ""}}
+        <a href="${list[0].url}" target="_blank">
+        {{else}}
+            <a href="javascript:;" target="_blank">
+        {{/if}}
+            {{if list[0]}}
+                {{if list[0].pics}}
+                    <img src="${list[0].pics || 'image/zw.jpg'}" alt="">
+                {{/if}}
+            {{/if}}
+            <span class="adv">广告</span>
+        </a>
+    </script>
+    <!--概况模板-->
+    <script type="text/template" id="surveyTemp">
+        <img src="image/title.png" alt="" class="img-title fl">
+        <p class="title-intro fl " title="${list.summary}">
+            ${tools.ellipsisContent(list.summary,80) || '暂无数据'}
+            <a href="survey.html?channelCode=hbgk&code=mlhb&code=mlhb" class="popup seeFullSummary">[ 详细介绍 ]</a>
+        </p>
+    </script>
+    <!-- 目的地模板 -->
+    <script type="text/template" id="mddTmpl">
+        {{each data}}
+        <li class="nav-menu-li">
+            <a href="destination-detail.html?code=mdd&id=${id}&channelCode=mdd">${regionName}</a>
+        </li>
+        {{/each}}
+    </script>
+    <!-- 二级导航模板 -->
+    <script type="text/template" id="menuTmpl">
+        {{each data}}
+        <li class="nav-menu-li">
+            <a href="${url}&code=${code}&id=${id}">${name}</a>
+        </li>
+        {{/each}}
+    </script>
+    <!-- 内容图片模板 -->
+    <script type="text/template" id="detailTmpl">
+        <p class="menu-intro fl">
+            ${data.summary||'暂无数据'}
+        </p>
+        <div class="muen-img fr">
+            <img src="${data.titleImage||'image/zw.jpg'}" alt="">
+        </div>
+    </script>
+<script>
+    var indexJs = {
+        init:function () {
+            this.setXinC();
+            this.setNav();
+            this.getIndexBanner(); // 首页banner
+            // this.getScenicList(); // 获取热门景点列表
+            this.getHotelList(); // 获取酒店列表
+            this.getFoodList(); // 获取美食列表
+            this.getGoodList(); // 获取特产购物列表
+            // this.loadRegions(); // 获取地区列表
+            this.getLineList(); // 线路列表
+            this.getScenicAdvertisement('.js_scenic_Advertisement','index_scenic','scenic'); // 获取景区门票广告
+            this.getScenicAdvertisement('.js_hotel_Advertisement','index_hotel','hotel'); // 获取酒店广告
+            this.getScenicAdvertisement('.js_line_Advertisement','index_line','line'); // 获取线路广告
+            this.getScenicAdvertisement('.js_food_Advertisement','index_food','food'); // 获取美食广告
+            this.getScenicAdvertisement('.js_good_Advertisement','index_good','good'); // 获取美食广告
+            this.getConifg() //获取配置信息
+
+        },
+        // 酒店列表配置
+        hotelParams:{
+            region:'',
+            type:0,
+            page: 1,
+            limitPage: 6
+        },
+        // 景区列表配置
+        scenicParams:{
+            page: 1,
+            limitPage: 6
+        },
+        // 线路列表配置
+        lineParams:{
+            page: 1,
+            limitPage: 6,
+            status:1
+        },
+        // 美食列表配置
+        foodParams: {
+          page:1,
+          limitPage:6
+        },
+        // 特产列表配置
+        goodParams: {
+            page:1,
+            limitPage:6
+        },
+        //读取栏目
+        channelParams:{
+            channelCode:''
+        },
+       flag:true,
+        setNav: function() {
+            setTimeout(function () {
+                $('.head-nav').find("li").eq(0).addClass('active');
+            },300)
+        },
+       setXinC: function () {
+            $('.left-title').css('left','50%').css('margin-left','-650px').css('top','200px')
+           //    左边固定
+           if($('#hotel')){
+               var offsetT = $('#hotel').offset().top;
+           }
+           var scrollT = 0;
+           var arrdata = new Array();
+           $(".index-scenic").each(function(i){
+               var ti = $(this).offset().top;
+               arrdata.push(ti);
+           });
+           $(window).scroll(function () {
+               $('.backtop-box').css('display','none');
+               scrollT = $(window).scrollTop();
+               if ( scrollT >= offsetT+20) {
+                   $(".left-title").css({display: "block"});
+                   $.each(arrdata,function(i){
+                       if(scrollT > arrdata[i]){
+                           if(i < arrdata.length && scrollT < arrdata[i+1] ){
+                               $(".left-title li").eq(i).addClass("curr").siblings("li").removeClass("curr");
+                           }else{
+                               $(".left-title li").eq(i).addClass("curr").siblings("li").removeClass("curr");
+                           }
+                       }
+                   });
+               } else {
+                   $(".left-title").css({display: "none"});
+               }
+           });
+           /* 行程跳转 */
+           var dayPos = $(".left-title li");
+           dayPos.click(function () {
+               var dataType = $(this).find('a').attr("data-name");
+               if(dataType === 'top'){
+                   $('html,body').animate({scrollTop: 0}, 200);
+               } else{
+                   $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top+20}, 200);
+               }
+           });
+       },
+        // 获取首页banner列表
+        getIndexBanner: function () {
+            var _this = this;
+            var $listTmpl = $("#bannerTemp");
+            var $listWrapper = $('.index-banner');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'homepage/getHomePageBanner',
+                data:{}
+            };
+            tools.request(params, function(res){
+                // console.log(res.datas)
+
+                loading.clean();
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                // 设置轮播
+
+                $('.index-banner .flexslider').flexslider({
+                    animation: "slide",
+                    animationLoop: true,
+                    slideshow: true,
+                    directionNav: true
+                });
+                $(".flex-control-nav a").text("")
+            })
+        },
+
+        // 获取热门景点列表
+        getScenicList: function () {
+            var _this = this;
+            var $listTmpl = $("#scenicTicketTemp");
+            var $listWrapper = $('.js_hotscenic');
+            $listWrapper.empty();
+            $('.js_scenic').empty();
+            var loading = tools.loading($('.js_scenic'));
+            var params = {
+                url: 'scenery/children',
+                data:_this.scenicParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                // console.log(res,'景区')
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        var bannerScenic = res.datas
+                        // 景区门票列表
+                        $('#scenicTicketTemp').tmpl({list: bannerScenic}).appendTo($('.js_scenic'));
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+
+            })
+        },
+        // 获取酒店列表
+        getHotelList: function () {
+            var _this = this;
+            var $listTmpl = $("#hotelTemp");
+            var $listWrapper = $('.js_hotel');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'hotel/list',
+                data:_this.hotelParams
+            };
+            tools.request(params, function(res) {
+                loading.clean();
+                // console.log(res, '酒店')
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        // 获取美食列表
+        getFoodList: function () {
+            var _this = this;
+            var $listTmpl = $("#foodTemp");
+            var $listWrapper = $('.js_food');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'ds/qiandnApi/team/teamProductAll',
+                type:true,
+                data:_this.foodParams
+            };
+            tools.request(params, function(res) {
+                loading.clean();
+                // console.log(res, '美食')
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        for(var i = 0; i < res.datas.length; i++) {
+                            if(i === 2 || i === 5){
+                                res.datas[i].lastliclass='last'
+                            }
+
+                        }
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        // 获取特产购物列表
+        getGoodList: function () {
+            var _this = this;
+            var $listTmpl = $("#goodTemp");
+            var $listWrapper = $('.js_good');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'ds/qiandnApi/specialty/list',
+                type: true,
+                data:_this.foodParams
+            };
+            tools.request(params, function(res) {
+                loading.clean();
+                // console.log(res, '特产')
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        for(var i = 0; i < res.datas.length; i++) {
+                            if(i === 2 || i === 5){
+                                res.datas[i].lastliclass='last'
+                            }
+
+                        }
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        // 获取地区列表
+        loadRegions: function () {
+            var _this = this;
+            $('.js_regions').empty();
+            var params = {
+                url: 'common/siteRegions',
+                data: {}
+            };
+            tools.request(params, function(res){
+                res.datas.length = 5;
+                // console.log(res,'地区')
+                var scenicDatas = res.datas;
+                var hotelDatas = res.datas;
+                var lineDatas = res.datas;
+                for(var i = 0; i< scenicDatas.length; i++){
+                    res.datas[i].type = 'scenic'
+                }
+                $("#regionsTemp").tmpl({list:scenicDatas}).appendTo($('.js_regions_scenic'));
+
+                for(var i = 0; i< hotelDatas.length; i++){
+                    res.datas[i].type = 'hotel'
+                }
+                $("#regionsTemp").tmpl({list: hotelDatas}).appendTo($('.js_regions_hotel'));
+                for(var i = 0; i< lineDatas.length; i++){
+                    res.datas[i].type = 'line'
+                }
+                $("#regionsTemp").tmpl({list: lineDatas}).appendTo($('.js_regions_line'));
+
+                $('.common-ul li').on('click', function () {
+                    var regionCode = $(this).attr('data-value')
+                    var regionType = $(this).attr('data-type')
+                    $(this).addClass('active').siblings().removeClass('active')
+                    if(regionType === 'scenic') {
+                        _this.scenicParams.region = regionCode;
+                        _this.getScenicList();
+                    }
+                    if(regionType === 'hotel') {
+                        _this.hotelParams.region = regionCode;
+                        _this.getHotelList();
+                    }
+                    if(regionType === 'line') {
+                        _this.lineParams.region = regionCode;
+                        _this.getLineList();
+                    }
+                })
+            })
+        },
+        // 获取线路列表
+        getLineList: function () {
+            var _this = this;
+            var $listTmpl = $("#lineTemp");
+            var $listWrapper = $('.js_line');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'line/pclist',
+                data: _this.lineParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        console.log(res.datas, '线路')
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        // 获取景区门票广告
+        getScenicAdvertisement: function (element,adcode,type) {
+            var _this = this;
+            var $listTmpl = $("#scenicAdvertisementTemp");
+            var $listWrapper = $(element);
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'siteAd/list',
+                data: {
+                    adCode:adcode
+                }
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if(res.code === 0){
+                    if(res.datas.length>0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    }else{
+                        res.datas=[{pics:[],url:''}];
+                        res.datas[0].pics[0]='image/ggzw.jpg';
+                        res.datas[0].url='javascript:;';
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                    }
+                }else{
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+
+            })
+        },
+        // 获取配置信息
+        getConifg: function () {
+            var navParams = {
+                url: 'config/config',
+                data:{}
+            };
+            tools.request(navParams,function (result) {
+                $('#scenic .small').html(result.page.index.Column_introduction.scenicTicket) //景区门票介绍
+                $('#hotel .small').html(result.page.index.Column_introduction.hotel) //酒店住宿介绍
+                $('#food .small').html(result.page.index.Column_introduction.food) //特色美食介绍
+                $('#good .small').html(result.page.index.Column_introduction.good) //特色美食介绍
+                $('#line .small').html(result.page.index.Column_introduction.line) //精选线路介绍
+                $('#note .small').html(result.page.index.Column_introduction.strategy) //攻略游记介绍
+                $('#destination .small').html(result.page.index.Column_introduction.destination) //目的地介绍
+                $('#charm .small').html(result.page.index.Column_introduction.mlhb) //目的地介绍
+            })
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

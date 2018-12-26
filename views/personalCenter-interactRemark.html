@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content bg-w">
+            <div class="nearorder p18">
+                <div class="person-title clearfix">
+                    <h3 class="fl">
+                        我的评论
+                    </h3>
+                </div>
+                <ul class="remark-box js_list">
+
+                </ul>
+            </div>
+            <div class="page">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+
+
+<script type="text/template" id="listTmp">
+    {{each list}}
+    <li>
+        <p class="title">
+            {{if sourceType==='ticket'}}
+            <a class="js_btn" href="scenic-detail2.html?id=${id}&channelCode=jqmp&code=jqmp">
+            {{else sourceType==='sourceType_2'}}
+            <a class="js_btn" href="hotel-detail.html?id=${reId}&channelCode=jdzs&code=jdzs">
+            {{else sourceType==='line'}}
+            <a class="js_btn" href="line-detail.html?id=${reId}&channelCode=lyxl&code=lyxl">
+            {{else}}
+            <a class="js_btn" href="javascript:;">
+            {{/if}}
+                [ ${sourceTypeName} ] ${ target }
+            </a>
+        </p>
+        <p>
+            {{html comment}}
+        </p>
+        <p class="time">发表于${ time }</p>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var remark = {
+        init: function () {
+            this.parmas = {
+                page: 1,
+                limitPage: 9,
+                token: tools.getCookie('token')
+            };
+            this.loadList();
+        },
+        eventBind: function () {
+
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_list');
+            $box.empty();
+            var loading = tools.loading($box);
+            tools.request({
+                url: 'comment/getCommentByAccount',
+                data: _this.parmas
+            },function (result) {
+                loading.clean();
+                $box.empty();
+                if(result.code === 0){
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#listTmp').tmpl({list: list}).appendTo($box);
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.parmas.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        _this.eventBind();
+                    }else{
+                        $box.html(tools.NO_DATA1);
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH1);
+                }
+            })
+        }
+    }
+    $(function () {
+        remark.init();
+    })
+</script>
+</body>
+</html>

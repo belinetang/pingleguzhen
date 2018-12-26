@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_购物车列表'})%>
+    <!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-15 -->
+</head>
+<body>
+<div class="cart-wrapper">
+    <!--引入页头-->
+    <%-include("common/header.html")%>
+    <!-- 购物车商品列表部分 -->
+    <div class="center carybox">
+        <div class="cart-list-wrappr">
+            <div class="cart-list-t clearfix">
+                <h3>特产 <span class="js_num"></span><i class="line"></i></h3>
+            </div>
+            <div class="js_cart"></div>
+        </div>
+        <div style="display: none;" class="bottom-list-wrapper">
+            <ul class="bottom-list-tabs clearfix">
+                <li class="bottom-list-tab active">
+                    <h3>我的收藏</h3>
+                    <i></i>
+                </li>
+                <li class="bottom-list-tab">
+                    <h3>最近浏览</h3>
+                    <i></i>
+                </li>
+            </ul>
+            <ul class="bottom-list clearfix">
+                <li class="bottom-card">
+                    <a href="javascript:void(0)" class="img-box">
+                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533211638379&di=645c2324d379a626b8e61782f4294ebd&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dpixel_huitu%252C0%252C0%252C294%252C40%2Fsign%3D0c199d17a3d3fd1f2204aa7a59364073%2Fa5c27d1ed21b0ef495479667d6c451da81cb3e5f.jpg" alt="">
+                    </a>
+                    <h3 class="tit">
+                        <a href="javascript:void(0)"> 迷你烤香肠炭烤味 香辣脆骨味 小肉枣小香肠猪肉肠熟食</a>
+                    </h3>
+                    <div class="bottom-card-price"><i>&yen;&nbsp;</i><em>66.6</em></div>
+                    <div class="sale">已售92</div>
+                </li>
+                <li class="bottom-card">
+                    <a href="javascript:void(0)" class="img-box">
+                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533211638379&di=645c2324d379a626b8e61782f4294ebd&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dpixel_huitu%252C0%252C0%252C294%252C40%2Fsign%3D0c199d17a3d3fd1f2204aa7a59364073%2Fa5c27d1ed21b0ef495479667d6c451da81cb3e5f.jpg" alt="">
+                    </a>
+                    <h3 class="tit">
+                        <a href="javascript:void(0)"> 迷你烤香肠炭烤味 香辣脆骨味 小肉枣小香肠猪肉肠熟食</a>
+                    </h3>
+                    <div class="bottom-card-price"><i>&yen;&nbsp;</i><em>66.6</em></div>
+                    <div class="sale">已售92</div>
+                </li>
+                <li class="bottom-card">
+                    <a href="javascript:void(0)" class="img-box">
+                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533211638379&di=645c2324d379a626b8e61782f4294ebd&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dpixel_huitu%252C0%252C0%252C294%252C40%2Fsign%3D0c199d17a3d3fd1f2204aa7a59364073%2Fa5c27d1ed21b0ef495479667d6c451da81cb3e5f.jpg" alt="">
+                    </a>
+                    <h3 class="tit">
+                        <a href="javascript:void(0)"> 迷你烤香肠炭烤味 香辣脆骨味 小肉枣小香肠猪肉肠熟食</a>
+                    </h3>
+                    <div class="bottom-card-price"><i>&yen;&nbsp;</i><em>66.6</em></div>
+                    <div class="sale">已售92</div>
+                </li>
+                <li class="bottom-card">
+                    <a href="javascript:void(0)" class="img-box">
+                        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533211638379&di=645c2324d379a626b8e61782f4294ebd&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimage%2Fc0%253Dpixel_huitu%252C0%252C0%252C294%252C40%2Fsign%3D0c199d17a3d3fd1f2204aa7a59364073%2Fa5c27d1ed21b0ef495479667d6c451da81cb3e5f.jpg" alt="">
+                    </a>
+                    <h3 class="tit">
+                        <a href="javascript:void(0)"> 迷你烤香肠炭烤味 香辣脆骨味 小肉枣小香肠猪肉肠熟食</a>
+                    </h3>
+                    <div class="bottom-card-price"><i>&yen;&nbsp;</i><em>66.6</em></div>
+                    <div class="sale">已售92</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="cartTmpl">
+    <div class="cart-list">
+        <div class="cart-tab-th clearfix">
+            <div class="cart-tab-td td-chk">
+                <div class="select-all">
+                    <div class="cart-chk js_select_all">
+                        <input type="checkbox" name="select-all" id="select-all-1"><i class="chk-img"></i>
+                    </div><label for="select-all-1">&nbsp;全选</label>
+                </div>
+            </div>
+            <div class="cart-tab-td td-item">商品信息</div>
+            <div class="cart-tab-td td-info">
+                <div class="td-inner">&nbsp;</div>
+            </div>
+            <div class="cart-tab-td td-price">
+                <div class="td-inner">单价</div>
+            </div>
+            <div class="cart-tab-td td-sum">
+                <div class="td-inner">数量</div>
+            </div>
+            <div class="cart-tab-td td-amount">
+                <div class="td-inner">小计（元）</div>
+            </div>
+            <div class="cart-tab-td td-op">
+                <div class="td-inner">操作</div>
+            </div>
+        </div>
+        <div class="cart-tab">
+            <div class="cart-tab-box">
+                {{each(i,e) list}}
+                <div class="cart-tr clearfix js_item${i} {{if e.status == false}}disabled{{/if}}">
+                    <div class="cart-tab-td td-chk">
+                        <div class="select-item">
+                            {{if e.status !== false}}
+                            <div class="cart-chk js_select_1" data-idx="${i}">
+                                <input type="checkbox" name="select-all"><i class="chk-img"></i>
+                            </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-item">
+                        <div class="item clearfix">
+                            <div class="img-box">
+                                <img src="${e.image || './image/zw.jpg'}" alt="${e.pName}">
+                            </div>
+                            <a href="javascript:void(0);" title="${e.pName}" class="item-tit">${tools.ellipsisContent(e.pName,20)}</a>
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-info">
+                        <div class="td-inner info">
+                            <p>口味：${e.title}</p>
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-price">
+                        <div class="td-inner">
+                            <div class="price">&yen;${e.price}</div>
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-sum">
+                        <div class="td-inner">
+                            {{if e.status !== false}}
+                            <div class="sum-box clearfix">
+                                <a href="javascript:;" class="btn-jian daq-icon sum-btn js_sum" data-idx="${i}">&#xe65d;</a>
+                                <!--<input type="text" placeholder="1" class="ipt">-->
+                                <p class="ipt js_ipt${i}">${e.quantity}</p>
+                                <a href="javascript:;" class="btn-add daq-icon sum-btn js_sum" data-idx="${i}">&#xe65b;</a>
+                            </div>
+                            {{else}}
+                            <div class="sum-txt">${e.quantity}</div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-amount">
+                        <div class="td-inner">
+                            <div class="amount">&yen;<span class="js_amount${i}">${e.price * e.quantity}</span></div>
+                        </div>
+                    </div>
+                    <div class="cart-tab-td td-op">
+                        <div class="td-inner">
+                            <div class="op">
+                                <a href="javascript:;" data-idx="${i}" class="js_deleteBtn">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="submit-bar-wrapper">
+        <div class="submit-bar-container clearfix">
+            <!--<div class="select-all">-->
+                <!--<div class="cart-chk js_select_all">-->
+                    <!--<input type="checkbox" name="select-all" id="select-all-2"><i class="chk-img"></i>-->
+                <!--</div><label for="select-all-2">&nbsp;全选</label>-->
+            <!--</div>-->
+            <!--<div class="submit-bar-op">-->
+                <!--<a href="javascript:void(0)" class="op-btn">删除选中商品</a>-->
+                <!--<a href="javascript:void(0)" class="op-btn">移出失效商品</a>-->
+            <!--</div>-->
+            <div class="right-box">
+                <span>已选&nbsp;<i class="orange js_itemsNum">0</i>&nbsp;件商品</span>
+                <span>合计（不含运费）</span>
+                <span class="orange">&yen;<em class="js_money">0</em></span>
+            </div>
+        </div>
+        <a href="javascript:void(0)" class="submit-btn submit-btn-disabled js_submit">去结算</a>
+    </div>
+</script>
+<script type="text/template" id="nodataTmpl">
+    <div class="cart-nodata">
+        <img src="./image/cart-nodata.png" alt="购物车">
+        <div class="cart-nodata-txt">
+            <p>购物车空空的哦~，去看看心意的商品吧~</p>
+            <a href="./specialty-list.html?channelCode=tcgw&code=tcgw">去购物&nbsp;<i class="daq-icon">&#xe6b1;</i></a>
+        </div>
+    </div>
+</script>
+<script>
+    var cart = {
+        init: function(){
+            this.getCartList();
+            this.cartListData = [];
+
+            this.deleteClick();
+            this.numChange();
+            this.submitBtnClick();
+        },
+        // 获取列表
+        getCartList: function(){
+            var _this = this;
+            $('.js_cart').renderHtml({
+                url: 'ds/qiandnApi/cart/list',
+                type: true,
+                loading: true,
+                params: {
+                    token: tools.getCookie('token')
+                },
+                size: 100,
+                template: $('#cartTmpl'),
+                noDataTmpl: $("#nodataTmpl"),
+                callback: function(data){
+                    return data;
+                },
+                complete: function(res){
+                    if(res.datas && res.datas.length) {
+                        _this.cartListData = res.datas;
+                        $('.js_num').html('（' + res.datas.length + '）');
+                        _this.selectAll();
+                    }
+                }
+            });
+        },
+        // 删除按钮点击事件
+        deleteClick: function() {
+            var _this = this;
+            $(document).on('click', '.js_deleteBtn',function () {
+                var idx = $(this).attr('data-idx');
+                $.dialog({
+                    title: '删除宝贝',
+                    message: '<p style="font-size:14px;color:#666;">确认要删除该宝贝吗？</p>',
+                    width: 300,
+                    height: 200,
+                    mask: true,
+                    footer: true,
+                    buttons: [
+                        {
+                            text :'确定',
+                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                            callback:function(){
+                                _this.deleteItem(idx);
+                            }
+                        },
+                        {
+                            text :'取消',
+                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                            callback: function(){}
+                        }
+                    ]
+
+                });
+            });
+        },
+        // 从购物车中删除
+        deleteItem: function (idx) {
+            var _this = this;
+            var params = {
+                url: 'ds/qiandnApi/cart/delete',
+                type: true,
+                data: {
+                    itemIds: _this.cartListData[idx].itemId,
+                    token: tools.getCookie('token')
+                }
+            };
+            tools.request(params, function (res) {
+                if(res.code === 0) {
+                    $.daqMessage({
+                        text: '已删除宝贝',
+                        skin: 1,
+                        position: 'center',
+                        time: 1000
+                    });
+                    $('.js_item'+idx).remove();
+                } else if(res.code === 2) {
+                    tools.doLogin();
+                } else {
+                    $.daqMessage({
+                        text: res.message,
+                        skin: 1,
+                        position: 'center',
+                        time: 1000
+                    });
+                }
+            });
+        },
+        // 数量加减
+        numChange: function () {
+            var _this = this;
+            $(document).on('click', '.js_sum', function(){
+                var $e = $(this);
+                // 按钮禁止点击
+                if($e.is('.disabled')){
+                    return false;
+                }
+                var idx = $e.attr('data-idx');
+                var data = _this.cartListData[idx];
+                var $ipt = $('.js_ipt' + idx);
+                var $amount = $('.js_amount' + idx);
+                var val = $ipt.html()-0;
+                var max = data.maxBuyNum < data.stock ? data.maxBuyNum : data.stock;
+                var min = data.minBuyNum;
+                var price = data.price;
+                // 数量减少
+                if($e.is('.btn-jian')){
+                    if(val <= min) {
+                        $e.addClass('disabled');
+                        return false;
+                    }
+                    val--;
+                    if(val === min){
+                        $e.addClass('disabled');
+                    }
+                    $ipt.html(val);
+                    if(val < max) {
+                        $e.siblings('.js_sum').removeClass('disabled');
+                    }
+                    $amount.html(price * val);
+                }
+                // 数量增加
+                if($e.is('.btn-add')){
+                    if(val >= max) {
+                        $e.addClass('disabled');
+                        return false;
+                    }
+                    val++;
+                    if(val === max ){
+                        $e.addClass('disabled');
+                    }
+                    $ipt.html(val);
+                    if(val > min) {
+                        $e.siblings('.js_sum').removeClass('disabled');
+                    }
+                    $amount.html(price * val);
+                }
+
+                _this.getMoney();
+            });
+        },
+        // 全选
+        selectAll: function(){
+            var _this = this;
+            var $selectAllBtns = $('.js_select_all');
+            $selectAllBtns.on('change', function(){
+                var $e = $(this);
+                if($e.is('.active')){
+                    itemsChange(false);
+                    $selectAllBtns.removeClass('active');
+                } else {
+                    itemsChange(true);
+                    $selectAllBtns.addClass('active');
+                }
+            });
+            // 改变商品列表选择框
+            var $items = $('.js_select_1');
+            function itemsChange(flag) {
+                if(flag) {
+                    $.each($items, function(i, e){
+                        if(!$(e).is('.active')){
+                            $(e).addClass('active');
+                        }
+                    });
+                } else {
+                    $.each($items, function(i, e){
+                        if($(e).is('.active')){
+                            $(e).removeClass('active');
+                        }
+                    });
+                }
+                _this.getMoney();
+            }
+            // 单个选择框选中
+            $items.on('click', function () {
+                var $e = $(this);
+                if($e.is('.active')){
+                    $e.removeClass('active');
+                } else {
+                    $e.addClass('active');
+                }
+                changeSelectAllBtn();
+            });
+            // 改变全选按钮状态
+            function changeSelectAllBtn() {
+                if($('.js_select_1.active').length === $('.js_select_1').length) {
+                    $selectAllBtns.addClass('active');
+                } else {
+                    $selectAllBtns.removeClass('active');
+                }
+                _this.getMoney();
+            }
+        },
+        // 统计选中商品价格
+        getMoney: function(){
+            var _this = this;
+            var $items = $('.js_select_1.active');
+            var money = 0;
+            $.each($items, function(i, e){
+               var $e = $(e);
+               var idx = $e.attr('data-idx');
+               var num = $('.js_ipt' + idx).html() - 0;
+               var price = _this.cartListData[idx].price - 0;
+               money = tools.math(num * price, money).add;
+            });
+            $('.js_itemsNum').html($items.length);
+            $('.js_money').html(money);
+
+            // 改变去结算按钮的 状态
+            if($items.length === 0) {
+                $('.js_submit').addClass('submit-btn-disabled');
+            } else {
+                $('.js_submit').removeClass('submit-btn-disabled');
+            }
+        },
+        // 去结算按钮点击事件
+        submitBtnClick: function(){
+            var _this = this;
+            $(document).on('click', '.js_submit', function(){
+                if($(this).is('.submit-btn-disabled')) {
+                    return false;
+                }
+                _this.submit();
+            });
+        },
+        submit: function() {
+            var _this = this;
+            var cartDataJson = [];
+            var itemIds = [];
+            var $products = $('.js_select_1.active');
+            var datas = _this.cartListData;
+            $.each($products, function(i, e){
+                var $e = $(e);
+                var idx = $e.attr('data-idx');
+                var productJson = {
+                    itemId: datas[idx].itemId,
+                    quantity: $('.js_ipt' + idx).html() - 0,
+                    specification: datas[idx].specification
+                };
+                cartDataJson.push(productJson);
+                itemIds.push(datas[idx].itemId);
+            });
+            itemIds = itemIds.toString();
+            var params = {
+                url: 'ds/qiandnApi/cart/order',
+                type: true,
+                data: {
+                    cartData: JSON.stringify(cartDataJson),
+                    token: tools.getCookie('token')
+                }
+            };
+            tools.request(params, function(res){
+                window.location.replace('cart-fillorder.html?itemIds=' + itemIds);
+            });
+        }
+    };
+    $(function(){
+        cart.init();
+    });
+</script>
+</body>
+</html>

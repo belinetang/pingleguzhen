@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content no-br">
+            <div class="nearorder bg-w">
+                <div class="person-title mar18 clearfix">
+                    <h3 class="fl">
+                        我的收藏
+                    </h3>
+                    <!--<span class="fr">-->
+                        <!--<a href="javascript:;" class="all-btn"><i class="icon-all"></i>全选</a>-->
+                        <!--<a href="javascript:;">删除</a>-->
+                    <!--</span>-->
+                </div>
+
+                <div class="state-list clearfix">
+                    <a href="javascript:;" class="curr">全部<i class="icon-line"></i></a>
+                    <!--<a href="javascript:;" data-type="ticket">门票<i class="icon-line"></i></a>-->
+                    <a href="javascript:;" data-type="sourceType_2">酒店<i class="icon-line"></i></a>
+                    <a href="javascript:;" data-type="line">路线<i class="icon-line"></i></a>
+                    <!--<a href="javascript:;" data-type="destination">目的地<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="sourceType_5">美食<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="sourceType_7">特产<i class="icon-line"></i></a>-->
+                </div>
+            </div>
+            <div class="collect-box">
+                <ul class="js_list">
+
+                </ul>
+            </div>
+            <div class="page">
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+
+<script type="text/template" id="listTmp">
+    {{each list}}
+    <li>
+        {{if sourceType==='ticket'}}
+        <a class="js_btn" href="scenic-detail2.html?channelCode=jqmp&code=jqmp&rid=${reId}">
+        {{else sourceType==='sourceType_2'}}
+        <a class="js_btn" href="hotel-detail.html?channelCode=jdzs&code=jdzs&id=${reId}">
+        {{else sourceType==='line'}}
+        <a class="js_btn" href="line-detail.html?channelCode=lyxl&code=lyxl&id=${reId}">
+        {{else sourceType==='destination'}}
+        <a class="js_btn" href="destination-detail.html?channelCode=mdd&id=${reId}&code=mdd">
+        {{else sourceType==='travel_strategy'}}
+        <a class="js_btn" href="note-detail.html?id=${reId}&code=yjgl&channelCode=yjgl">
+        {{else}}
+        <a class="js_btn" href="javascript:;">
+        {{/if}}
+            <div class="img_box">
+                <img src="${image || 'image/zw.jpg'}" alt="${target}">
+            </div>
+            <div class="content_box">
+                {{if price}}
+                <p class="title" title="${target}">${tools.ellipsisContent(target,21)}</p>
+                <p class="price"><i>￥</i><span>${ price || '暂无数据' }</span>起</p>
+                {{else}}
+                <p class="title" title="${target}">${tools.ellipsisContent(target,32)}</p>
+                {{/if}}
+                {{if sourceTypeName}}
+                <span class="type {{if sourceType==='sourceType_1'}}mp{{else sourceType==='sourceType_2'}}jd{{else sourceType==='line'}}lyxl{{else sourceType==='sourceType_5'}}ms{{else sourceType==='sourceType_7'}}tc{{else sourceType==='destination'}}mdd{{else sourceType==='travel_strategy'}}lygl{{else sourceType==='video'}}sp{{/if}}">${ sourceTypeName }</span>
+                {{/if}}
+            </div>
+            <span class="del" data-id="${id}"><i class="daq-icon close">&#xe672;</i></span>
+        </a>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var collect = {
+        init: function () {
+            this.parmas = {
+                page: 1,
+                limitPage: 10,
+                token: tools.getCookie('token'),
+                sourceType: ''
+            };
+            this.loadList();
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.state-list > a').off().click(function () {
+                var _self = $(this);
+                _this.parmas.sourceType = _self.attr("data-type");
+                _this.parmas.page = 1;
+                _this.loadList();
+                _self.addClass('curr').siblings('a').removeClass('curr');
+            });
+            //取消收藏
+            $('.del').click(function () {
+                var id = $(this).attr('data-id');
+                $.dialog({
+                    title: '取消收藏',
+                    message: '<p style="font-size:14px;color:#666;">确认要取消收藏吗？</p>',
+                    width: 300,
+                    height: 200,
+                    mask: true,
+                    footer: true,
+                    buttons: [
+                        {
+                            text :'确定',
+                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                            callback:function(){
+                                _this.deleteEnshrineId(id);
+                            }
+                        },
+                        {
+                            text :'取消',
+                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                            callback: function(){}
+                        }
+                    ]
+
+                });
+                return false;
+            })
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_list');
+            $box.empty();
+            var loading = tools.loading($box);
+            tools.request({
+                url: 'enshrine/getEnshrineByAccount',
+                data: _this.parmas
+            },function (result) {
+                loading.clean();
+                $box.empty();
+                if(result.code === 0){
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#listTmp').tmpl({list: list}).appendTo($box);
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.parmas.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        _this.eventBind();
+                    }else{
+                        $box.html(tools.NO_DATA1);
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH1);
+                }
+            })
+        },
+        deleteEnshrineId: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'enshrine/deleteEnshrineId',
+                data: {
+                    id: id,
+                    token: tools.getCookie('token')
+                }
+            },function (result) {
+                _this.loadList();
+            })
+        }
+    }
+    $(function () {
+        collect.init();
+    })
+</script>
+</body>
+</html>

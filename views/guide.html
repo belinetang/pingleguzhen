@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_导游查询'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--banner-->
+<div class="d-banner">
+    <div class="banner-img js_towlevelbanner">
+    </div>
+</div>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<!--条件筛选-->
+<div class="selection-conditions1 center clearfix">
+    <!--选择类别-->
+    <div class="type-box clearfix">
+        <label>选择类别</label>
+        <ul class="type clearfix">
+        </ul>
+    </div>
+    <!--选择区域-->
+    <div class="region-box clearfix">
+        <label>选择区域</label>
+        <ul class="region clearfix">
+        </ul>
+    </div>
+</div>
+<ul class="guide-list">
+
+</ul>
+<div class="page"></div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--导游类型-->
+<script type="text/template" id="typeTemp">
+    <li class="curr" data-id="">全部</li>
+    {{each list}}
+    <li data-id="${code}">${name}</li>
+    {{/each}}
+</script>
+<!--区域模板-->
+<script type="text/template" id="regionsTemp">
+    <li class="curr" data-id="">全部</li>
+    {{each list}}
+    <li data-id="${region}">${name}</li>
+    {{/each}}
+</script>
+<!--导游列表 S-->
+<script type="text/template" id="guideListTemp">
+    {{each list}}
+    <li class="guide-item">
+        {{if phone}}
+        <div class="guide-hd ">
+            <img src="${photo}" alt="${name} ">
+        </div>
+        {{/if}}
+        <div class="guide-bd"><p><strong class="name" title="${name}">${name} </strong>
+            {{if sex === '女性'}}
+            <span class="gender woman">${sex}<i class="daq-icon"></i></span></p>
+            {{/if}}
+            {{if sex === '男性'}}
+            <span class="gender man">${sex}<i class="daq-icon"></i></span></p>
+            {{/if}}
+            <p><label>导游等级：</label>${level}</p>
+            <p><label>导游证号：</label>${identification || '未知'}</p>
+            <p title="${language}">语言种类：${language || '未知'}</p>
+            <p title="${company}"><label>所属公司：</label>${company || '未知'}</p></div>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var guideJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.loadRegions();
+            this.getGuideType();
+            this.getGuideList(); // 获取导游列表
+        },
+        guide_Params:{
+            page:1,
+            limitPage:12,
+        },
+        // 获取地区列表
+        loadRegions: function () {
+            var _this = this;
+            var $listTmpl = $("#regionsTemp");
+            var $listWrapper = $('.region');
+            $listWrapper.empty();
+            var params = {
+                url: 'common/siteRegions',
+                data: {}
+            };
+            tools.request(params, function (res) {
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.region li').on('click', function () {
+                    _this.guide_Params.region = $(this).attr('data-id')
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.getGuideList();
+                })
+            })
+        },
+        // 获取导游类型
+        getGuideType: function () {
+            var _this = this;
+            var $listTmpl = $("#typeTemp");
+            var $listWrapper = $('.type');
+            $listWrapper.empty();
+            var params = {
+                url: 'guide/type/list',
+                data: {}
+            };
+            tools.request(params, function (res) {
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.type li').on('click', function () {
+                    _this.guide_Params.level = $(this).attr('data-id')
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.getGuideList();
+                })
+            })
+        },
+        // 获取导游列表
+        getGuideList: function () {
+            var _this = this;
+            var $listTmpl = $("#guideListTemp");
+            var $listWrapper = $('.guide-list');
+            $listWrapper.empty();
+            $('.page').empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'guide/list',
+                data: _this.guide_Params
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        //  初始化分页
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.guide_Params.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.getGuideList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    }
+    $(function () {
+        guideJs.init();
+    })
+</script>
+</body>
+
+</html>

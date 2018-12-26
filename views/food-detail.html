@@ -1,0 +1,228 @@
+<!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：龚小虎 | 创建：2018-7-31 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_特产详情'})%>
+    <!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：龚小虎 | 创建：2018-8-14 -->
+</head>
+<body>
+    <!--引入页头-->
+    <%-include("common/header.html")%>
+    <%-include("common/nav.html")%>
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <div class="daq-food-detail">
+        <div class="center">
+            <!--详情-->
+            <div class="js_detail"></div>
+        </div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--美食详情tmpl-->
+    <script type="text/template" id="sTmpl">
+        <div class="specialty-show clearfix">
+            <div class="left-img-show fl">
+                <div class="big-img">
+                    <img src="${data.cover || './image/zw.jpg'}" alt="">
+                </div>
+                <div class="scroll-content js_img_scroll">
+                    <ul class="scroll-ul clearfix">
+                        {{each data.productImages}}
+                            <li data-src="${large}"><img src="${thumbnail}" alt="${title}"></li>
+                        {{/each}}
+                    </ul>
+                    <div class="left-btn daq-icon">&#xe6b2;</div>
+                    <div class="right-btn daq-icon">&#xe6b1;</div>
+                </div>
+            </div>
+            <div class="right-classify fl">
+                <h2 class="specialty-name">${data.name}</h2>
+                <!--<p class="summary">${data.remind || '暂无数据'}</p>-->
+                <div class="specialty-price">
+                    优惠价：
+                    <span class="price">&yen;<span>${data.dayPrice.price}</span></span>
+                    <span class="original-price">价值:<span>&yen;${data.dayPrice.marketPrice}</span></span>
+                </div>
+                <div class="food-validity">
+                    <span>有效期:</span>
+                    ${data.validity}
+                    <!--至 2016-10-31  法定节假日、周末通用-->
+                </div>
+                <div class="food-validity">
+                    <span>联系电话:</span>
+                    ${data.businessPhone}
+                    <!--至 2016-10-31  法定节假日、周末通用-->
+                </div>
+                <div class="food-validity">
+                    <span>商家地址:</span>
+                    ${data.address}
+                    <!--至 2016-10-31  法定节假日、周末通用-->
+                </div>
+                <div class="bug-num">
+                    <span class="left-name">数&ensp;&ensp;量:</span>
+                    <p class="daq-inp-operation dio-input mt-10 spec-inp-operation">
+                        <input class="wid-138 js_quantity" type="text" value="1" maxlength="6"/>
+                        <i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>
+                    </p>
+                </div>
+                <div class="specialty-btn">
+                    <button class="now-bug js_buy">立即购买</button>
+                    <span class="share">
+                        <i class="daq-icon">&#xe652;</i>分享
+                        <label class="bdsharebuttonbox bdshare_t bds_tools_32" style="position: absolute;z-index: 10; top: -6px; display:  block; left: 0; width:0px; height:0px;" data-bd-bind="1471256152095">
+                        <a class="bds_more" title="" data-img="" data-cmd="more" style="position: absolute;z-index:10; margin:0;padding:0;background: transparent;left: 0;top: 4px;width:90px;height:90px; display:inline-block; border: 0;background:red;opacity: 0;filter:Alpha(opacity=0)"></a>
+                    </label>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- 特产参数 -->
+        <!--房型介绍-->
+        <div class="hotel-detail-price">
+            <ul class="detail-nav">
+                <li class="active">
+                    <a href="javascript:;" data-type="service">套餐详情</a>
+                </li>
+                <!--<li>-->
+                    <!--<a href="javascript:;" data-type="explain">费用说明</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:;" data-type="meal">套餐详情</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:;" data-type="hint">温馨提示</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a href="javascript:;" data-type="evaluate">会员评价</a>-->
+                <!--</li>-->
+            </ul>
+            <div class="goods-state" id="service">
+                {{html data.detail || '暂无数据'}}
+            </div>
+        </div>
+        <!-- 产品特色 -->
+        <!--<div class="goods-special" id="meal">-->
+            <!--<h2 class="common-title">套餐详情</h2>-->
+            <!--<div class="special-content">-->
+                <!--{{html data.feeInfo || '暂无数据'}}-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="goods-special" id="hint">-->
+            <!--<h2 class="common-title">温馨提示</h2>-->
+            <!--<div class="special-content">-->
+                <!--{{html data.memo || '暂无数据'}}-->
+            <!--</div>-->
+        <!--</div>-->
+    </script>
+<script>
+$(function () {
+    detail.init();
+});
+var detail = {
+    init: function(){
+        this.getDetail();
+        tools.setTowLevelBanner();
+        $(document).on('click', '.js_buy', function(){
+            tools.isLogin(function(){
+                window.location.href = 'food-order.html?id=' + tools.getUrlParams('id') + '&quantity=' + $('.js_quantity').val();
+            });
+        });
+    },
+    getDetail: function(){
+        var _this = this;
+        $('.js_detail').renderHtml({
+            url: 'ds/qiandnApi/team/view',
+            type: true,
+            template: $("#sTmpl"),
+            params: {
+                pid: tools.getUrlParams('id')
+            },
+            loading: true,
+            callback: function (data) {
+                var data = data.products;
+                if(data.productImages.length > 0) {
+                    data.cover = data.productImages[0].large;
+                }
+                return data;
+            },
+            complete: function(res){
+                /*分享*/
+                tools.share();
+                _this.complete(res);
+                _this.pageScroll();
+            }
+        })
+    },
+    complete: function(res){
+        // 规格处理
+        // 左侧图片处理
+        if(res.data.products.productImages.length > 0){
+            this.imgHover();
+        } else {
+            $('.js_img_scroll').hide();
+        }
+
+        this.operation = tools.inputCount({
+            el: '.daq-inp-operation',
+            max:res.data.products.dayPrice.maxBuyNum, // 最大值
+            min:res.data.products.dayPrice.minBuyNum // 最小值
+        });
+    },
+    // 左侧图片预览
+    imgHover: function(){
+        $(".scroll-ul li").eq(0).addClass('active');
+        $(".scroll-ul li").click(function () {
+            var $src = $(this).attr("data-src");
+            $(".big-img").find("img").attr("src",$src);
+            $(this).addClass('active').siblings("li").removeClass('active');
+        });
+        $('.right-btn').on('click',function () {
+            var $box = $('.scroll-ul')
+            var leng = $('.scroll-ul li').length
+            var $h = parseInt($box.css('marginLeft'))
+            if($h == -(leng-6)*101 || leng <= 6){
+                return false
+            }
+            $box.stop().css('marginLeft',$h-101 + 'px').css("transition","all .1s");
+        });
+        $('.left-btn').on('click',function () {
+            var $box = $('.scroll-ul')
+            var $h = parseInt($box.css('marginLeft'))
+            var leng = $('.scroll-ul li').length
+            if($h == 0 || leng <= 6){
+                return false
+            }
+            $box.stop().css('marginLeft',$h+101 + 'px').css("transition","all .1s");
+        });
+    },
+    // 下方选项卡点击页面滚动
+    pageScroll: function() {
+        var needPos = $(".detail-nav li");
+        needPos.click(function () {
+            needPos.removeClass("active");
+            $(this).addClass("active");
+            var dataType = $(this).find('a').attr("data-type");
+            if($('.detail-nav').hasClass("curr")){
+                $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-46}, 500);
+            }else{
+                $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-92}, 500);
+            }
+        });
+        /*详情页面内容tit滚动判断固定位置*/
+        var Scrolltop = $(".detail-nav").offset().top;
+        $(window).scroll(function(){
+            var bodyScrolltop = document.documentElement.scrollTop + document.body.scrollTop;
+            if(bodyScrolltop >= Scrolltop){
+                $(".detail-nav").addClass('curr');
+            }else if(bodyScrolltop < Scrolltop){
+                $(".detail-nav").removeClass('curr');
+            }
+        });
+    }
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_空模板'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--在线投诉 S-->
+    <div class="mailbox-wrap">
+        <div class="mainlbox-con">
+            <a class="title">在线投诉</a>
+            <form id="mailbox-from">
+                <ul>
+                    <li>
+                        <label class="fl"><i>*</i>投诉对象：</label>
+                        <select class="text fl who" name="who">
+                            <option value="宾馆酒店">宾馆酒店</option>
+                            <option value="景区景点">景区景点</option>
+                            <option value="热门景点">热门景点</option>
+                        </select>
+                        <p class="fl"></p>
+                    </li>
+                    <li>
+                        <label class="fl"><i>*</i>投诉标题：</label>
+                        <input type="text" class="text fl t-title tl" name="title" placeholder="请输入标题">
+                        <p class="fl"></p>
+                    </li>
+                    <li class="clearfix">
+                        <label class="fl"><i>*</i>您的姓名：</label><input type="text" class="text fl name" name="name" placeholder="请输入您的姓名">
+                        <p class="fl"></p>
+                    </li>
+                    <li class="clearfix">
+                        <label class="fl"><i>*</i>您的电话：</label><input type="text" class="text fl phone" name="phone" placeholder="请输入手机号码">
+                        <p class="fl"></p>
+                    </li>
+                    <li class="fl clearfix">
+                        <label class="fl"><i>*</i>投诉内容：</label><textarea class="fl content" name="content"  placeholder="请输入您需要投诉的详情内容" maxlength="180"></textarea>
+                        <p class="fl"></p>
+                    </li>
+
+                    <li>
+                        <input type="button" value="确认并提交" class="submits">
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+
+</body>
+<script type="text/javascript">
+    var mailBox = {
+        _init: function() {
+            this.bindEvent();
+            this.getAdv('.mailbox-wrap','zxts_bg');
+        },
+        _initConfig:{},
+        bindEvent: function() {
+            var _this = this;
+            //投诉按钮的点击
+            $('.submits').click(function() {
+                _this.submit();
+            });
+        },
+        formValidate: function(formData) {
+            var _this = this;
+            var result = {
+                msg: '',
+                status: false
+            };
+            var formData = {
+                name: $('.name'),
+                phone: $('.phone'),
+                title: $('.t-title'),
+                who: $('.who'),
+                content: $('.content')
+            };
+            //投诉标题
+            if (!tools.validate(formData.title.val(), 'require') || !tools.validate(formData.title.val(), 'chinese') || !tools.validate(formData.title.val(), 'length', 5, 21)) {
+                formData.title.siblings('p').text("长度请保持在6~21个字符以内英文或汉字");
+                return false;
+            } else {
+                _this.sensitiveWords(formData.title.siblings('p'),formData.title.val());
+                formData.title.focus();
+                formData.title.siblings('p').text('');
+            }
+            //验证投诉人
+            if (!tools.validate(formData.name.val(), 'require') || !tools.validate(formData.name.val(), 'chinese') || !tools.validate(formData.name.val(), 'length', 1, 16)) {
+                formData.name.siblings('p').text("请保持在2~15个字符以内的英文或汉字");
+                return false;
+            } else {
+                _this.sensitiveWords(formData.name.siblings('p'),formData.name.val());
+                formData.name.focus();
+                formData.name.siblings('p').text('');
+            }
+            //验证电话
+            if (!tools.validate(formData.phone.val(), 'phone') || !tools.validate(formData.phone.val(), 'chinese') || !tools.validate(formData.phone.val(), 'length', 1, 12)) {
+                formData.phone.siblings('p').text("请输入正确的手机号");
+                return false;
+            } else {
+                _this.sensitiveWords(formData.phone.siblings('p'),formData.phone.val());
+                formData.phone.focus();
+                formData.phone.siblings('p').text('');
+            }
+            //验证内容
+            if (!tools.validate(formData.content.val(), 'require') || !tools.validate(formData.content.val(), 'length', 5, 201)) {
+                formData.content.siblings('p').text("长度请保持在6~200个字符以内");
+                return false;
+            } else {
+                _this.sensitiveWords(formData.content.siblings('p'),formData.content.val());
+                formData.content.focus();
+                formData.content.siblings('p').text('');
+            }
+            result.status = true;
+            result.msg = "验证成功";
+            return result;
+        },
+        submit: function() {
+            var _this =this;
+            var formData = {
+                    name: $('.name').val(),
+                    phone: $('.phone').val(),
+                    title: $('.t-title').val(),
+                    unit: $('.who').val(),
+                    content: $('.content').val(),
+                },
+                //表单验证结果
+                validateResult = this.formValidate(formData);
+            if (validateResult.status) {
+                _this._initConfig.name = $('.name').val();
+                _this._initConfig.title = $('.t-title').val();
+                _this._initConfig.phone = $('.phone').val();
+                _this._initConfig.unit = $('.who').val();
+                _this._initConfig.content = $('.content').val();
+                var params = {
+                    url: 'complain/save',
+                    data: _this._initConfig
+                }
+                tools.request(params, function(res){
+                    if (res.code === 0) {
+                        $("#mailbox-from")[0].reset();
+                        $.dialog({
+                            title: '提交成功',
+                            message: '提交成功，等待后台审核',
+                            width: 400,
+                            height: 200,
+                            mask: true,
+                            footer: false
+                        });
+                    } else {
+                        $.dialog({
+                            title: '提交出错',
+                            message: '提交出错了',
+                            width: 400,
+                            height: 200,
+                            mask: true,
+                            footer: false
+                        });
+                    }
+                })
+            }
+        },
+        sensitiveWords: function(ele,str){
+            var params = {
+                url: 'sensitiveWord/check',
+                type: 'json',
+                data: {
+                    dataText: str
+                }
+            }
+            tools.request(params, function(res){
+                if (res.code === 2) {
+                    ele.text('你输入的内容包含敏感词汇');
+                }
+            })
+        },
+        // 背景广告位
+        getAdv: function (element,code) {
+            var _this = this;
+            var navParams = {
+                url: 'siteAd/list',
+                data:{
+                    adCode:code,
+                }
+            };
+            tools.request(navParams,function (result) {
+                console.log(result)
+                if (result.code === 0) {
+                    if(result.datas && result.datas.length>0) {
+                        $(element).css('background','url('+result.datas[0].pics[0]+') center')
+                    }else{
+                        $(element).css('background','url(image/zw.jpg)')
+                    }
+                } else {
+                    $(element).html(tools.TRY_REFRESH);
+                }
+            })
+        },
+    };
+    $(function() {
+        mailBox._init();
+    });
+</script>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content min680 bg-w">
+            <div class="nearorder p18">
+                <div class="person-title mar24 clearfix">
+                    <h3 class="fl">
+                        订单管理
+                    </h3>
+                </div>
+
+                <div class="state-list-order clearfix js_count">
+
+                </div>
+
+                <div class="order-search clearfix">
+                    <span>订单号：<input type="text" placeholder="请输入订单号" class="js_sn"></span>
+                    <span class="time">
+                    订单时间：
+                    <div class="daq-date">
+                        <input class="date" id="start" placeholder="开始时间" readonly="readonly">
+                        <i class="sysfont date-icon"></i>
+                    </div> -
+                     <div class="daq-date">
+                        <input class="date" id="end" placeholder="结束时间" readonly="readonly">
+                        <i class="sysfont date-icon"></i>
+                    </div>
+                    </span>
+                    <a href="javascript:;" class="js_search">搜 索</a>
+                </div>
+            </div>
+                <table class="ordertable">
+                    <thead>
+                    <tr>
+                        <th class="w408 text-left p20">产品信息</th>
+                        <th>购买日期</th>
+                        <th>数量</th>
+                        <th>总金额</th>
+                        <th>订单状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="js_list">
+
+                    </tbody>
+                </table>
+                <div class="page">
+                </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+
+<!--列表-->
+<script type="text/template" id="listTemp">
+    {{each list}}
+    <tr>
+        <td class="order-info">
+            <a href="javascript:;" class="img-box"><img src="${thumbnail || 'image/zw.jpg'}" alt="${ fullName }"></a>
+            <div>
+                <p class="txt1">订单号：${sn}</p>
+                <p>产品名称：
+                    {{if isMarketable}}
+                        {{if category === 'ticket'}}
+                            <a href="scenic-detail2.html?rid=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }">
+                        {{else category === 'room'}}
+                            <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }">
+                        {{else category === 'line'}}
+                            <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }">
+                        {{else category === 'specialty'}}
+                            <a href="specialty-detail.html?id=${productId}&channelCode=tcgw&code=tcgw" title="${ fullName }">
+                        {{else category === 'team'}}
+                            <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }">
+                        {{/if}}
+                    {{else}}
+                    <a href="javascript:;" class="lowerFrame" title="${ fullName }">
+                    {{/if}}
+                        ${ tools.ellipsisContent(fullName,36) }
+                    </a>
+                </p>
+            </div>
+        </td>
+        <td class="time">${createDate}</td>
+        <td>
+            {{if child}}
+            成人：${quantity}  儿童：${child}
+            {{else}}
+            ${quantity}
+            {{/if}}
+        </td>
+        <td class="amount">￥${amount}</td>
+        <td>
+            ${orderStatus}
+        </td>
+        <td>
+            {{if orderStatus==="待付款"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                <a href="ticketonline-payment.html?id=${id}" class="cancel-btn">
+                {{else}}
+                <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                    去付款</a>
+            </p>
+            <p class="btn-box">
+                <a href="javascript:;" data-sn="${sn}" class="cancel-btn js_close">取消订单</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="未发货"}}
+            <p class="btn-box">
+                <a href="personalCenter-applyrefund.html?orderId=${id}" class="cancel-btn">申请退款</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="已发货"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                {{if category === 'ticket'}}
+                <a href="scenic-detail2.html?rid=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }" class="cancel-btn">
+                {{else category === 'room'}}
+                <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }" class="cancel-btn">
+                {{else category === 'line'}}
+                <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }" class="cancel-btn">
+                {{else category === 'specialty'}}
+                <a href="specialty-detail.html?id=${productId}&channelCode=tcgw&code=tcgw" title="${ fullName }" class="cancel-btn">
+                {{else category === 'team'}}
+                <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }" class="cancel-btn">
+                {{/if}}
+                {{else}}
+                <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                再次购买</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="待使用" || orderStatus==="已支付"}}
+            <p class="btn-box">
+                <a href="personalCenter-applyrefund.html?orderId=${id}" class="cancel-btn">申请退款</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="已退款" || orderStatus==="已取消" || orderStatus==="待评价" || orderStatus==="已消费" || orderStatus==="已签收"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                    {{if category === 'ticket'}}
+                    <a href="scenic-detail2.html?rid=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }" class="cancel-btn">
+                    {{else category === 'room'}}
+                    <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }" class="cancel-btn">
+                    {{else category === 'line'}}
+                    <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }" class="cancel-btn">
+                    {{else category === 'specialty'}}
+                    <a href="specialty-detail.html?id=${productId}&channelCode=tsgw&code=tsgw" title="${ fullName }" class="cancel-btn">
+                    {{else category === 'team'}}
+                    <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }" class="cancel-btn">
+                    {{/if}}
+                {{else}}
+                 <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                  再次购买</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<!--数量-->
+<script type="text/template" id="countTmp">
+    <a href="javascript:;" class="curr" data-status="">全部订单（${data.allOrder}）<i class="icon-line"></i></a>
+    <a href="javascript:;" data-status="unpaid">待付款（${data.unpaidOrder}）<i class="icon-line"></i></a>
+    <a href="javascript:;" data-status="inited">待使用（${data.initedOrder}）<i class="icon-line"></i></a>
+    <a href="javascript:;" data-status="undis">待评价（${data.unevaluateOrder}）<i class="icon-line"></i></a>
+</script>
+<script>
+    var allorder = {
+        init: function () {
+            this.parmas = {
+                page: 1,
+                limitPage: 6,
+                token: tools.getCookie('token'),
+                sourceType: '',
+                status:'',
+                endDate:'',
+                startDate:'',
+                category:'',
+                sn:''
+            };
+            if(tools.getUrlParams('type') === 'all'){
+                this.parmas.category = ''
+            }else{
+                this.parmas.category = tools.getUrlParams('type');
+            }
+            this.orderNumInfo();
+            this.loadList();
+            this.eventBind();
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.js_search').click(function () {
+                _this.parmas.sn = $('.js_sn').val();
+                _this.loadList();
+            })
+            var start =  laydate.render({
+                elem: '#start',
+                done: function(value, date){
+                    _this.parmas.startDate = value;
+                    if(value !== ''){
+                        end.config.min.year = date.year;
+                        end.config.min.month = date.month-1;
+                        end.config.min.date = date.date;
+                    }else{
+                        end.config.min.year = '';
+                        end.config.min.month = '';
+                        end.config.min.date = '';
+                    }
+                }
+            });
+            var end = laydate.render({
+                elem: '#end',
+                done: function(value, date){
+                    _this.parmas.endDate = value;
+                    if (value !== ''){
+                        start.config.max.year = date.year;
+                        start.config.max.month = date.month-1;
+                        start.config.max.date = date.date;
+                    } else {
+                        start.config.max.year = '';
+                        start.config.max.month = '';
+                        start.config.max.date = '';
+                    }
+                }
+            });
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_list');
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/orderList',
+                data: _this.parmas,
+                type: true
+            },function (result) {
+                $box.empty();
+                if(result.code === 0){
+                    $box.empty();
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#listTemp').tmpl({list: list}).appendTo($box);
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.parmas.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        //下架判定
+                        $('.lowerFrame').off().click(function () {
+                            $.dialog({
+                                title: '温馨提示',
+                                message: '<p style="font-size:14px;color:#666;">商品已经下架</p>',
+                                width: 300,
+                                height: 200,
+                                mask: true,
+                                footer: true,
+                                buttons: [
+                                    {
+                                        text :'确定',
+                                        className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                        callback:function(){
+
+                                        }
+                                    }
+                                ]
+
+                            });
+                        });
+                        //取消订单
+                        $('.js_close').off().click(function () {
+                            var sn = $(this).attr('data-sn');
+                            $.dialog({
+                                title: '取消订单',
+                                message: '<p style="font-size:14px;color:#666;">确认要取消当前订单吗？</p>',
+                                width: 300,
+                                height: 200,
+                                mask: true,
+                                footer: true,
+                                buttons: [
+                                    {
+                                        text :'确定',
+                                        className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                        callback:function(){
+                                            tools.request({
+                                                url: 'ds/qiandnApi/order-pc/cancel-order',
+                                                data:{
+                                                    sn: sn,
+                                                    token: tools.getCookie('token')
+                                                },
+                                                type: true
+                                            },function (result) {
+                                                if(result.code === 0){
+                                                    _this.loadList();
+                                                }else{
+                                                    alert(result.message);
+                                                }
+                                            })
+                                        }
+                                    },
+                                    {
+                                        text :'取消',
+                                        className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                                        callback: function(){}
+                                    }
+                                ]
+
+                            });
+                        })
+                    }else{
+                        $box.html("<tr><td colspan='6'>"+tools.NO_DATA+"</td></tr>");
+                        $('.page').html("");
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH)
+                }
+            })
+        },
+        orderNumInfo: function () {
+            var _this = this,
+                $box = $('.js_count');
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/orderCount',
+                data: {
+                    token: _this.parmas.token,
+                    category: _this.parmas.category
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $box.empty();
+                    var data = result.data;
+                    $('#countTmp').tmpl({data: data}).appendTo($box);
+                    $('.js_count>a').off().click(function () {
+                        _this.parmas.status = $(this).attr("data-status");
+                        _this.parmas.page = 1;
+                        $(this).addClass('curr').siblings('a').removeClass('curr');
+                        _this.loadList();
+                    })
+                }else{
+                    $box.html(tools.TRY_REFRESH)
+                }
+            })
+        },
+    }
+    $(function () {
+        allorder.init();
+    })
+</script>
+</body>
+</html>

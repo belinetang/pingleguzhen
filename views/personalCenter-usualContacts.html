@@ -1,0 +1,445 @@
+<!-- 页面设计：陈建波| 页面重构：胡琳浚 | 前端开发：胡琳浚 | 创建：2018-8-7 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content min680 bg-w">
+            <div class="nearorder p18">
+                <div class="person-title mar24 clearfix">
+                    <h3 class="fl">
+                        常用联系人
+                    </h3>
+                </div>
+                <div class="usual-address js-list">
+                </div>
+                <div class="contacts lxr-contacts js-no">
+                </div>
+                <div class="page"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="personalCenter-max add-address">
+    <div class="content">
+        <div class="person-title mar24 clearfix">
+            <h3 class="fl">
+                新增常用联系人
+            </h3>
+            <i class="daq-icon fr close">&#xe656;</i>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系人姓名：
+            </p>
+            <input type="text" class="name js_name" maxlength="18">
+            <span class="warning"><i>!</i>联系人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                性别：
+            </p>
+            <span class="sex-select">
+                <input type="radio" id="man" name="sex" data-sex="0"  checked="">
+                <label for="man">男</label>
+            </span>
+            <span for="women" class="sex-select">
+                <input type="radio" id="women" name="sex" data-sex="1">
+                <label for="women">女</label>
+            </span>
+            <span class="warning"><i>!</i>联系人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系手机：
+            </p>
+            <input type="text" class="phone js_phone" maxlength="11">
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                身份证号：
+            </p>
+            <input type="text" class="idcard js_idcard" maxlength="18">
+            <span class="warning"><i>!</i>请正确填写身份证</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+            </p>
+            <a href="javascript:;" class="sub js_sub">提交</a>
+            <a href="javascript:;" class="cancel close">取消</a>
+        </div>
+    </div>
+</div>
+<div class="personalCenter-max add-update-address">
+    <div class="content">
+        <div class="person-title mar24 clearfix">
+            <h3 class="fl">
+                新增常用联系人
+            </h3>
+            <i class="daq-icon fr close">&#xe656;</i>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系人姓名：
+            </p>
+            <input type="text" class="name js_update_name" maxlength="18">
+            <span class="warning"><i>!</i>联系人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                性别：
+            </p>
+            <span for="update_man" class="sex-select">
+                <input id="update_man" type="radio" name="sex" data-sex="0">
+                <label for="update_man">男</label>
+            </span>
+            <span for="update_women" class="sex-select">
+                <input id="update_women" type="radio" name="sex" data-sex="1">
+                <label for="update_women">女</label>
+            </span>
+            <span class="warning"><i>!</i>联系人不能为空</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                联系手机：
+            </p>
+            <input type="text" class="phone js_update_phone" maxlength="11">
+            <span class="warning"><i>!</i>请正确填写手机号</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+                <span>*</span>
+                身份证号：
+            </p>
+            <input type="text" class="idcard js_update_idcard" maxlength="18">
+            <span class="warning"><i>!</i>请正确填写身份证</span>
+        </div>
+        <div class="my-details clearfix">
+            <p class="left-title fl">
+            </p>
+            <a href="javascript:;" class="sub js_sub_update" data-id="">修改</a>
+            <a href="javascript:;" class="cancel close">取消</a>
+        </div>
+    </div>
+</div>
+<!--列表-->
+<script type="text/template" id="adressListTemp">
+        <p class="usual-btn js-add-btn">
+            <img src="image/address-icon.png" alt="">
+            <span>新增常用联系人</span>
+        </p>
+        <div class="title clearfix">
+            <p class="name fl">姓名</p>
+            <p class="city fl">性别</p>
+            <p class="phone fl">手机号</p>
+            <p class="phone fl">证件类型</p>
+            <p class="idcard fl">证件号码</p>
+            <p class="handle wd140 fl">操作</p>
+        </div>
+        <ul class="address-message">
+            {{each list}}
+            <li class="clearfix">
+                <p class="name fl" title="${name}">${ tools.ellipsisContent(name,6) }</p>
+                <p class="city fl">
+                    {{if gender===0}}
+                    男
+                    {{else gender===1}}
+                    女
+                    {{else}}
+                    保密
+                    {{/if}}
+                </p>
+                <p class="phone fl">${ mobile }</p>
+                <p class="phone fl">身份证</p>
+                <p class="idcard fl">${ idcard }</p>
+                <p class="handle wd140 fl" data-id="${id}">
+                                <!--<span class="default-address {{if isDefault}}active{{/if}}">-->
+                                    <!--默认地址-->
+                                    <!--<img src="image/active.png" alt="">-->
+                                <!--</span>-->
+                    <a href="javascript:;" class="js_update" data-name="${name}" data-phone="${mobile}" data-idcard="${idcard}" data-id="${id}" data-gender="${gender}">修改</a>
+                    <a href="javascript:;" class="delbtn">删除</a>
+                </p>
+            </li>
+            {{/each}}
+        </ul>
+</script>
+<!--暂无-->
+<script type="text/template" id="noTemp">
+        <p class="tit">您还没有添加常用游客信息哦~</p>
+        <p class="txt">常用游客信息可以帮助您快速填写订单中的游客信息</p>
+        <div class="btn-box">
+            <a href="javascript:void(0);" class="contacts-add-btn js-add-btn">新增联系人</a>
+        </div>
+</script>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script>
+    var address = {
+        params: {
+            token: tools.getCookie('token'),
+            page: 1,
+            limitPage: 6
+        },
+        Addparams: {
+            idcard: '',
+            gender: 0,
+            name: '',
+            mobile: '',
+            token: tools.getCookie('token')
+        },
+        UpdateParams: {
+            idcard: '',
+            gender: '',
+            name: '',
+            mobile: '',
+            id: '',
+            token: tools.getCookie('token')
+        },
+        init: function () {
+            this.getAddress();
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.js_name,.js_phone,.js_idcard,.js_update_name,.js_update_phone,.js_update_idcard').blur(function () {
+                if(!tools.validate($(this).val(), 'require')){
+                    $(this).parent().find('.warning').addClass('curr');
+                }else{
+                    $(this).parent().find('.warning').removeClass('curr');
+                }
+            });
+            $(".js-add-btn").click(function () {
+                if($(document).width() <1540) {
+                    $('.personalCenter-max.add-address .content').css("margin-top", "64px");
+                    $('.add-update-address .content').css("top",'-124px');
+                }
+                $('.add-address').show();
+            });
+            $('.js_update').click(function() {
+                if($(document).width() <1540) {
+                    $('.add-update-address .content').css("top",'-124px');
+                }
+            })
+            $(".close").click(function () {
+                $('.add-address,.add-update-address').hide();
+            });
+            $('input[type="radio"]').change(function () {
+                _this.Addparams.gender = $(this).attr('data-sex');
+            })
+        },
+        getAddress: function () {
+            var _this = this;
+            var loading = tools.loading($('.js-list'));
+            tools.request({
+                url:'userInfo/getMemberContacts',
+                data: _this.params
+            },function (result) {
+                loading.clean();
+                $('.js-list').empty();
+                $('.js-no').empty();
+                if(result.code === 0) {
+                    var list = result.datas;
+                    $('.js-list').empty();
+                    if(list.length > 0){
+                        $('#adressListTemp').tmpl({list: list}).appendTo('.js-list');
+                        $('.js-list').show();
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.params.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.getAddress();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        //删除
+                        $('.delbtn').click(function () {
+                            var id = $(this).parent().attr("data-id");
+                            $.dialog({
+                                title: '删除宝贝',
+                                message: '<p style="font-size:14px;color:#666;">确认要删除该宝贝吗？</p>',
+                                width: 300,
+                                height: 200,
+                                mask: true,
+                                footer: true,
+                                buttons: [
+                                    {
+                                        text :'确定',
+                                        className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                        callback:function(){
+                                            _this.deleteReceiver(id);
+                                        }
+                                    },
+                                    {
+                                        text :'取消',
+                                        className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                                        callback: function(){}
+                                    }
+                                ]
+
+                            });
+                        })
+                        //修改
+                        $('.js_update').click(function () {
+                            var my = $(this);
+                            _this.UpdateParams.gender = my.attr('data-gender');
+                            _this.UpdateParams.id = my.attr('data-id');
+                            _this.UpdateParams.name = my.attr('data-name');
+                            _this.UpdateParams.idcard = my.attr('data-idcard');
+                            _this.UpdateParams.mobile = my.attr('data-phone');
+                            $('.add-update-address').show();
+                             _this.editReceiver();
+                        })
+                    }else{
+                        $('#noTemp').tmpl({list: list}).appendTo('.js-no');
+                        $('.js-no').show();
+                    }
+                    _this.eventBind();
+                    $('.js_sub').off().click(function () {
+                        _this.addAdress();
+                    });
+                }else{
+                    alert(result.message);
+                }
+            })
+        },
+        addAdress: function () {
+           var $name = $('.js_name'),
+                $phone = $('.js_phone'),
+                $idcard = $('.js_idcard'),
+                _this = this ;
+           if(!tools.validate($name.val(), 'require')){
+               $name.parent().find('.warning').addClass('curr');
+               $name.focus();
+               return false;
+           }
+            if(!tools.validate($phone.val(), 'phone')){
+                $phone.parent().find('.warning').addClass('curr');
+                $phone.focus();
+                return false;
+            }
+            if(!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test($idcard.val())){
+                $idcard.parent().find('.warning').addClass('curr');
+                $idcard.focus();
+                return false;
+            }
+            _this.Addparams.idcard = $idcard.val();
+            _this.Addparams.name = $name.val();
+            _this.Addparams.mobile = $phone.val();
+            tools.request({
+                url: 'userInfo/saveContacts',
+                data: _this.Addparams
+            },function (result) {
+                if(result.code === 0){
+                    $name.val('');
+                    $phone.val('');
+                    $idcard.val('');
+                    $('.add-address').hide();
+                    _this.getAddress();
+                }else{
+                    alert(result.message);
+                }
+            });
+        },
+        deleteReceiver: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'userInfo/delContacts',
+                data:{
+                    id: id,
+                    token: tools.getCookie("token")
+                }
+            },function (result) {
+                if(result.code === 0){
+                    _this.getAddress();
+                }else{
+                    alert(result.message);
+                }
+            })
+        },
+        editReceiver: function () {
+            var $name = $('.js_update_name'),
+                $phone = $('.js_update_phone'),
+                $idcard = $('.js_update_idcard'),
+                _this = this,
+                gender = 0;
+            if(_this.UpdateParams.gender === "0"){
+                $('#update_man').attr("checked","checked");
+                gender = 0;
+            }else{
+                $('#update_women').attr("checked","checked");
+                gender = 1;
+            }
+            $('#update_women,#update_man').change(function () {
+                gender = $(this).attr("data-sex")
+            });
+            $name.val(_this.UpdateParams.name);
+            $phone.val(_this.UpdateParams.mobile);
+            $idcard.val(_this.UpdateParams.idcard);
+            $('.js_sub_update').click(function () {
+                if(!tools.validate($name.val(), 'require')){
+                    $name.parent().find('.warning').addClass('curr');
+                    $name.focus();
+                    return false;
+                }
+                if(!tools.validate($phone.val(), 'phone')){
+                    $phone.parent().find('.warning').addClass('curr');
+                    $phone.focus();
+                    return false;
+                }
+                if(_this.UpdateParams.areaId === ''){
+                    $areaId.parent().find('.warning').addClass('curr');
+                    return false;
+                }
+                if(!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test($idcard.val())){
+                    $idcard.parent().find('.warning').addClass('curr');
+                    $idcard.focus();
+                    return false;
+                }
+                _this.UpdateParams.idcard = $idcard.val();
+                _this.UpdateParams.name = $name.val();
+                _this.UpdateParams.mobile = $phone.val();
+                tools.request({
+                    url: 'userInfo/saveContacts',
+                    data: {
+                        idcard: $idcard.val() || _this.UpdateParams.idcard,
+                        name: $name.val() || _this.UpdateParams.name,
+                        mobile: $phone.val() || _this.UpdateParams.mobile,
+                        id: _this.UpdateParams.id,
+                        token: tools.getCookie('token'),
+                        gender: gender || _this.UpdateParams.gender
+                    }
+                },function (result) {
+                    if(result.code === 0){
+                        $('.add-update-address').hide();
+                        _this.getAddress();
+                    }else{
+                        alert(result.message);
+                    }
+                });
+            })
+        }
+    };
+    $(function () {
+        address.init();
+    });
+</script>
+</body>
+</html>

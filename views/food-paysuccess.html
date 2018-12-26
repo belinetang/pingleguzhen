@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_特产支付成功'})%>
+    <!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-22 -->
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+
+<!--支付流程状态-->
+<ul class="paytype center clearfix">
+    <li class="paytype1"><i>1</i>填写订单</li>
+    <li class="paytype2 curr"><i>2</i>在线支付</li>
+    <li class="paytype3 curr"><i>3</i>完成</li>
+</ul>
+<!--&lt;!&ndash; 导航 &ndash;&gt;-->
+<!--<%-include("common/nav.html")%>-->
+<!--&lt;!&ndash;面包削&ndash;&gt;-->
+<!--<div class="crumbs">-->
+    <!--<div class="js_curmbs center"></div>-->
+<!--</div>-->
+<div class="c-p c-p-1">
+    <div class="order-page js_pay_wrapper"></div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="detailTmpl">
+    <div class="font1 ">
+        <i class="daq-icon">&#xe6b6;</i>
+        <p class="p1">订单支付成功</p>
+    </div>
+    <div class="font2">
+        <div class="o-i-tr clearfix">
+            <div class="o-i-l">订单号：</div>
+            <div class="o-i-r">
+                <p>${data.sn}</p>
+            </div>
+        </div>
+        <div class="o-i-tr clearfix">
+            <div class="o-i-l">订单金额：</div>
+            <div class="o-i-r">
+                <p class="orange-font"><i class="small">&yen;&nbsp;</i><span>${data.totalAmount}</span></p>
+            </div>
+        </div>
+        <div class="o-i-tr clearfix">
+            <div class="o-i-l">联系人：</div>
+            <div class="o-i-r">
+                <p>${data.contactInfo.name}</p>
+            </div>
+        </div>
+        <div class="o-i-tr clearfix">
+            <div class="o-i-l">手机号码：</div>
+            <div class="o-i-r">
+                <p>${data.contactInfo.phone}</p>
+            </div>
+        </div>
+        <div class="o-i-tr clearfix">
+            <div class="o-i-l">预订时间：</div>
+            <div class="o-i-r">
+                <p>${data.paymentDate.slice(0,11)}</p>
+            </div>
+        </div>
+        <!--手机二维码-->
+        <!--<div class="appcode-box">-->
+            <!--<div class="imgbox">-->
+                <!--<img src="image/appcode.png" alt="">-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+    <div class="font3">
+        <a href="./index.html" class="tohome">返回首页</a>
+        <a href="./personalCenter-allorder.html?type=team" class="toorder">查看订单</a>
+    </div>
+</script>
+<script>
+var pay = {
+    init: function(){
+        this.getOrderDetail();
+    },
+    getOrderDetail: function(){
+        var _this = this;
+        var $tmpl = $('#detailTmpl');
+        var $wrapper = $('.js_pay_wrapper');
+        $wrapper.renderHtml({
+            url:  'ds/qiandnApi/order-pc/order-details',
+            type: true,
+            loading: true,
+            template: $tmpl,
+            params: {
+                token: tools.getCookie('token'),
+                orderId: tools.getUrlParams('id')
+            },
+            callback: function(data){
+                // data.FormatCreateDate = _this.getStartDate(data.orders[0].createDate);
+                return data;
+            },
+            complete: function(res){}
+        });
+    },
+    // 获取年月日日期
+    getStartDate: function(time){
+        var date = new Date(time);
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    }
+};
+$(function(){
+    pay.init();
+});
+</script>
+</body>
+</html>

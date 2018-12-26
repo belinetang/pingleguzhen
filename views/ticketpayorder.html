@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_购买门票'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<!--支付流程状态-->
+<ul class="paytype center clearfix">
+    <li class="paytype1"><i>1</i>填写订单</li>
+    <li class="paytype2"><i>2</i>在线支付</li>
+    <li class="paytype3"><i>3</i>完成</li>
+</ul>
+<!--订单信息-->
+<div class="center ticket-payorder1-info clearfix">
+    <div class="payorder1-left">
+        <div class="title"><i class="daq-icon">&#xe729;</i>预订信息</div>
+        <div class="ydinfo">
+            <p class="ticket-title">成人票 <span>查看须知</span></p>
+            游玩日期：
+            <div class="daq-date">
+                <input class="date" id="day" placeholder="请选择日期"/>
+                <i class="sysfont date-icon"></i>
+            </div>
+        </div>
+        <div class="inroom">
+            购买数量：
+            <p class="daq-inp-operation dio-input mt-10">
+                <input class="wid-138" type="text" value="0" maxlength="6"/>
+                <i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>
+            </p>
+        </div>
+        <div class="title"><i class="daq-icon">&#xe6a1;</i>联系人信息 <span class="tips">温馨提示：您需要填写1个游玩人的信息</span></div>
+        <div class="contacts clearfix">
+            <span class="ctitle">常用联系人:</span>
+            <div class="clearfix choose-box js_address">
+
+            </div>
+        </div>
+        <div class="info1 none">
+           <span class="infotitle"> <i>*</i>姓名:</span><input type="text" placeholder="请输入联系人姓名" class="pageusername"> 联系人的姓名
+        </div>
+        <div class="info1 none">
+            <span class="infotitle"><i>*</i>手机号码:</span><input type="text" placeholder="请输入手机号码" class="pageuserphone" maxlength="11"> 预订成功后会向您发送短信通知
+        </div>
+        <div class="info1 none">
+            <span class="infotitle"><i>*</i>名字拼音:</span><input type="text" placeholder="请输入联系人名字拼音" class="pageuserpingyin">联系人名字的全拼
+        </div>
+        <div class="info1 none">
+           <span class="infotitle"><i>*</i>导游证号:</span><input type="text" placeholder="请输入导游证号" class="pageuserdyz">导游证件编号
+        </div>
+        <div class="info1 none">
+            <span class="infotitle"><i>*</i>导游姓名:</span><input type="text" placeholder="请输入导游姓名" class="pageuserdyname">导游的姓名
+        </div>
+        <div class="info1 none">
+            <span class="infotitle"><i>*</i>导游身份证:</span><input type="text" placeholder="请输入导游身份证" class="pageuserdysfz" >导游的身份证号码
+        </div>
+        <div class="tourist-information">
+            <span>游客人信息</span>
+        </div>
+        <ul class="tourist-list">
+            <!--<li>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">游客姓名</span><input type="text" placeholder="请输入游客人姓名" class="tourist-name"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">游客手机号</span><input type="text" placeholder="请输入游客人手机号" class="tourist-phone" maxlength="11"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">姓名拼音</span><input type="text" placeholder="请输入游客人姓名拼音" class="tourist-namepy"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">身份证号码</span><input type="text" placeholder="请输入游客人身份证号码" class="tourist-sfz"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">护照</span><input type="text" placeholder="请输入游客人护照号" class="tourist-hz"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">台胞证</span><input type="text" placeholder="请输入游客人台胞证号" class="tourist-tb"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">港澳通行证</span><input type="text" placeholder="请输入游客人港澳通行证证号" class="tourist-ga"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">其他信息1</span><input type="text" placeholder="请输入其他信息1" class="tourist-other1"></div>-->
+                <!--<div class="tourist-form none"><i class="beicon">*</i><span class="font1">其他信息2</span><input type="text" placeholder="请输入其他信息2" class="tourist-other2"></div>-->
+            <!--</li>-->
+        </ul>
+        <div class="info2">
+            <div id="checkbox2" class="clearfix choose-box ">
+                <input type="checkbox" checked name="b.multi" value="true" title="同意《平乐古镇·天台山旅游电子商务平台网络产品购买协议》" />
+            </div>
+        </div>
+        <div class="submit-box">
+            <a href="javascript:;" class="paynow">立即支付</a>
+        </div>
+    </div>
+    <div class="payorder1-right">
+        <div class="title-box">
+            <p class="title">费用明细</p>
+        </div>
+        <div class="pricebox">
+            <p class="font clearfix">
+                <span class="title">门票价格</span>
+                <span class="price"></span>
+            </p>
+            <p class="font clearfix">
+                <span class="title2"></span>
+                <span class="price2"></span>
+            </p>
+            <p class="font2 clearfix">
+                <span class="title">应付金额</span>
+                <span class="price"></span>
+            </p>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--demo模板-->
+<!--常用联系人列表-->
+<script type="text/template" id="adressListTemp">
+    {{each list}}
+    <div class="fl contact-info" data-name="${name}" data-phone="${mobile}">
+        <span class="contact-info-icon"><i class="daq-icon">&#xe6b6;</i></span>
+        <span class="name">${name}</span>
+    </div>
+    {{/each}}
+</script>
+<script>
+    var indexJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.setCheckBox();
+            this.getAddress(); //获取常用联系人
+            this.getTicketInfo(); // 获取门票信息
+            this.getContacts(); //获取常用联系人
+        },
+        //保存购买数量 用于对添加游客做控制
+        buyNum:'',
+        //订单表单信息保存
+        ticketInfoFrom: {
+            resdata:{},
+            ticketFrom:{
+                bookingDate: '',
+                userName:'',
+                userPhone:'',
+                agreement:true,
+                num:'',
+                countPrice:'',
+                pinyin:'',
+                guideno: '',
+                guidename: '',
+                guidecardid:''
+            },
+            touristArrarInfo:{
+                name: [],  // 名字
+                pinyin: [], // 拼音
+                phone:[], // 电话
+                usersfz:[],// 身份证
+                userhz:[], // 护照
+                usertb:[], //台胞证
+                userga:[], // 港澳通行证
+                define1:[], // 自定义1
+                define2:[], // 自定义2
+            }
+        },
+        // 请求常用联系人
+        getAddress: function () {
+            var _this = this;
+            var loading = tools.loading($('.js_address'));
+            var betoken = tools.getCookie('token')
+            if(betoken) {
+                tools.request({
+                    url:'userInfo/getMemberContacts',
+                    data: {
+                        token: betoken,
+                        page: 1,
+                        limitPage: 6
+                    }
+                },function (result) {
+                    loading.clean();
+//                $('.js-address').empty();
+                    if(result.code === 0) {
+                        var list = result.datas;
+                        if(list.length > 0){
+                            $('#adressListTemp').tmpl({list: list}).appendTo('.js_address');
+                            $(".contacts").show()
+                            $(".contact-info-icon").click(function () {
+                                if($(this).hasClass("active")){
+                                    $(this).removeClass("active");
+                                    $(".pageusername").val("");
+                                    $(".pageuserphone").val("");
+                                } else{
+                                    $(this).addClass("active");
+                                    $(this).parent().siblings().find(".contact-info-icon").removeClass("active");
+                                    var name = $(this).parent().attr("data-name");
+                                    var phone = $(this).parent().attr("data-phone");
+                                    $(".pageusername").val(name);
+                                    $(".pageuserphone").val(phone);
+                                }
+                            })
+                        }else{
+                            $(".contacts").hide()
+                        }
+                    }else{
+                        alert(result.message);
+                    }
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+
+        },
+        // 获取当前日期
+        getNowFormatDate: function() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        },
+        // 设置时间选择控件
+        setGeekerLayDate: function () {
+            var _this = this;
+            var end = laydate.render({
+                elem: '#day',
+                min: _this.ticketInfoFrom.resdata.date,
+                change: function (date) {
+
+                },
+                done: function(value, date){
+                    _this.getTicketDateNum(tools.getUrlParams('id'),date.year + '-' +date.month + '-' +date.date);
+                    if (value !== ''){
+                        // end.config.max.year = date.year;
+                        // end.config.max.month = date.month-1;
+                        // end.config.max.date = date.date;
+                        _this.ticketInfoFrom.ticketFrom.bookingDate = value;
+                        //console.log(_this.ticketInfoFrom.ticketFrom.bookingDate)
+                    } else {
+                        end.config.max.year = '';
+                        end.config.max.month = '';
+                        end.config.max.date = '';
+                    }
+                }
+            });
+        },
+        //获取当前时间
+        dateToString:function(now){
+            var year = now.getFullYear();
+            var month =(now.getMonth() + 1).toString();
+            var day = (now.getDate()).toString();
+            var hour = (now.getHours()).toString();
+            var minute = (now.getMinutes()).toString();
+            var second = (now.getSeconds()).toString();
+            if (month.length == 1) {
+                month = "0" + month;
+            }
+            if (day.length == 1) {
+                day = "0" + day;
+            }
+            if (hour.length == 1) {
+                hour = "0" + hour;
+            }
+            if (minute.length == 1) {
+                minute = "0" + minute;
+            }
+            if (second.length == 1) {
+                second = "0" + second;
+            }
+//            var dateTime = year + "-" + month + "-" + day +" "+ hour +":"+minute+":"+second;
+            var dateTime = year + "-" + month + "-" + day;
+            return dateTime;
+        },
+        // 小号复选框
+        setCheckBox:function () {
+            var _this = this;
+            $("#checkbox").daqCheckbox({
+                callback: function (data, obj) {
+                    // console.log(data);
+                    // console.log(obj);
+                }
+            });
+            $("#checkbox2").daqCheckbox({
+                labelSize: true,
+                callback: function (data, obj) {
+                    if(data[0] === 'true') {
+                        _this.ticketInfoFrom.ticketFrom.agreement = true
+                    }else{
+                        _this.ticketInfoFrom.ticketFrom.agreement = false
+                    }
+                }
+            });
+        },
+        // 获取门票订单信息
+        getTicketInfo: function () {
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'scenery/ticketOrder',
+                // type:true,
+                data: {
+                    token: betoken,
+                    id: tools.getUrlParams('id')
+                }
+            };
+            // 游客信息模板
+            var touristHtml = ' <li>' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">游客姓名</span><input type="text" placeholder="请输入游客人姓名" class="tourist-name"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">游客手机号</span><input type="text" placeholder="请输入游客人手机号" class="tourist-phone" maxlength="11"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">姓名拼音</span><input type="text" placeholder="请输入游客人姓名拼音" class="tourist-namepy"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">身份证号码</span><input type="text" placeholder="请输入游客人身份证号码" class="tourist-sfz"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">护照</span><input type="text" placeholder="请输入游客人护照号" class="tourist-hz"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">台胞证</span><input type="text" placeholder="请输入游客人台胞证号" class="tourist-tb"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">港澳通行证</span><input type="text" placeholder="请输入游客人港澳通行证证号" class="tourist-ga"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">其他信息1</span><input type="text" placeholder="请输入其他信息1" class="tourist-other1"></div>\n' +
+                '                <div class="tourist-form none"><i class="beicon">*</i><span class="font1">其他信息2</span><input type="text" placeholder="请输入其他信息2" class="tourist-other2"></div>\n' +
+                '            </li>'
+            if(betoken) {
+                tools.request(params, function(res) {
+                    // console.log(res)
+                    _this.ticketInfoFrom.resdata = res.data;
+                    _this.judgeServerConfig(res.data)
+                    // 后台配置只提交一个游客信息时 passengerInfoPerNum = 9999
+                    if(res.data.passengerInfoPerNum === 9999 || res.data.passengerInfoPerNum === 1){
+                        $('.tourist-list').html(touristHtml)
+                        _this.judgeServerConfig(res.data);
+                    }
+                    //设置用户选择的默认购买数量=最小购买数量
+                    _this.ticketInfoFrom.ticketFrom.num = _this.ticketInfoFrom.resdata.minBuyNum;
+                    _this.buyNum = _this.ticketInfoFrom.resdata.minBuyNum;
+                    // 设置时间默认为当天
+                    var playdate = _this.dateToString(new Date());
+                    $('#day').val(playdate)
+                    _this.ticketInfoFrom.ticketFrom.bookingDate = playdate;
+                    //设置门票名称
+                    $('.ticket-title').html(_this.ticketInfoFrom.resdata.name)
+                    //设置购买的限制
+                    _this.setGeekerLayDate();
+                    tools.inputCount({
+                            el: '.daq-inp-operation',
+                            max: _this.ticketInfoFrom.resdata.maxBuyNum,
+                            min: _this.ticketInfoFrom.resdata.minBuyNum,
+                            change: function (data) {
+                            _this.ticketInfoFrom.ticketFrom.num =data;
+                            _this.countPrice();
+
+                            // 游客信息 根据后台返回的字段判断显示数量以及内容
+                            if(res.data.passengerInfoPerNum === 1) { // 当状态1:需要每一个客人的信息
+                                if(data>_this.buyNum) {
+                                    var num = data - _this.buyNum;
+                                    for(var i = 0; i<num; i++) {
+                                        $('.tourist-list').append(touristHtml)
+                                    }
+                                    _this.judgeServerConfig(res.data)
+                                    _this.buyNum= data;
+                                }
+                                if(data<_this.buyNum) {
+                                    var num = _this.buyNum - data;
+                                    for(var i = 0; i<num; i++) {
+                                        $('.tourist-list').find('li').eq(-1).remove()
+                                    }
+                                    _this.judgeServerConfig(res.data);
+                                    _this.buyNum= data;
+                                }
+                            }else if(res.data.passengerInfoPerNum === 9999){ // 当状态9999:只需要一个客人的信息
+                                // $('.tourist-list').append(touristHtml)
+                            }else if(res.data.passengerInfoPerNum === 0) { // 当状态0:不需要客人的信息
+                                $('.tourist-information').empty();
+                                // $('.tourist-list').addClass('none');
+                            }
+
+                        }
+                    })
+                    //计算订单价格
+                    _this.countPrice();
+                    // 立即支付 1
+                    $('.paynow').click(function () {
+                        if(betoken) {
+                            _this.ticketInfoFrom.ticketFrom.userName = $('.pageusername').val();  // 联系人名字
+                            _this.ticketInfoFrom.ticketFrom.userPhone = $('.pageuserphone').val();  // 联系人电话
+                            _this.ticketInfoFrom.ticketFrom.pinyin = $('.pageuserpingyin').val(); // 联系人拼音
+                            _this.ticketInfoFrom.ticketFrom.guideno = $('.pageuserdyz').val(); // 导游证号码
+                            _this.ticketInfoFrom.ticketFrom.guidename = $('.pageuserdyname').val(); // 导游姓名
+                            _this.ticketInfoFrom.ticketFrom.guidecardid = $('.pageuserdysfz').val(); // 导游身份证
+                            _this.ticketInfoFrom.ticketFrom.num = $('.daq-inp-operation input').val();
+
+                            // 页面提交前验证表单完整性
+                            for(var i = 0; i<res.data.contactInfo.contactInfos.length; i++) {
+                                if(res.data.contactInfo.contactInfos[i].name ==='name'){
+                                    // 检查联系人姓名
+                                    if(!_this.ticketInfoFrom.ticketFrom.userName || _this.ticketInfoFrom.ticketFrom.userName.trim() === '' || _this.ticketInfoFrom.ticketFrom.userName === '请输入联系人') {
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入联系人姓名',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                                // 联系人电话
+                                if(res.data.contactInfo.contactInfos[i].name ==='phone'){
+                                    //检查手机号
+                                    if (!_this.ticketInfoFrom.ticketFrom.userPhone || _this.ticketInfoFrom.ticketFrom.userPhone.trim() === '' || _this.ticketInfoFrom.ticketFrom.userPhone === '请输入手机号码') {
+                                        //提示输入账号
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入手机号码',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }else if(!/^1\d{10}$/.test(_this.ticketInfoFrom.ticketFrom.userPhone)){
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入正确的手机号码',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                                // 联系人名字pinyin
+                                if(res.data.contactInfo.contactInfos[i].name ==='pinyin'){
+                                    // 检查联系人拼音
+                                    if (!_this.ticketInfoFrom.ticketFrom.pinyin || _this.ticketInfoFrom.ticketFrom.pinyin.trim() === '' || _this.ticketInfoFrom.ticketFrom.pinyin === '请输入联系人名字拼音') {
+                                        //提示输入拼音
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入联系人名字拼音',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                                // 导游身份证
+                                if(res.data.contactInfo.contactInfos[i].name ==='guideidcard'){
+                                    if (!_this.ticketInfoFrom.ticketFrom.guidecardid || _this.ticketInfoFrom.ticketFrom.guidecardid.trim() === '' || _this.ticketInfoFrom.ticketFrom.guidecardid === '请输入导游身份证号码') {
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入导游身份证号码',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                                // 导游证号
+                                if(res.data.contactInfo.contactInfos[i].name ==='guideno'){
+                                    if (!_this.ticketInfoFrom.ticketFrom.guideno || _this.ticketInfoFrom.ticketFrom.guideno.trim() === '' || _this.ticketInfoFrom.ticketFrom.guideno === '请输入导游证号') {
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入导游证号',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                                // 导游姓名
+                                if(res.data.contactInfo.contactInfos[i].name ==='guidename'){
+                                    if (!_this.ticketInfoFrom.ticketFrom.guidename || _this.ticketInfoFrom.ticketFrom.guidename.trim() === '' || _this.ticketInfoFrom.ticketFrom.guidename === '请输入导游姓名') {
+                                        $.dialog({
+                                            title: '错误提示',
+                                            message: '请输入导游姓名',
+                                            width: 400,
+                                            height: 200,
+                                            mask: true,
+                                            footer: false
+                                        });
+                                        return;
+                                    }
+                                }
+                            }
+                            // 游客信息
+                            // console.log(res.data,111)
+                            if(res.data.passengerInfoPerNum === 9999 || res.data.passengerInfoPerNum === 1){
+                                _this.ticketInfoFrom.touristArrarInfo.name=[];
+                                _this.ticketInfoFrom.touristArrarInfo.pinyin=[];
+                                _this.ticketInfoFrom.touristArrarInfo.phone=[];
+                                _this.ticketInfoFrom.touristArrarInfo.usersfz=[];
+                                _this.ticketInfoFrom.touristArrarInfo.userhz=[];
+                                _this.ticketInfoFrom.touristArrarInfo.usertb=[];
+                                _this.ticketInfoFrom.touristArrarInfo.userga=[];
+                                for(var i = 0; i<res.data.passengerInfo.passengerInfos.length; i++) {
+                                    if (res.data.passengerInfo.passengerInfos[i].name === 'name') {
+                                        for(var num = 0;num<_this.buyNum; num++){
+                                            _this.ticketInfoFrom.touristArrarInfo.name.push($('.tourist-name').eq(num).val())
+                                            if($('.tourist-name').eq(num).val() ===''){
+                                                $.dialog({
+                                                    title: '错误提示',
+                                                    message: '游客人姓名输入不完整',
+                                                    width: 400,
+                                                    height: 200,
+                                                    mask: true,
+                                                    footer: false
+                                                });
+                                                return;
+                                            }
+                                        }
+                                    }
+
+                                    if (res.data.passengerInfo.passengerInfos[i].name === 'pinyin') {
+                                        for(var num = 0;num<_this.buyNum; num++){
+                                            _this.ticketInfoFrom.touristArrarInfo.pinyin.push($('.tourist-namepy').eq(num).val())
+                                            if($('.tourist-namepy').eq(num).val() ===''){
+                                                $.dialog({
+                                                    title: '错误提示',
+                                                    message: '游客人拼音输入不完整',
+                                                    width: 400,
+                                                    height: 200,
+                                                    mask: true,
+                                                    footer: false
+                                                });
+                                                return;
+                                            }
+                                        }
+
+                                    }
+                                    // console.log(_this.ticketInfoFrom.touristArrarInfo.pinyin, 'pinyin')
+                                    if (res.data.passengerInfo.passengerInfos[i].name === 'phone') {
+                                        for(var num = 0;num<_this.buyNum; num++){
+                                            _this.ticketInfoFrom.touristArrarInfo.phone.push($('.tourist-phone').eq(num).val())
+                                            if($('.tourist-phone').eq(num).val() ===''){
+                                                $.dialog({
+                                                    title: '错误提示',
+                                                    message: '游客人手机号输入不完整',
+                                                    width: 400,
+                                                    height: 200,
+                                                    mask: true,
+                                                    footer: false
+                                                });
+                                                return;
+                                            }
+                                        }
+                                    }
+
+                                    if (res.data.passengerInfo.passengerInfos[i].credentialsType) {
+                                        if(res.data.passengerInfo.passengerInfos[i].credentialsType.length>0) {
+                                            for (var j = 0; j < res.data.passengerInfo.passengerInfos[i].credentialsType.length; j++) {
+                                                if(res.data.passengerInfo.passengerInfos[i].credentialsType[j].name=== 'Idcard') {
+                                                    for(var num = 0;num<_this.buyNum; num++){
+                                                        _this.ticketInfoFrom.touristArrarInfo.usersfz.push($('.tourist-sfz').eq(num).val())
+                                                    }
+                                                }
+                                                if(res.data.passengerInfo.passengerInfos[i].credentialsType[j].name=== 'Passport') {
+                                                    for(var num = 0;num<_this.buyNum; num++){
+                                                        _this.ticketInfoFrom.touristArrarInfo.userhz.push($('.tourist-hz').eq(num).val())
+                                                    }
+                                                }
+                                                if(res.data.passengerInfo.passengerInfos[i].credentialsType[j].name=== 'TaiwanPermit') {
+                                                    for(var num = 0;num<_this.buyNum; num++){
+                                                        _this.ticketInfoFrom.touristArrarInfo.usertb.push($('.tourist-tb').eq(num).val())
+                                                    }
+                                                }
+                                                if(res.data.passengerInfo.passengerInfos[i].credentialsType[j].name=== 'HKAndMacauPermit') {
+                                                    for(var num = 0;num<_this.buyNum; num++){
+                                                        _this.ticketInfoFrom.touristArrarInfo.userga.push($('.tourist-ga').eq(num).val())
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                // 判断数组中身份证是否有重复
+                                if(_this.ifArrarRepeat(_this.ticketInfoFrom.touristArrarInfo.usersfz)) {
+                                    $.dialog({
+                                        title: '错误提示',
+                                        message: '您填写的游客人信息中,出现两位或两位以上游客身份证相同的情况,请检查后再次提交',
+                                        width: 400,
+                                        height: 200,
+                                        mask: true,
+                                        footer: false
+                                    });
+                                    return;
+                                }
+                            }
+                            // 判断是否同意购买协议
+                            if(_this.ticketInfoFrom.ticketFrom.agreement===false) {
+                                $.dialog({
+                                    title: '错误提示',
+                                    message: '请同意购买协议',
+                                    width: 400,
+                                    height: 200,
+                                    mask: true,
+                                    footer: false
+                                });
+                                return;
+                            }
+                            _this.countPrice();  // 计算产品价格
+
+                            // console.log(_this.ticketInfoFrom.ticketFrom,'orderJson')
+                            //处理游客人信息 分为多个对象放在一个数组中提交
+
+                            var touristArrar = _this.touristDataInfo();
+                            console.log(touristArrar , '游客信息')
+                            //保存订单
+                            var params = {
+                                url: 'scenery/saveOrder',
+                                data: {
+                                    passengerInfos:JSON.stringify(touristArrar),
+                                    token:betoken,
+                                    id: _this.ticketInfoFrom.resdata.pid,
+                                    order:JSON.stringify({
+                                        date:_this.ticketInfoFrom.ticketFrom.bookingDate, //日期
+                                        contactPinyin:_this.ticketInfoFrom.ticketFrom.pinyin, // 联系人拼音
+                                        contactName:_this.ticketInfoFrom.ticketFrom.userName, // 联系人名字
+                                        contactPhone:_this.ticketInfoFrom.ticketFrom.userPhone, // 联系人电话
+                                        quantity:_this.ticketInfoFrom.ticketFrom.num, //数量
+                                        price:_this.ticketInfoFrom.resdata.marketPrice, //单价
+                                        totalAmount:_this.ticketInfoFrom.ticketFrom.countPrice, //总价
+                                        guideIdcard:_this.ticketInfoFrom.ticketFrom.guidecardid,// 导游身份证
+                                        guideName:_this.ticketInfoFrom.ticketFrom.guidename, //导游名字
+                                        guideNo:_this.ticketInfoFrom.ticketFrom.guideno //导游证号码
+                                    })
+                                }
+                            };
+                            // console.log(params,111)
+                            // console.log(touristArrar,222)
+                            tools.request(params, function(res){
+                                if(res.code === 0) {
+                                    window.location.href = "ticketonline-payment.html?channelCode=jqmp&code=jqmp&id="+res.data.orderId+"";
+                                }else{
+                                    // console.log(res)
+                                    $.dialog({
+                                        title: '温馨提示',
+                                        message: '<p style="font-size:14px;color:#666;">'+res.message+'</p>',
+                                        width: 300,
+                                        height: 200,
+                                        mask: true,
+                                        footer: true,
+                                        buttons: [
+                                            {
+                                                text :'确定',
+                                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                                callback:function(){
+                                                    window.location.href='scenic-list.html?channelCode=jqmp&code=jqmp'
+                                                }
+                                            }
+                                        ]
+
+                                    });
+                                }
+                            })
+
+                        }else{
+                            window.location.href = "login.html";
+                        }
+                    })
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+
+        },
+        // 计算产品价格
+        countPrice: function () {
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'scenery/getMoney',
+                data: {
+                    token: betoken,
+                    quantity:_this.ticketInfoFrom.ticketFrom.num || 1,
+                    id: _this.ticketInfoFrom.resdata.pid,
+                    date:_this.ticketInfoFrom.ticketFrom.bookingDate,
+                }
+            };
+            if(betoken) {
+                tools.request(params, function(res) {
+                    // console.log(res)
+                    res.data.num=_this.ticketInfoFrom.ticketFrom.num;
+                    res.data.price =_this.ticketInfoFrom.resdata.sellPrice;
+                    //修改页面费用明细
+                    $('.payorder1-right .font').find('.price').html('<i>&yen;</i>'+_this.ticketInfoFrom.resdata.sellPrice+'')
+                    $('.payorder1-right .font').find('.price2').html('<i>&yen;</i>'+_this.ticketInfoFrom.resdata.sellPrice+' X '+_this.ticketInfoFrom.ticketFrom.num+'')
+                    $('.payorder1-right .font2').find('.price').html('<i>&yen;</i>'+res.data.money+'')
+                    $('.payorder1-right .font').find('.title2').html(_this.ticketInfoFrom.resdata.ticketType)
+
+                    //保存计算总价
+                    _this.ticketInfoFrom.ticketFrom.countPrice = res.data.money;
+                })
+            }else {
+                window.location.href = "login.html";
+            }
+        },
+        // 获取常用联系人
+        getContacts: function () {
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'userInfo/getMemberContacts',
+                data: {
+                    token: betoken,
+                    page:1,
+                    limitPage:5
+                }
+            };
+            if(betoken) {
+                tools.request(params, function(res){
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+
+        },
+        // 判断后台设置配置
+        judgeServerConfig: function (data) {
+            //联系人信息 根据后台返回的字段判断显示的内容
+            for(var i = 0; i<data.contactInfo.contactInfos.length; i++) {
+                // 联系人姓名
+                if(data.contactInfo.contactInfos[i].name ==='name'){
+                    $('.pageusername').parent().removeClass('none');
+                }
+                // 联系人电话
+                if(data.contactInfo.contactInfos[i].name ==='phone'){
+                    $('.pageuserphone').parent().removeClass('none');
+                }
+                // 联系人名字pinyin
+                if(data.contactInfo.contactInfos[i].name ==='pinyin'){
+                    $('.pageuserpingyin').parent().removeClass('none');
+                }
+                // 导游身份证
+                if(data.contactInfo.contactInfos[i].name ==='guideidcard'){
+                    $('.pageuserdysfz').parent().removeClass('none');
+                }
+                // 导游证号
+                if(data.contactInfo.contactInfos[i].name ==='guideno'){
+                    $('.pageuserdyz').parent().removeClass('none');
+                }
+                // 导游姓名
+                if(data.contactInfo.contactInfos[i].name ==='guidename'){
+                    $('.pageuserdyname').parent().removeClass('none');
+                }
+            }
+            //判断游客 1级信息 姓名 手机号 拼音
+            if(data.passengerInfo.passengerInfos.length<1) {
+                $('.tourist-information').addClass('none');
+            }
+            for(var i = 0; i< data.passengerInfo.passengerInfos.length; i++) {
+                if(data.passengerInfo.passengerInfos[i].name === 'name') {
+                    $('.tourist-name').parent().removeClass('none');
+                }
+                if(data.passengerInfo.passengerInfos[i].name === 'pinyin') {
+                    $('.tourist-namepy').parent().removeClass('none');
+                }
+                if(data.passengerInfo.passengerInfos[i].name === 'phone') {
+                    $('.tourist-phone').parent().removeClass('none');
+                }
+                // 判断2级信息 证件
+                if(data.passengerInfo.passengerInfos[i].credentialsType) {
+                    for(var j = 0; j<data.passengerInfo.passengerInfos[i].credentialsType.length; j++) {
+                        if(data.passengerInfo.passengerInfos[i].credentialsType[j].name === 'Idcard') {
+                            $('.tourist-sfz').parent().removeClass('none');
+                        }
+                        if(data.passengerInfo.passengerInfos[i].credentialsType[j].name === 'Passport') {
+                            $('.tourist-hz').parent().removeClass('none');
+                        }
+                        if(data.passengerInfo.passengerInfos[i].credentialsType[j].name === 'TaiwanPermit') {
+                            $('.tourist-tb').parent().removeClass('none');
+                        }
+                        if(data.passengerInfo.passengerInfos[i].credentialsType[j].name === 'HKAndMacauPermit') {
+                            $('.tourist-ga').parent().removeClass('none');
+                        }
+                    }
+                }
+            }
+
+        },
+        // 处理游客信息到一个数组中并返回
+        touristDataInfo: function () {
+            var _this = this;
+            var dataArrar = []
+            // console.log(_this.ticketInfoFrom.touristArrarInfo.pinyin,999)
+            for(var i= 0;i<_this.buyNum; i++) {
+                var dataInfo = {
+                    credentials:'', //证件号
+                    name: '', //姓名
+                    pinyin:'',// 拼音
+                    phone: '',//手机号
+                    credentialsType:'',//证件类型
+                    define1:'',// 自定义1
+                    define2:'', // 自定义2
+                }
+                dataInfo.name = _this.ticketInfoFrom.touristArrarInfo.name[i];
+                dataInfo.phone = _this.ticketInfoFrom.touristArrarInfo.phone[i];
+                dataInfo.pinyin = _this.ticketInfoFrom.touristArrarInfo.pinyin[i];
+                dataInfo.define1 = _this.ticketInfoFrom.touristArrarInfo.define1[i];
+                dataInfo.define2 = _this.ticketInfoFrom.touristArrarInfo.define2[i];
+                if(_this.ticketInfoFrom.touristArrarInfo.usersfz[i]!== ''){
+                    dataInfo.credentials = _this.ticketInfoFrom.touristArrarInfo.usersfz[i];
+                    dataInfo.credentialsType = 'Idcard';
+                }else if(_this.ticketInfoFrom.touristArrarInfo.userhz[i]!== '') {
+                    dataInfo.credentials = _this.ticketInfoFrom.touristArrarInfo.userhz[i];
+                    dataInfo.credentialsType = 'Passport';
+                }else if(_this.ticketInfoFrom.touristArrarInfo.usertb[i]!== '') {
+                    dataInfo.credentials = _this.ticketInfoFrom.touristArrarInfo.usertb[i];
+                    dataInfo.credentialsType = 'TaiwanPermit';
+                }else if(_this.ticketInfoFrom.touristArrarInfo.userga[i]!== '') {
+                    dataInfo.credentials = _this.ticketInfoFrom.touristArrarInfo.userga[i];
+                    dataInfo.credentialsType = 'HKAndMacauPermit';
+                }
+                dataArrar.push(dataInfo)
+            }
+            return dataArrar
+        },
+        // 判断数组中是否有重复
+        ifArrarRepeat: function(arr) {
+            var arrStr = JSON.stringify(arr),str;
+            for (var i = 0; i < arr.length; i++) {
+                if (arrStr.indexOf(arr[i]) != arrStr.lastIndexOf(arr[i])){
+                    return true;
+                }
+            };
+            return false;
+        },
+        // 传入门票id和日期获取库存量
+        getTicketDateNum: function (id, date) {
+            var _this =this;
+            var betoken = tools.getCookie('token')
+            if(betoken) {
+                var params = {
+                    url: 'scenery/getDatePrice',
+                    data:{
+                        id:id,
+                        date:date,
+                        token:betoken
+                    }
+                }
+                tools.request(params, function(res) {
+                    // console.log(res)
+                    if(res.code === 1 ){
+                        $.dialog({
+                            title: '温馨提示',
+                            message: '您选择的日期暂时无法预订',
+                            width: 300,
+                            height: 200,
+                            mask: true,
+                            footer: true
+                        });
+                        var playdate = _this.dateToString(new Date());
+                        $('#day').val(playdate)
+                        _this.ticketInfoFrom.ticketFrom.bookingDate = playdate;
+                    }
+                })
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

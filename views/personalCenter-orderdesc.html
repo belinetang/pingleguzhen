@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!--当前位置-->
+<div class="current-position">
+    <div class="center">
+        <span>您所在的位置 : </span><a href="index.html">网站首页</a>- <a href="personalCenter-index.html">个人中心</a> - <span>订单详情</span>
+    </div>
+</div>
+<div class="order-detail-box-dj personalCenter-max">
+    <div class="center clearfix js_desc">
+
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="descTmp">
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                支付详情
+            </h3>
+        </div>
+        <div class="content-box">
+            <p><span>订单编号：</span>${data.sn}</p>
+            <p><span>创建时间：</span>${data.createDate}</p>
+        </div>
+    </div>
+
+    {{if data.category === 'specialty'}}
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                产品详情
+            </h3>
+        </div>
+        <div class="content-box">
+            <p><span>产品名称：</span>${data.productName}{{if data.category === 'specialty'}}<i class="pro_num"> x ${data.quantity}</i>{{/if}}</p>
+            {{if data.remind}}<p><span>使用说明：</span>{{html data.remind}}</p>{{/if}}
+        </div>
+    </div>
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                收货信息
+            </h3>
+        </div>
+        <div class="content-box">
+            <p><span>姓 名：</span>${data.contactInfo.name}</p>
+            <p><span>联系电话：</span>${data.contactInfo.phone}</p>
+            <p><span>发货状态：</span><span class="content">
+                {{if data.shippingStatus === 'unshipped'}}
+                未发货
+                {{else data.shippingStatus === 'shipped'}}
+                已发货
+                {{/if}}
+                </span></p>
+            <p>
+                <span>邮寄地址：</span>${data.receiverAddress}
+            </p>
+        </div>
+    </div>
+    {{else}}
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                产品详情
+            </h3>
+        </div>
+        <div class="content-box">
+            <p><span>名 称：</span>${data.productName}</p>
+            {{if data.remind}}<p><span>使用说明：</span>{{html data.remind}}</p>{{/if}}
+        </div>
+    </div>
+
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                联系人信息
+            </h3>
+        </div>
+        <div class="content-box">
+            <p><span>姓 名：</span>${data.contactInfo.name}</p>
+            <p><span>联系电话：</span>${data.contactInfo.phone}</p>
+            {{if data.contactIdcard}}<p><span>身份证：</span>${data.contactIdcard}</p>{{/if}}
+            {{if data.guidename}}<p><span>导游姓名：</span>${data.contactInfo.guidename}</p>{{/if}}
+        </div>
+    </div>
+    {{if data.passengerInfos.length > 0}}
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                游客信息
+            </h3>
+        </div>
+        <div class="content-box">
+            <table class="userinfo">
+                <thead>
+                    <tr>
+                        {{if data.passengerInfos[0].name}}<th>姓名</th>{{/if}}
+                        {{if data.passengerInfos[0].pinyin}}<th>拼音</th>{{/if}}
+                        {{if data.passengerInfos[0].mobile}}<th>联系电话</th>{{/if}}
+                        {{if data.passengerInfos[0].credentialsType}}<th>证件类型</th>{{/if}}
+                        {{if data.passengerInfos[0].credentials}}<th>证件号码</th>{{/if}}
+                        {{if data.passengerInfos[0].defined1Type}}<th>${data.passengerInfos[0].defined1Type}</th>{{/if}}
+                        {{if data.passengerInfos[0].defined2Type}}<th>${data.passengerInfos[0].defined2Type}</th>{{/if}}
+                    </tr>
+                </thead>
+                <tbody>
+                {{each data.passengerInfos}}
+                    <tr>
+                        {{if name}}<td title="${name}">${tools.ellipsisContent(name,6)}</td>{{/if}}
+                        {{if pinyin}}<td title="${pinyin}">${tools.ellipsisContent(pinyin,18)}</td>{{/if}}
+                        {{if mobile}}<td title="${mobile}">${tools.ellipsisContent(mobile,11)}</td>{{/if}}
+                        {{if credentialsType}}<td title="${credentialsType}">${tools.ellipsisContent(credentialsType,8)}</td>{{/if}}
+                        {{if credentials}}<td title="${credentials}">${tools.ellipsisContent(credentials,18)}</td>{{/if}}
+                        {{if defined1}}<td title="${defined1}">${tools.ellipsisContent(defined1,18)}</td>{{/if}}
+                        {{if defined2}}<td title="${defined2}">${tools.ellipsisContent(defined2,18)}</td>{{/if}}
+                    </tr>
+                </tbody>
+                {{/each}}
+            </table>
+
+        </div>
+    </div>
+    {{/if}}
+    <div class="p-20">
+        <div class="person-title clearfix">
+            <h3 class="fl">
+                消费明细
+            </h3>
+        </div>
+        <div class="content-box">
+            <p>
+                <span>消费码：</span><span class="content">${data.eticket}</span>
+                <span>订单数量：</span><span class="content">成人：${data.quantity}&nbsp;&nbsp;&nbsp;&nbsp;儿童： ${data.child}</span>
+            </p>
+            <p>
+                {{if data.date}}
+                <span>消费日期：</span><span class="content">${data.date}</span>
+                <span>有效期：</span>${data.canUseDate} 至 ${data.canUseEndDate}
+                {{/if}}
+            </p>
+        </div>
+    </div>
+    {{/if}}
+    <div class="no-border">
+        <table class="ordertable">
+            <thead>
+            <tr>
+                <th class="w448 text-left p20">产品信息</th>
+                <th class="w190">单价</th>
+                <th  class="w190">数量</th>
+                <th  class="w190">总金额</th>
+                <th>订单状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="order-info">
+                    <a href="javascript:;" class="img-box"><img src="${data.thumbnail || 'image/zw.jpg'}" alt="${data.productName}"></a>
+                    <div>
+                        <p title="${data.productName}">
+                            ${tools.ellipsisContent(data.productName,60)}
+                        </p>
+                    </div>
+                </td>
+                <td class="time">
+                    {{if data.child}}
+                    成人：¥ ${data.price}  儿童： ¥ ${data.childPrice}
+                    {{else}}
+                    ¥ ${data.price}
+                    {{/if}}
+                </td>
+                <td>
+                    {{if data.category === 'specialty'}}
+                        ${ data.quantity }
+                    {{else}}
+                        {{if data.child}}
+                        成人：${data.quantity}  儿童：${data.child}
+                        {{else}}
+                        ${data.quantity}
+                        {{/if}}
+                    {{/if}}
+
+                </td>
+                <td class="amount">￥${data.totalAmount}</td>
+                <td>${data.orderStatus}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="dj-price-box">
+            <p><span>订单总金额：</span><i class="price-icon">¥ </i><i class="price">${data.totalAmount}</i></p>
+        </div>
+    </div>
+</script>
+<script>
+    var desc = {
+        init: function () {
+            this.loadDesc();
+        },
+        loadDesc: function () {
+            var $box = $('.js_desc');
+            var loading = tools.loading($box);
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/order-details',
+                data:{
+                    token: tools.getCookie('token'),
+                    orderId: tools.getUrlParams('orderId')
+                },
+                type: true
+            },function (result) {
+                loading.clean();
+                $box.empty();
+                if(result.code === 0){
+                    var data = result.data;
+                    $('#descTmp').tmpl({data: data}).appendTo($box);
+                }else{
+                    $box.html(tools.TRY_REFRESH1)
+                }
+            })
+        }
+    };
+    $(function () {
+        desc.init()
+    })
+</script>
+</body>
+</html>

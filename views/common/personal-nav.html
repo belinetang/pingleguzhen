@@ -1,0 +1,150 @@
+<div class="submenu">
+    <h2>我的主页</h2>
+    <ul class="submenu-list">
+        <li class="hassubmenu">
+            <a href="javascript:;">
+                <i class="icon icon1"></i><span>我的订单</span>
+            </a>
+            <span class="triangle"></span>
+            <span class="triangle1"></span>
+            <ul>
+                <li>
+                    <a href="personalCenter-allorder.html?type=all">全部订单</a>
+                </li>
+                <li>
+                    <a href="personalCenter-allorder.html?type=line">线路订单</a>
+                </li>
+                <li>
+                    <a href="personalCenter-allorder.html?type=ticket">门票订单</a>
+                </li>
+                <li>
+                    <a href="personalCenter-allorder.html?type=room">酒店订单</a>
+                </li>
+                <li>
+                    <a href="personalCenter-allorder.html?type=specialty">特产订单</a>
+                </li>
+                <li>
+                    <a href="personalCenter-allorder.html?type=team">美食订单</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="personalCenter-refund.html">
+                <i class="icon icon2"></i><span>退款管理</span>
+            </a>
+        </li>
+        <li class="hassubmenu">
+            <a href="javascript:;">
+                <i class="icon icon3"></i><span>我的互动</span>
+            </a>
+            <span class="triangle"></span>
+            <span class="triangle1"></span>
+            <ul>
+                <li>
+                    <a href="personalCenter-interactPraise.html">点赞</a>
+                </li>
+                <li>
+                    <a href="personalCenter-interactRemark.html">点评</a>
+                </li>
+                <!--<li>-->
+                    <!--<a href="javascript:;">分享</a>-->
+                <!--</li>-->
+                <li>
+                    <a href="personalCenter-interactCollect.html">收藏</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="personalCenter-message.html">
+                <i class="icon icon4"></i><span>消息中心</span>
+            </a>
+        </li>
+        <li class="hassubmenu">
+            <a href="javascript:;">
+                <i class="icon icon5"></i><span>个人中心</span>
+            </a>
+            <span class="triangle"></span>
+            <span class="triangle1"></span>
+            <ul>
+                <li>
+                    <a href="personalCenter-userinfo.html">个人资料</a>
+                </li>
+                <li>
+                    <a href="personalCenter-usualContacts.html">常用联系人</a>
+                </li>
+                <li>
+                    <a href="personalCenter-usualAddressr.html">常用地址</a>
+                </li>
+                <li>
+                    <a href="personalCenter-safeCenter.html">安全中心</a>
+                </li>
+            </ul>
+        </li>
+
+    </ul>
+</div>
+<script>
+    var navJs = {
+        init: function () {
+            this.doLogin();
+            this.eventBind();
+            this.minmenu();
+        },
+        eventBind: function () {
+            //点击事件
+            $(".submenu-list .hassubmenu>a").on("click",function(){
+                var _this = $(this).parent();
+                if( _this.is(".curr")){
+                    _this.find("ul").slideUp('fast',function(){
+                        _this.removeClass("curr");
+                    });
+                } else {
+                    _this.addClass("curr");
+                    _this.find("ul").slideDown('fast');
+                }
+            });
+        },
+        //url判断菜单展开
+        minmenu:function(){
+            var url = window.location.href;
+            $('.submenu-list .hassubmenu>ul a').each(function () {
+                var $this = $(this);
+                if(url.indexOf($this.attr('href')) !== -1){
+                    $this.parent().addClass('curr');
+                    $this.parent().parent().css('display','block');
+                    $this.parent().parent().parent().addClass('curr');
+                }
+            })
+            $('.submenu-list>li>a').each(function () {
+                var $this = $(this);
+                if(url.indexOf($this.attr('href')) !== -1){
+                    $this.parent().addClass('curr');
+                }
+            })
+        },
+        //判断是否登陆
+        doLogin: function () {
+            var url = window.location.href;
+            if(!tools.getCookie('token')){
+                window.location.href = "login.html?redirect="+url;
+                return false;
+            }else{
+                tools.request({
+                    url: 'userInfo/getUserInfo',
+                    data: {
+                        token: tools.getCookie('token')
+                    }
+                },function (result) {
+                    if(result.code === 2){
+                        tools.delCookie('token');
+                        window.location.href = "login.html?redirect="+url;
+                    }
+                })
+            }
+
+        }
+    };
+    $(function () {
+        navJs.init();
+    })
+</script>

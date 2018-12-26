@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_空模板'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--banner-->
+    <div class="appdown-box">
+        <a href="javascript:;" class="androiddown">
+            <i class="daq-icon">&#xe624;</i>Android
+        </a>
+        <a href="javascript:;" class="iosdown">
+            <i class="daq-icon">&#xe601;</i>iphone
+        </a>
+
+    </div>
+    <div class="d-banner">
+        <div class="banner-img"></div>
+
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+
+</body>
+<script>
+    var appdownJs = {
+        init: function () {
+            this.getAppDownBanner();
+        },
+        //获取banner
+        getAppDownBanner: function () {
+            var params = {
+                url: 'siteChannel/channelList',
+                data:{
+                    channelCode: 'appdown'
+                }
+            };
+            tools.request(params, function(res) {
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $('.banner-img').css("background", "url(" + res.datas[0].navImage + ") center")
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    }
+    $(function () {
+        appdownJs.init()
+    })
+</script>
+
+</html>

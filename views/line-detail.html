@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_线路详情'})%>
+    <!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：龚小虎 | 创建：2018-8-15 -->
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <%-include("common/nav.html")%>
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <div class="daq-hotel-detail daq-line-detail">
+        <div class="center">
+            <!--详情-->
+            <div class="js_detail"></div>
+            <!-- 行程 -->
+            <div class="js_travel-date"></div>
+
+            <!-- 点评 -->
+            <div class="daq-comment" id="comment">
+                <h2 class="title">点评</h2>
+                <div class="comment-content">
+                    <textarea name="" id="" cols="20" rows="10" placeholder="请输入评论内容..." class="write-comment" maxlength="255"></textarea>
+                    <div class="my-comment">
+                        <p class="sub-comment">
+                            <span>我要评论</span>
+                            <span>
+                                <i class="daq-icon" data-value="1">&#xe67c;</i>
+                                <i class="daq-icon" data-value="2">&#xe67c;</i>
+                                <i class="daq-icon" data-value="3">&#xe67c;</i>
+                                <i class="daq-icon" data-value="4">&#xe67c;</i>
+                                <i class="daq-icon" data-value="5">&#xe67c;</i>
+                            </span>
+                        </p>
+                        <div class="sub-right">
+                            <!--<input type="text" placeholder="验证码" class="sub-y">-->
+                            <!--<span><img src="image/yzm.jpg" alt=""></span>-->
+                            <button class="btn updateCall">提交</button>
+                        </div>
+                    </div>
+                    <div class="all-comment">
+                        <p class="all-title">所有评论（共<span class="num"></span>条）</p>
+                        <ul class="comment-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--线路详情tmpl-->
+    <script type="text/template" id="sTmpl">
+        <!--酒店图片-->
+        <div class="hotel-detail-top">
+            <h2 class="name">${data.productName}</h2>
+            <div class="hotel-dis clearfix">
+                <div class="hotel-dis-left fl clearfix">
+                    <div class="big-img fl">
+                        <img src="${data.productImages[0].thumbnail || './image/zw.jpg'}" alt="">
+                        <!--<a class="qj-icon" href="javascript:;">-->
+                            <!--<i class="daq-icon">&#xe6e8;</i>-->
+                            <!--<p>全景</p>-->
+                        <!--</a>-->
+                    </div>
+                    <div class="all-img fl">
+                        <div class="inside-div js_img_scroll">
+                            <ul class="scroll-ul">
+                                {{each data.productImages}}
+                                <li data-src="${large}"><img src="${thumbnail}" alt="${title}"></li>
+                                {{/each}}
+                            </ul>
+                            <div class="top daq-icon">&#xe6b0;</div>
+                            <div class="bottom daq-icon">&#xe6af;</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hotel-dis-right fr">
+                    <div class="right-top clearfix">
+                        <span class="circle"><span class="in">${data.commentLevel}<i>分</i></span></span>
+                        <div class="star">
+                            <span>${data.startName}</span>
+                            <p class="daq-icon right-icon">
+                                {{each(i) data.startNum}}
+                                ${data.startNum[i]}
+                                {{/each}}
+                            </p>
+                        </div>
+                        <p class="num">共有评论 <span>${data.commentNum || '未知'}</span>条</p>
+                    </div>
+                    <div class="hotel-add">
+                        <p>线路类型：<span>${data.lineType || '暂无数据'}</span></p>
+                        <p class="citys">出发城市：<span>${data.lineCity || '暂无数据'}</span></p>
+                    </div>
+                    <div class="hotel-intro">
+                        <p>
+                                <span>&yen;
+                                    <span>${data.sellPrice || '暂无数据'}</span>
+                                </span>起/人</p>
+                    </div>
+                    <ul class="hotel-bom-icon">
+                        <li class="p1_recommend" data-title="${data.productName}"  data-id="${data.id}">
+                            <span class="daq-icon">&#xe623;</span>
+                            <p>推荐(<i class="num" style="margin: 0">${data.commendNum}</i>)</p>
+                        </li>
+                        <li class="pl_praised" data-id="${data.id}" data-hnum="${data.thumbSum}"  data-title="${data.productName}">
+                            <span class="daq-icon">&#xe643;</span>
+                            <p>点赞(<i class="num" style="margin: 0">${data.thumbSum}</i>)</p>
+                        </li>
+                        <li class="enshrinebtn" data-id="${data.id}" data-title="${data.productName}" data-content="地址：${ data.lineCity || '暂无数据' }" data-value="${data.colletctionNum}">
+                            <span class="daq-icon">&#xe67c;</span>
+                            <p>收藏(<i class="num" style="margin: 0">${data.colletctionNum}</i>)</p>
+                        </li>
+                        <li style="position: relative" class="pl_share">
+                            <span class="daq-icon">&#xe652;</span>
+                            <p>分享</p>
+                            <label class="bdsharebuttonbox bdshare_t bds_tools_32" style="position: absolute;z-index: 10; top: -6px; display:  block; left: 0; width:0px; height:0px;" data-bd-bind="1471256152095">
+                                <a class="bds_more" title="" data-img="" data-cmd="more" style="position: absolute;z-index:10; margin:0;padding:0;background: transparent;left: 0;top: 0px;width:90px;height:40px; display:inline-block; border: 0;background:red;opacity: 0;filter:Alpha(opacity=0)"></a>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- 行程选择 -->
+        <div class="travel-date clearfix">
+            <div class="left-date fl js_date">
+
+            </div>
+            <div class="right-choice fl">
+                <h2>选择出发日期和人数</h2>
+                <p class="go-date">
+                    出发日期:
+                    <span class="depart-date">${data.dayPrices.date}</span>
+                </p>
+                <div class="bug-ticket-num clearfix">
+                    <span class="fl">出行人数:</span>
+                    <!--<p class="daq-inp-operation dio-input spec-inp-operation fl quantity-operation">-->
+                        <!--<input class="wid-138 js_quantity quantity-num" type="text" value="" maxlength="3"/>-->
+                        <!--<i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>-->
+                    <!--</p>-->
+                    <!--<span class="fl people">成人</span>-->
+                    <!--<p class="daq-inp-operation dio-input spec-inp-operation child-operation fl">-->
+                        <!--<input class="wid-138 js_quantity child-num" type="text" value="" maxlength="3"/>-->
+                        <!--<i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>-->
+                    <!--</p>-->
+                    <!--<span class="fl people">儿童</span>-->
+                    <p class="fl quantity-operation clearfix">
+                        <i class="daq-icon minus fl">&#xe65d;</i>
+                        <input class="quantity-num fl" type="text" value="1" maxlength="3" />
+                        <i class="daq-icon add fl">&#xe65b;</i>
+                    </p>
+                    <span class="fl people">成人</span>
+                    <p class="child-operation fl clearfix">
+                        <i class="daq-icon minus fl">&#xe65d;</i>
+                        <input class="quantity-num fl" type="text" value="0" maxlength="3" />
+                        <i class="daq-icon add fl">&#xe65b;</i>
+                    </p>
+                    <span class="fl people">儿童</span>
+                </div>
+                <div class="travel-price">
+                    总价：
+                    <span>&yen;<span class="priceTotal">7360.00</span></span>
+                </div>
+                <p class="ticket-total">
+                    成人&yen;<span class="cr-price">${data.sellPrice}</span> x <span class="cr-num">1</span>；儿童&yen;<span class="er-prcie">${data.childPrice}</span> x <span class="et-num">0</span>
+                </p>
+                <a class="ticket-btn" href='linepayorder.html'>立订预订</a>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="xTmpl">
+        <!--房型介绍-->
+        <div class="hotel-detail-price">
+            <ul class="detail-nav">
+                <li class="active">
+                    <a href="javascript:;" data-type="journey">行程介绍</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="pay">购买须知</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="comment" class="comment">点评(<span class="num"></span>条)</a>
+                </li>
+            </ul>
+        </div>
+        <!-- 行程安排 -->
+        <div class="journey-intro" id="journey">
+            <ul class="journey-title clearfix">
+                <li class="fl">
+                    <i class="daq-icon">&#xe6c1;</i>
+                    <span>行程天数:${data.travelDays.daysAndNights}</span>
+                </li>
+                <li class="fl">
+                    <i class="daq-icon">&#xe668;</i>
+                    <span>交通安排：${data.traffic.inbound}去${data.traffic.outbound}返</span>
+                </li>
+                <li class="fl">
+                    <i class="daq-icon">&#xe678;</i>
+                    <span>集合时间：${data.gather[0].gatherTime}</span>
+                </li>
+                <li class="fl">
+                    <i class="daq-icon">&#xe71f;</i>
+                    <span>集合地点：${data.gather[0].gatherAddress}</span>
+                </li>
+            </ul>
+            <div class="journey-content clearfix">
+                <ul class="fl left-title">
+                    {{each data.lineTravel}}
+                    <li>
+                        <i class="yuan-icon"></i>
+                        <span class="line"></span>
+                        <a href="javascript:;" data-name="day${lineTravelDay}">第${lineTravelDay}天</a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <ul class="fl journey-right-content">
+                    {{each data.lineTravel}}
+                    <li>
+                        <h2 id="day${lineTravelDay}" class="about_tit" style="margin-bottom: 20px">
+                            <span class="title-icon">D${lineTravelDay}</span>
+                            <p>${lineTravelTitle}</p>
+                        </h2>
+
+                        <ul>
+                            <li>
+                                <h2>
+                                    <span class="daq-icon icon-title">&#xe713;</span>
+                                    <p>详细行程</p>
+                                </h2>
+                                <div class="day-content">
+                                    {{each scenics}}
+                                    <h3>${scenicName}</h3>
+                                    {{html scenicDescription}}
+                                    {{/each}}
+                                </div>
+                            </li>
+                            <li>
+                                <h2>
+                                    <span class="daq-icon icon-title">&#xe6f2;</span>
+                                    <p>用餐</p>
+                                </h2>
+                                <div class="day-content">
+                                    <p>早餐:${dining.diningBreakfast || '自理'}</p>
+                                    <p>午餐:${dining.diningLunch || '自理'}</p>
+                                    <p>晚餐:${dining.diningSupper || '自理'}</p>
+                                </div>
+                            </li>
+                            <li>
+                                <h2>
+                                    <span class="daq-icon icon-title">&#xe6e1;</span>
+                                    <p>住宿</p>
+                                </h2>
+                                <div class="day-content">
+                                    ${stay.lineTravelStay || '自行安排'}
+                                </div>
+                            </li>
+                            <li>
+                                <h2>
+                                    <span class="daq-icon icon-title">&#xe6ef;</span>
+                                    <p>活动安排</p>
+                                </h2>
+                                <div class="day-content">
+                                    {{each activities}}
+                                    <h2>${activityTitle}</h2>
+                                    {{html activityContent}}
+                                    {{/each}}
+                                </div>
+                            </li>
+                            <li>
+                                <h2>
+                                    <span class="daq-icon icon-title">&#xe6ed;</span>
+                                    <p>特产购物</p>
+                                </h2>
+                                <div class="day-content">
+                                    ${shop.lineTravelShop || '无购物安排'}
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        <!-- 购买须知 -->
+        <div class="hotel-detail-intro" id="pay">
+            <h2 class="title">购买须知</h2>
+            <p class="detail">
+                ${data.remind}
+            </p>
+        </div>
+    </script>
+    <!--评论列表    -->
+    <script type="text/template" id="commentTemp">
+        <ul class="comment-list">
+            {{each(i) list}}
+            <li class="item">
+                <div class="user-head"><img src="${headPath || 'image/zw.jpg'}" alt=""></div>
+                <div class="comment">
+                    <div class="title-cont">
+                        <p class="name">${name || '暂无'}</p>
+                        <p class="comment-star">
+                            {{each(i) startNum}}
+                            <i class="daq-icon">${startNum[i]}</i>
+                            {{/each}}
+                        </p>
+                    </div>
+                    <div class="time">${time || '暂无'}</div>
+                    <div class="content-dis">
+                        ${comment || '暂无数据'}
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+        <div class="page"></div>
+    </script>
+<script>
+    $(function () {
+        detail.init();
+    });
+    var detail = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.line.id = tools.getUrlParams('id');
+            this.getDetail();//详情
+            this.getLine();//线路
+            this.getComment() //获取评论列表
+            this.praiseClick();//点赞
+            this.recommendClick();//推荐
+            this.enshrineClick();//收藏
+            this.max = '';
+            this.chilsmax = 0;
+        },
+        //线路基本信息
+        line:{
+            id:'',
+            lineInfo: {}
+        },
+        paramsTotal:{
+            sellPrice:'',
+            childPrice:'',
+            date:'',
+            child:'',
+            quantity:'',
+            supplierId:'',
+            departDate:''
+        },
+        // 评论列表配置
+        paramscomment:{
+            page:1,
+            limitPage:10,
+            sourceType: 'line',
+            reId:tools.getUrlParams('id')
+        },
+        // 提交评论配置:
+        updataComment: {
+            star:0,
+        },
+        leng:'',
+        getDetail:function () {
+            var _this = this;
+            $('.js_detail').renderHtml({
+                url: 'line/detail',
+//                type: true,
+                template: $("#sTmpl"),
+                params: {
+                    id: tools.getUrlParams('id')
+                },
+                loading: true,
+                callback: function (data) {
+                    // console.log(data, 111)
+                    data.id= tools.getUrlParams('id');
+                    data.startNum= ['&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;'];
+                    for(var i=0; i< parseInt(data.commentLevel); i++) {
+                        data.startNum[i]='&#xe62c;'
+                    }
+                    switch(parseInt(data.commentLevel))
+                    {
+                        case 0:
+                            data.startName = '不满意'
+                            break;
+                        case 1:
+                            data.startName = '不满意'
+                            break;
+                        case 2:
+                            data.startName = '不满意'
+                            break;
+                        case 3:
+                            data.startName = '一般'
+                            break;
+                        case 4:
+                            data.startName = '非常满意'
+                            break;
+                        case 5:
+                            data.startName = '非常满意'
+                            break;
+                        default:
+                            data.startName = '暂无数据'
+                            break;
+                    }
+                    return data;
+                },
+                complete: function(res){
+                    // console.log(res)
+                    _this.line.scenicInfo = res.data;
+                    _this.paramsTotal.date = res.data.dayPrices.date;
+                    _this.paramsTotal.sellPrice = res.data.sellPrice;
+                    _this.paramsTotal.childPrice = res.data.childPrice;
+                    _this.paramsTotal.child = 0;
+                    _this.paramsTotal.quantity = res.data.dayPrices.prices.minBuyNum;
+                    _this.paramsTotal.supplierId = res.data.supplier.supplierId;
+                    _this.paramsTotal.departDate = $('.depart-date').text();
+                    if(_this.leng !== 0) {
+                        $(".comment .num").html(_this.leng);
+                    } else {
+                        $(".comment .num").html(0);
+                    }
+                    $('.detail-nav .num').html(res.data.commentNum)
+                    _this.complete(res);
+                    _this.updateCall(); //提交用户评论
+                    /*分享*/
+                    tools.share();
+                    // 数量输入框控制
+                    _this.max = res.data.dayPrices.prices.maxBuyNum-1;
+                    _this.childmax = res.data.dayPrices.prices.maxBuyNum - $(".quantity-operation .quantity-num").val();
+                    _this.numChange();
+                    _this.lineTotal();
+                    _this.lineDate();
+                    var id = tools.getUrlParams('id')
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+_this.max+"");
+                    var betoken = tools.getCookie('token')
+                }
+            })
+        },
+        //点赞
+        praiseClick: function(){
+            $(document).on('click', '.pl_praised', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'thumb/saveThumb',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'line',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '点赞成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        //推荐
+        recommendClick: function(){
+            $(document).on('click', '.p1_recommend', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'recommended/saveRecommend',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'line',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '推荐成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        //收藏
+        enshrineClick: function(){
+            $(document).on('click', '.enshrinebtn', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'enshrine/saveEnshrine',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'line',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '收藏成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        //请求旅游线路
+        getLine:function () {
+            var _this = this;
+            $('.js_travel-date').renderHtml({
+                url: 'line/getDetailExtend',
+//                type: true,
+                template: $("#xTmpl"),
+                params: {
+                    id: tools.getUrlParams('id')
+                },
+                loading: true,
+                callback: function (data) {
+                    var line = data;
+                    return line;
+                },
+                complete: function(){
+                    setTimeout(function () {
+                        _this.clickScroll();
+                        _this.travelScroll();
+                    },300)
+                }
+            })
+        },
+        complete: function(res){
+            var _this = this;
+            // 规格选择
+            // 左侧图片处理
+            if(res.data.productImages.length > 0){
+                this.imgHover();
+            } else {
+                $('.js_img_scroll').hide();
+            }
+            // 评分
+            res.data.startNum= [];
+            for(var i=0; i< parseInt(res.data.commentLevel); i++) {
+                res.data.startNum.push('&#xe62c;')
+            }
+            switch(parseInt(res.data.commentLevel))
+            {
+                case 0:
+                    res.data.startName = '不满意'
+                    break;
+                case 1:
+                    res.data.startName = '不满意'
+                    break;
+                case 2:
+                    res.data.startName = '不满意'
+                    break;
+                case 3:
+                    res.data.startName = '一般'
+                    break;
+                case 4:
+                    res.data.startName = '非常满意'
+                    break;
+                case 5:
+                    res.data.startName = '非常满意'
+                    break;
+                default:
+                    res.data.startName = '暂无数据'
+                    break;
+            }
+        },
+        // 顶部轮播
+        imgHover: function () {
+            $('.bottom').on('click',function () {
+                var $box = $('.inside-div')
+                var leng = $('.inside-div li').length
+                var $h = parseInt($box.css('marginTop'))
+                if($h == -(leng-5)*88 || leng <= 5 ){
+                    return false
+                }
+                $box.stop().css('marginTop',$h-88 + 'px').css("transition","all .1s");
+            });
+            $('.top').on('click',function () {
+                var $box = $('.inside-div')
+                var $h = parseInt($box.css('marginTop'))
+                var leng = $('.inside-div li').length
+                if($h == 0){
+                    return false
+                }
+                if(leng <= 5 ){
+                    return false
+                }
+                $box.stop().css('marginTop',$h+88 + 'px').css("transition","all .1s");
+            });
+            $(".inside-div li").mouseover(function () {
+                var $src = $(this).find("img").attr("src")
+                $(".big-img").find("img").attr("src",$src)
+            });
+        },
+        //点击跳转到指定位置
+        clickScroll: function () {
+            //点击到指定位置
+            var needPos = $(".detail-nav li");
+            needPos.click(function () {
+                needPos.removeClass("active");
+                $(this).addClass("active");
+                var dataType = $(this).find('a').attr("data-type");
+                if($('.detail-nav').hasClass("curr")){
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-46}, 200);
+                }else{
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-92}, 200);
+                }
+            });
+            /*详情页面内容tit滚动判断固定位置*/
+            var Scrolltop = $(".detail-nav").offset().top;
+            $(window).scroll(function(){
+                var bodyScrolltop = document.documentElement.scrollTop + document.body.scrollTop;
+                if(bodyScrolltop >= Scrolltop){
+                    $(".detail-nav").addClass('curr');
+                }else if(bodyScrolltop < Scrolltop){
+                    $(".detail-nav").removeClass('curr');
+                }
+            });
+        },
+        //形成滚动跳转
+        travelScroll: function () {
+            //    左边固定
+            if($('#day1').length>0){
+                var offsetT = $('#day1').offset().top;
+            }
+            var dhight = $('.left-title').height();
+            var scrollT = 0;
+            var arrdata = new Array();
+            var detailnav = [];
+            for(var i =0;i<$('.detail-nav li').length;i++) {
+                detailnav.push($('.detail-nav li').eq(i).find('a').attr('data-type'))
+            }
+            $(".about_tit").each(function(i){
+                var ti = $(this).offset().top;
+                arrdata.push(ti);
+            });
+            $(window).scroll(function () {
+                scrollT = $(window).scrollTop();
+                bescroll = $(window).scrollTop();
+                if ( scrollT >= offsetT && scrollT < ($('#pay').offset().top-dhight-30)) {
+                    $(".left-title").css({position: "fixed",top:"83px"});
+                    $(".journey-right-content").css({marginLeft: "184px"});
+                    $.each(arrdata,function(i){
+                        if(scrollT > arrdata[i]-200 ){
+                            if(i < arrdata.length && scrollT < arrdata[i+1] ){
+                                $(".left-title li").eq(i).addClass("curr").siblings("li").removeClass("curr");
+                            }else{
+                                $(".left-title li").eq(i).addClass("curr").siblings("li").removeClass("curr");
+                            }
+                        }
+                    });
+
+                } else {
+                    $(".left-title").css({position: "relative",top:"0px"});
+                    $(".journey-right-content").css({marginLeft: "44px"});
+                }
+                for(var i= 0;i < detailnav.length; i++) {
+                    if(bescroll > $('#'+detailnav[i]).offset().top) {
+                        $('.detail-nav li').eq(i).addClass("active").siblings().removeClass('active')
+                    }
+                }
+
+            });
+
+            //点击
+            var dayPos = $(".left-title li");
+            dayPos.click(function () {
+                dayPos.removeClass("curr");
+                $(this).addClass("curr");
+                var dataType = $(this).find('a').attr("data-name");
+                if($('.detail-nav').hasClass("curr")){
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-60}, 200);
+                }else{
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-120}, 200);
+                }
+            });
+        },
+        //获取评论列表
+        getComment:function() {
+            var _this = this;
+            var $commentTmpl = $("#commentTemp");
+            var $commentWrapper = $('.comment-list');
+            $commentWrapper.empty();
+            var loading = tools.loading($commentWrapper);
+            var sendParams={
+                url:'comment/getCommentInfo',
+                data:this.paramscomment,
+                method: 'GET'
+            };
+            tools.request(sendParams,function(res){
+                loading.clean();
+
+                if(res.code===0){
+                    if(res.datas.length>0){
+                        for(var i = 0; i< res.datas.length; i++) {
+                            res.datas[i].startNum= ['&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;'];
+                            for(var j=0; j< parseInt(res.datas[i].star); j++) {
+                                res.datas[i].startNum[j]='&#xe62c;'
+                            }
+                        }
+                        var len = res.datas.length;
+                        if(len > 0) {
+                            $(".all-comment .num").text(len);
+                        } else{
+                            $(".all-comment .num").text(0);
+                        }
+                        _this.leng = len;
+                        $commentTmpl.tmpl({list: res.datas}).appendTo($commentWrapper);
+                        //分页
+                        var totalPage = 1;
+                        if(res.page){
+                            totalPage = res.page.totalPage;
+                        }
+                        tools.pageTurn({
+                            selector: '.page',
+                            total: totalPage,
+                            currPage: _this.paramscomment.page,
+                            limits: 3,
+                            click: function(paramscomment){
+                                $("body,html").scrollTop(0);
+                                getComment(paramscomment);
+                            },
+                            paramscomment:_this.paramscomment
+                        });
+                    }else{
+                        $(".all-comment .num").text('0')
+                        $commentWrapper.html(tools.NO_DATA);
+                    }
+                }else{
+                    $commentWrapper.html(tools.TRY_REFRESH);
+                }
+
+            })
+        },
+        // 提交用户评论
+        updateCall: function() {
+            var $submit = $('.updateCall');
+            var _this = this;
+            var star = 0
+            _this.setCommentStar();// 设置评论等级
+            $submit.click(function () {
+                var $content =$('.write-comment').val();
+                if($content === ''){
+                    alert('请填写评论！');
+                    return;
+                }
+                // 获取用户登录的token
+                var betoken = tools.getCookie('token')
+                if(betoken) {
+                    tools.request({
+                        url:'/comment/saveComment',
+                        data:{
+                            sourceType:'line',
+                            reId: _this.line.id,
+                            comment:$content,
+                            target:_this.line.scenicInfo.productName,
+                            token:tools.getCookie('token'),
+                            star:_this.updataComment.star,
+                            // pics:pics
+                        }
+                    },function(result){
+                        if(result.code === 0){
+                            alert('评论成功，等待审核');
+                            $('.opabox').css('display','none');
+                        }else{
+                            alert(result.message)
+                        }
+                    })
+                }else {
+                    window.location.href = "login.html";
+                }
+            })
+        },
+        // 设置评论等级 星星
+        setCommentStar: function () {
+            /**
+             * 选择评论星级
+             */
+            var _this = this;
+            $('.sub-comment i').on('click',function () {
+                var starNum = $(this).attr('data-value')
+                _this.updataComment.star = starNum;
+                switch (starNum) {
+                    case '1':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '2':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '3':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '4':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '5':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe62c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                }
+            })
+        },
+        //请求总价
+        lineTotal: function () {
+            var a = tools.math(tools.math(this.paramsTotal.child,this.paramsTotal.childPrice).mul, tools.math(this.paramsTotal.quantity,this.paramsTotal.sellPrice).mul).add;
+            $('.priceTotal').text(a)
+        },
+        //日历
+        lineDate: function () {
+            var _this = this;
+            var now = new Date();
+            var time = now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
+            var mouth = now.getFullYear() + "-" +((now.getMonth()+1)<10?"0":"")+(now.getMonth()+1);
+            daqCalendar.init('.js_date', {
+                url: 'line/getmonthPrice',
+                date: time,
+                mode: 'single',
+                data: {
+                    id: tools.getUrlParams('id'),
+                    month: mouth,
+                    supplierId: this.paramsTotal.supplierId,
+                    type: 'current'
+                },
+                change: function (date) {
+                    $('.cr-price').text(date.price);
+                    $('.et-price').text(date.childPrice);
+                    $('.depart-date').text(date.date);
+                    _this.paramsTotal.departDate = date.date
+                    var id = tools.getUrlParams('id')
+                    // 数量输入框控制
+                    var max = date.minBuy <= date.stock ? date.maxBuy : date.stock;
+                    _this.max = max
+                    _this.childmax = max - $(".quantity-operation .quantity-num").val();
+                    $(".quantity-operation .quantity-num").val(1)
+                    $(".child-operation .quantity-num").val(0)
+                    $(".cr-num").html(1);
+                    $(".et-num").html(0);
+                    _this.paramsTotal.child = 0;
+                    _this.paramsTotal.quantity = 1;
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+date.maxBuy+"");
+                    _this.lineTotal();
+                }
+            })
+        },
+        // 数量++
+        numChange:function () {
+            var _this = this;
+            var id = tools.getUrlParams('id');
+            $(".quantity-operation .add").click(function () {
+                var addNum = parseInt($(this).prev().val());
+                if(addNum >= _this.max){
+                    $.toast({
+                        text: '已是最大购买数量'
+                    })
+                }else{
+                    addNum++;
+                    $(this).prev().val(addNum)
+                    _this.childmax = --_this.max
+                    _this.paramsTotal.quantity = parseInt($(this).prev().val())
+                    $(".cr-num").html(parseInt($(this).prev().val()))
+                    _this.lineTotal();
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+_this.max+"");
+                }
+            });
+            $(".child-operation .add").click(function () {
+                var addNum = parseInt($(this).prev().val());
+                if(addNum >= _this.childmax){
+                    $.toast({
+                        text: '已是最大购买数量'
+                    })
+                }else{
+                    addNum++;
+                    $(this).prev().val(addNum)
+                    _this.max = --_this.childmax
+                    // console.log(_this.max + '成人数量')
+                    _this.paramsTotal.child = parseInt($(this).prev().val())
+                    $(".et-num").html(parseInt($(this).prev().val()))
+                    _this.lineTotal();
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+_this.max+"");
+                }
+            });
+            $(".quantity-operation .minus").click(function () {
+                var addNum = parseInt($(this).next().val());
+                // console.log(addNum)
+                if(addNum <= 1){
+                    $.toast({
+                        text: '已是最小购买数量'
+                    })
+                }else{
+                    addNum--;
+                    $(this).next().val(addNum)
+                    _this.childmax = ++_this.max
+                    _this.paramsTotal.quantity = parseInt($(this).next().val())
+                    $(".cr-num").html(parseInt($(this).next().val()))
+                    _this.lineTotal();
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+_this.max+"");
+                }
+            });
+            $(".child-operation .minus").click(function () {
+                var addNum = parseInt($(this).next().val());
+                if(addNum <= 0){
+                    $.toast({
+                        text: '已是最小购买数量'
+                    })
+                }else{
+                    addNum--;
+                    $(this).next().val(addNum)
+                    _this.max = ++_this.childmax
+                    _this.paramsTotal.child = parseInt($(this).next().val())
+                    $(".et-num").html(parseInt($(this).next().val()))
+                    _this.lineTotal();
+                    $('.ticket-btn').attr('href',"linepayorder.html?id="+id+"&child="+_this.paramsTotal.child+"&quantity="+_this.paramsTotal.quantity+"&depart="+_this.paramsTotal.departDate+"&maxBuy="+_this.max+"");
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

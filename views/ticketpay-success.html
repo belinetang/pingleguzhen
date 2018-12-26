@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_首页'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+    <!--支付流程状态-->
+    <ul class="paytype center clearfix">
+        <li class="paytype1"><i>1</i>填写订单</li>
+        <li class="paytype2 curr"><i>2</i>在线支付</li>
+        <li class="paytype3 curr"><i>3</i>完成</li>
+    </ul>
+    <!--订单信息-->
+    <div class="order-page">
+
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--支付成功模板-->
+    <script type="text/template" id="successTemp">
+        <div class="font1">
+            <i class="daq-icon">&#xe6b6;</i>
+            <p class="p1">订单支付成功</p>
+            <p class="p2">电子码已发送到${list.contactMobile} 请注意查收！！使用规则：${list.passType}</p>
+        </div>
+        <div class="font2">
+            <p class="p1" title="${list.productName}">${tools.ellipsisContent(list.productName,55)}</p>
+            <p class="p2" title="${list.passAddress}">${tools.ellipsisContent(list.passAddress,55)}</p>
+            <table>
+                <tr>
+                    <td class="tb1">订单号:</td>
+                    <td class="tb2">${list.sn}</td>
+                </tr>
+                <tr>
+                    <td class="tb1">预订人数</td>
+                    <td class="tb2">${list.quantity}人</td>
+                </tr>
+                <tr>
+                    <td class="tb1">预订时间:</td>
+                    <td class="tb2">${list.paymentDate}</td>
+                </tr>
+                <tr>
+                    <td class="tb1">费用总计:</td>
+                    <td class="tb2">&yen; ${list.paymentAmount}</td>
+                </tr>
+            </table>
+            <!--手机二维码-->
+            <!--<div class="appcode-box">-->
+                <!--<div class="imgbox">-->
+                    <!--<img src="image/appcode.png" alt="">-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="font3">
+            <a href="index.html" class="tohome">返回首页</a>
+            <a href="personalCenter-allorder.html?type=ticket" class="toorder">查看订单</a>
+        </div>
+    </script>
+<script>
+    var indexJs = {
+        init:function () {
+            tools.setTowLevelBanner();
+            this.getOrderInfo(); //获取订单详情
+        },
+        // 获取订单详情
+        getOrderInfo: function () {
+            var $listTmpl = $('#successTemp')
+            var $listWrapper = $('.order-page')
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'ds/qiandnApi/order-pc/order-details',
+                type:true,
+                data: {
+                    token: betoken,
+                    orderId: tools.getUrlParams('id')
+                }
+            }
+            if(betoken) {
+                tools.request(params, function (res) {
+                    $listTmpl.tmpl({list: res.data}).appendTo($listWrapper);
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

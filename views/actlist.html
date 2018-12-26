@@ -1,0 +1,114 @@
+<!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-8 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_线路详情'})%>
+    <!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：龚小虎 | 创建：2018-8-24 -->
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<%-include("common/nav.html")%>
+<!--banner-->
+<div class="note-banner">
+    <div class="banner-img js_towlevelbanner"></div>
+</div>
+<!-- 当前位置 -->
+<!-- 当前位置 -->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+
+    <div class="news center js_news">
+
+    </div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="newsTmpl">
+    <ul class="news-list clearfix">
+        {{each list}}
+        <li class="fl">
+            <div class="news-in clearfix">
+                {{if cover}}
+                <a class="left-img fl" href="act-detail.html?id=${id}&code=jchd&channelCode=zthd">
+                    <img src="${cover}" alt="" class="img">
+                </a>
+                {{/if}}
+                <div class="right-div fl {{if !cover}}right-noImg{{/if}}">
+                    <h2 class="title" title="${title}">
+                        <a href="act-detail.html?id=${id}&code=jchd&channelCode=zthd">${title || '暂无数据'}</a></h2>
+                    <p class="time">创建时间:${createTime}</p>
+                    <p class="intro" title="${theme}">
+                        <a href="act-detail.html?id=${id}&code=jchd&channelCode=zthd">
+                            ${theme || '暂无数据'}
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+    <!--分页 S-->
+    <div class="page">
+        <a class="first-page">首页</a>
+        <a class="page-up">上一页</a>
+        <a class="curr">1</a>
+        <a>2</a>
+        <a>3</a>
+        <a>4</a>
+        <a class="page-down">下一页</a>
+        <a class="last-page">末页</a>
+    </div>
+    <!--分页 E-->
+</script>
+<script>
+    var news = {
+        init:function () {
+            this.newsParams = {
+                page: 1,
+                limitPage: 6,
+                channelCode:tools.getUrlParams("channelCode")
+            };
+            tools.setTowLevelBanner();
+            this.newsList();
+        },
+        newsList: function () {
+            var _this = this;
+            var $listTmpl = $("#newsTmpl");
+            var $listWrapper = $('.js_news');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'activity/list',
+                data:this.newsParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if(res.datas && res.datas.length > 0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.newsParams.page = data.page;
+                                _this.newsList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    }else{
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            });
+        }
+    }
+    $(function () {
+        news.init();
+    })
+</script>
+</body>
+</html>

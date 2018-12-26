@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_新用户注册'})%>
+</head>
+<body>
+<div class="register-header">
+    <div class="center">
+        <a class="logo" href="index.html?channelCode=index"></a>
+        <span class="pagetitle">欢迎注册</span>
+        <span class="tologin">已有账号? <a href="login.html?channelCode=index">请登录</a></span>
+    </div>
+    <ul class="pagetype clearfix">
+        <li class="curr animated pulse"><i>1</i>填写注册信息</li>
+        <li class="animated pulse"><i>2</i>接受并填写验证码</li>
+        <li class="animated pulse"><i>3</i>注册成功</li>
+    </ul>
+</div>
+<!--第一步-->
+<div class="register-fristbody center">
+    <table class="formlist">
+        <tr>
+            <td class="td-font"><i>*</i>手机号码</td>
+            <td class="td-middle"><input type="text" placeholder="请输入手机号码" class="userphone"></td>
+            <td class="td-last"><div class="tips"><i>!</i></div></td>
+        </tr>
+        <tr>
+            <td class="td-font"><i>*</i>登录密码</td>
+            <td class="td-middle"><input type="password" placeholder="请输入密码" class="userpwd" maxlength="18"></td>
+            <td class="td-last">6-18位，区分大小写,字母、数字、特殊符号中的两种或两种以上
+                <div class="tips"><i>!</i>6-18位，字母、数字、特殊符号中的两种或两种以上</div>
+            </td>
+        </tr>
+        <tr class="tr40">
+            <td class="td-font"></td>
+            <td class="td-middle safe">安全程度: <i>弱</i><i>中</i><i>强</i></td>
+            <td class="td-last"></td>
+        </tr>
+        <tr>
+            <td class="td-font"><i>*</i>确认密码</td>
+            <td class="td-middle"><input type="password" placeholder="请再次输入密码" maxlength="18" class="userqpwd"></td>
+            <td class="td-last">
+                <div class="tips"><i>!</i>请输入确认密码</div>
+            </td>
+        </tr>
+        <!--<tr>-->
+            <!--<td class="td-font"><i>*</i>图形验证码</td>-->
+            <!--<td class="td-middle-vcode"><input type="text" class="vcode1">-->
+                <!--<div class="vcode-box">-->
+                    <!--<img src="image/vcode.jpg" alt="" class="register1vcode">-->
+                <!--</div></td>-->
+            <!--<td class="td-last">-->
+                <!--<div class="tips"><i>!</i>请输入验证码</div>-->
+            <!--</td>-->
+        <!--</tr>-->
+        <tr>
+            <td class="td-font"></td>
+            <td class="td-middle"><a href="JavaScript:;" class="nowregister">立即注册</a></td>
+            <td class="td-last"> <div class="tips"></div></td>
+        </tr>
+    </table>
+    <div class="agreementbox">
+        <div class="agrbox">
+
+        </div>
+    </div>
+</div>
+<!--第二步-->
+<div class="register-secondbody center">
+    <p class="font-tips">
+        我们已经向您的手机
+        <span class="page-userphone"></span>
+        发送了注册验证码
+    </p>
+    <p class="vcode-box">
+        <i>*</i>验证码
+        <input type="text" class="phonecode">
+        <span class="tips">
+                <i>!</i>
+                验证信息失效,请重新获取验证码
+            </span>
+    </p>
+    <p class="btn-box">
+        <a href="javascript:;" class="submit">确认并提交</a>
+        <a href="javascript:;" class="novcode">没有收到验证码?</a>
+    </p>
+    <div class="revcode-box animated bounceInUp">
+        <p class="title">如果1分钟内没收到验证码,请重新申请验证码:</p>
+        <!--<div class="vcode-box2">-->
+            <!--<span>图形验证码</span>-->
+            <!--<input type="text">-->
+            <!--<div class="bevcode">-->
+                <!--<img src="image/vcode.jpg" alt="">-->
+            <!--</div>-->
+        <!--</div>-->
+        <a href="javascript:;" class="btn-revcode">重新发送短信</a>
+    </div>
+    <p class="anqtitle">验证手机常见问题</p>
+    <ul class="anq">
+        <li>
+            <p>问:为什么要进行手机验证？</p>
+            <p>答:当您遗忘密码时，可通过验证手机找回密码，还可加快电话预订的速度。</p>
+        </li>
+        <li>
+            <p>问：如果多次长时间收不到验证码怎么办？</p>
+            <p>答：您可以尝试重新发送，若仍未收到，请查看手机是否装有防火墙拦截了短信。</p>
+        </li>
+        <li>
+            <p>问：验证过的手机今后还可以修改吗？</p>
+            <p>答：手机验证通过后，即生成同程账户。验证手机是可以修改的，修改后账户名也将一同修改为新手机号码。</p>
+        </li>
+    </ul>
+</div>
+<!--第三步-->
+<div class="register-threebody center">
+    <p><i class="daq-icon">&#xe6b6;</i>恭喜,您已成功注册</p>
+    <a href="javascript:void(0);" class="tologin js_login">立即登录</a>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--demo模板-->
+<!-- 内容图片模板 -->
+<script type="text/template" id="zcxyTmpl">
+    <p class="title" title="${list.name}">${tools.ellipsisContent(list.name,22)}<a class="daq-icon close" href="javascript:history.back(-1)">&#xe656;</a></p>
+    <div class="agrsummary">
+        {{html list.content || '暂无数据'}}
+    </div>
+    <ul class="btnlist clearfix">
+        <li><a href="login.html">不同意</a></li>
+        <li class="infrist"><a href="javascript:;">同意</a></li>
+    </ul>
+</script>
+<script>
+var registerJs = {
+    init: function () {
+        //获取协议内容
+        this.getRegisterList();
+        // 立即注册
+        this.nowRegister();
+
+        // 没有收到验证码
+        this.novcode();
+        // 填写验证码确认并提交 进入第三步
+        this.inThree();
+        // 监听密码输入
+        this.monitorPassword();
+        //获取图形验证码
+        // this.getVcode();
+        //page2 重新获取短信验证码
+        this.setRePhoneCode();
+        $(document).on('click', '.js_login',function () {
+            window.location.replace('login.html');
+        })
+    },
+    agreement: 0, // 同意注册协议状态 0 未同意 1 同意
+    userInfo:{
+        phone: '',
+        pwd: '',
+        qpwd: '',
+        vcode1:'',
+        phonecode:''
+    },
+    _config: {},// 配置文件对象
+    //获取协议内容
+    getRegisterList: function() {
+        var _this = this;
+        var $listTmpl = $("#zcxyTmpl");
+        var $listWrapper = $('.agrbox');
+        $listWrapper.empty();
+        var loading = tools.loading($listWrapper);
+        var params = {
+            url: 'siteChannel/detail',
+            data:{
+                channelCode:'zcxy'
+            }
+        };
+        tools.request(params, function(res){
+            loading.clean();
+            if (res.code === 0) {
+                if (res.data) {
+                    var datas = res.data
+                    $listTmpl.tmpl({list: datas}).appendTo($listWrapper);
+                    // 同意协议
+                    _this.inRegisterPage();
+                } else {
+                    $listWrapper.html(tools.NO_DATA);
+                }
+            } else {
+                $listWrapper.html(tools.TRY_REFRESH);
+            }
+        })
+    },
+    // 立即注册 进入第二步
+    nowRegister: function () {
+        var _this = this;
+        $('.nowregister').on('click', function () {
+            _this.userInfo.phone = $('.userphone').val();
+            _this.userInfo.pwd = $('.userpwd').val();
+            _this.userInfo.qpwd = $('.userqpwd').val();
+            // _this.userInfo.vcode1 = $('.vcode1').val();
+
+            //检查手机号
+            if (!_this.userInfo.phone || _this.userInfo.phone.trim() === '' || _this.userInfo.phone === '请输入手机号码') {
+                //提示输入账号
+               $('.td-last').eq(0).addClass('warning').find('.tips').html('<i>!</i>请输入手机号码');
+                return;
+            }else if(!/^1\d{10}$/.test(_this.userInfo.phone)){
+                $('.td-last').eq(0).addClass('warning').find('.tips').html('<i>!</i>请输入正确的手机号码');
+                return;
+            }else{
+                $('.td-last').eq(0).removeClass('warning');
+            }
+            //检查密码
+            if (!_this.userInfo.pwd || _this.userInfo.pwd.trim() === '' || _this.userInfo.pwd === '请输入密码') {
+                $('.td-last').eq(1).addClass('warning').find('.tips').html('<i>!</i>请输入密码');
+                return;
+            }else if(_this.userInfo.pwd.length<6){
+                $('.td-last').eq(1).addClass('warning').find('.tips').html('<i>!</i>密码不能少于6位');
+                return;
+            }
+            if (!_this.userInfo.qpwd  || _this.userInfo.qpwd .trim() === '' || _this.userInfo.qpwd  === '请再次输入密码') {
+                $('.td-last').eq(3).addClass('warning').find('.tips').html('<i>!</i>请输入确认密码');
+                return;
+            }
+            if (_this.userInfo.pwd !== _this.userInfo.qpwd) {
+                $('.td-last').eq(3).addClass('warning').find('.tips').html('<i>!</i>您两次输入的密码不一致');
+                return;
+            }else{
+                $('.td-last').eq(3).removeClass('warning');
+            }
+            // if (_this.userInfo.vcode1 === '') {
+            //     $('.td-last').eq(4).addClass('warning').find('.tips').html('<i>!</i>请输入验证码');
+            //     return;
+            // }
+            //发送短信
+            var sendParams = {
+                url: 'member/sendMsg',
+                data: {
+                    type:'_register',
+                    phone: _this.userInfo.phone
+                }
+            };
+            tools.request(sendParams, function (data) {
+                if(data.code === 1){
+                   alert(data.message)
+
+                }else if(data.code === 0 ){
+                    $('.page-userphone').html(_this.userInfo.phone)
+                    $('.register-fristbody').hide();
+                    $('.register-secondbody').show();
+                    if(!$('.btn-revcode').is(".unclick")) {
+                        $('.btn-revcode').addClass("unclick");
+                        _this.countdown();
+                    }
+                    $('.pagetype').find('li').eq(1).addClass('curr').siblings().removeClass('curr');
+
+                }
+            });
+
+        })
+    },
+    // 填写验证码确认并提交 进入第三步
+    inThree: function () {
+        var _this = this;
+        $('.submit').on('click', function () {
+            _this.userInfo.phonecode = $('.phonecode').val();
+            if (_this.userInfo.phonecode === '') {
+                $('.register-secondbody .vcode-box .tips').css('display','inline-block').html('<i>!</i>请输入短信验证码')
+                return;
+            }
+            //提交注册
+            var sendParams = {
+                url: 'member/register',
+                method:'POST',
+                data: {
+                    msgCode:_this.userInfo.phonecode,
+                    account:_this.userInfo.phone,
+                    password: _this.userInfo.pwd,
+                    ignoreCode: 1
+                }
+            };
+            tools.request(sendParams, function (data) {
+                if(data.code===0){
+                    $('.register-threebody').show();
+                    $('.register-secondbody').hide();
+                    $('.pagetype').find('li').eq(2).addClass('curr').siblings().removeClass('curr');
+                }else{
+                    $('.register-secondbody .vcode-box .tips').css('display','inline-block').html('<i>!</i>' + data.message)
+                }
+            });
+        })
+    },
+    // 同意协议
+    inRegisterPage: function () {
+        var _this = this;
+        $('.infrist').on('click',function () {
+            _this.agreement = 1;
+            setTimeout(function () {
+                $('.agreementbox').hide();
+            },500)
+        })
+    },
+    // 没有收到验证码
+    novcode: function () {
+        $(".novcode").click(function () {
+            $(".revcode-box").show();
+        })
+    },
+    //监听密码输入时的密码强度
+    monitorPassword: function() {
+        var _this = this;
+        var pwdStrong = '无'
+        $('.userpwd').bind('input porpertychange', function () {
+            pwdStrong = _this.checkPassword3($(this).val())
+            if(pwdStrong === '无') {
+
+            }else if(pwdStrong === '弱') {
+                $('.safe>i').eq(0).addClass('curr').siblings().removeClass('curr');
+            }else if(pwdStrong === '中') {
+                $('.safe>i').eq(1).addClass('curr').siblings().removeClass('curr');
+            }else if(pwdStrong === '强') {
+                $('.safe>i').eq(2).addClass('curr').siblings().removeClass('curr');
+            }
+        })
+
+    },
+    //密码强度校验
+    checkPassword3: function (pwd) {
+        var Mcolor, Wcolor, Scolor, Color_Html;
+        var m = 0;
+        //匹配数字
+        if (/\d+/.test(pwd)) {
+            m++;
+        };
+        //匹配字母
+        if (/[A-Za-z]+/.test(pwd)) {
+            m++;
+        };
+        //匹配除数字字母外的特殊符号
+        if (/[^0-9a-zA-Z]+/.test(pwd)) {
+            m++;
+        };
+
+        if (pwd.length <= 6) { m = 1; }
+        if (pwd.length <= 0) { m = 0; }
+        switch (m) {
+            case 1:
+                Wcolor = "pwd pwd_Weak_c";
+                Mcolor = "pwd pwd_c";
+                Scolor = "pwd pwd_c pwd_c_r";
+                Color_Html = "弱";
+                break;
+            case 2:
+                Wcolor = "pwd pwd_Medium_c";
+                Mcolor = "pwd pwd_Medium_c";
+                Scolor = "pwd pwd_c pwd_c_r";
+                Color_Html = "中";
+                break;
+            case 3:
+                Wcolor = "pwd pwd_Strong_c";
+                Mcolor = "pwd pwd_Strong_c";
+                Scolor = "pwd pwd_Strong_c pwd_Strong_c_r";
+                Color_Html = "强";
+                break;
+            default:
+                Wcolor = "pwd pwd_c";
+                Mcolor = "pwd pwd_c pwd_f";
+                Scolor = "pwd pwd_c pwd_c_r";
+                Color_Html = "无";
+                break;
+        }
+        return Color_Html;
+    },
+    // 获取图形验证码
+    getVcode: function () {
+        var _this = this;
+        var sendParams = {
+            url: '/config/config',
+            data: {}
+        };
+        tools.request(sendParams, function (data) {
+            _this._config = data;
+            $('.register1vcode').attr('src', _this._config.serverUrl+ '/member/getKaptchaImage?siteCode=hbydzxwz');
+            //刷新图片验证码
+            $('.register1vcode').on("click",function () {
+                $(this).attr('src', _this._config.serverUrl+ '/member/getKaptchaImage?siteCode=hbydzxwz&'+Math.random());
+            });
+        });
+    },
+    // 重新发送短信
+    setRePhoneCode: function () {
+        var _this = this;
+        $('.btn-revcode').click(function () {
+            if($(this).html() === '重发验证码') {
+                var sendParams = {
+                    url: 'member/sendMsg',
+                    data: {
+                        type:'_register',
+                        phone: _this.userInfo.phone
+                    }
+                };
+                tools.request(sendParams, function (data) {
+                    $('.register-secondbody .vcode-box .tips').css('display','none');
+                    $('.btn-revcode').addClass("unclick");
+                    _this.countdown();
+                });
+            }
+        })
+    },
+    // 倒计时
+    countdown: function () {
+        var i= 60;
+        $(".btn-revcode").html(i+"s");
+        var timer =	setInterval(function(){
+            i--;
+            if(i > 0) {
+                $(".btn-revcode").html(i+"s");
+            } else {
+                clearInterval(timer);
+                $(".btn-revcode").html("重发验证码").removeClass("unclick");
+            }
+        },1000);
+    }
+}
+$(function () {
+    registerJs.init();
+    // 判断分辨率
+    var w=screen.width;
+    console.log(w)
+    if(w < 1440){
+        $('.agreementbox').css("padding-top","40px");
+    }
+})
+
+</script>
+</body>
+</html>

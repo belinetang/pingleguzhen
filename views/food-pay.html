@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_美食支付'})%>
+    <!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-23 -->
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!--支付流程状态-->
+<ul class="paytype center clearfix">
+    <li class="paytype1"><i>1</i>填写订单</li>
+    <li class="paytype2 curr"><i>2</i>在线支付</li>
+    <li class="paytype3"><i>3</i>完成</li>
+</ul>
+<div class="c-p">
+    <div class="js_pay_wrapper"></div>
+</div>
+<!--订单信息-->
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--demo模板-->
+<script type="text/template" id="detailTmpl">
+    <!--订单信息-->
+    <div class="ticket-payinfo">
+        <div class="top">
+            <div class="pricebox"><span class="font1">应付金额</span><span class="icon">&yen;</span>${data.amount}</div>
+            <div class="openinfo js_open_detail">
+                订单详情 <i class="daq-icon">&#xe6af;</i>
+            </div>
+        </div>
+        <div class="order-info js_order_open_info" style="display: none;">
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">订单号：</div>
+                <div class="o-i-r">
+                    <p>${data.sn}</p>
+                </div>
+            </div>
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">产品名称：</div>
+                <div class="o-i-r">
+                    <p>${data.name}&nbsp;×&nbsp;${data.quantity}</p>
+                </div>
+            </div>
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">联系人：</div>
+                <div class="o-i-r">
+                    <p>${data.contactName}</p>
+                </div>
+            </div>
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">手机号：</div>
+                <div class="o-i-r">
+                    <p>${data.contactMobile}</p>
+                </div>
+            </div>
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">预订时间：</div>
+                <div class="o-i-r">
+                    <p>${data.FormatCreateDate}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">订单金额：</div>
+                <div class="o-i-r">
+                    <p><i class="small">&yen;&nbsp;</i><span>${data.amount}</span></p>
+                </div>
+            </div>
+            <div class="o-i-tr clearfix">
+                <div class="o-i-l">剩余支付时间：</div>
+                <div class="o-i-r">
+                    <p class="orange-i js_time"><i>1</i>&nbsp;时&nbsp;<i>59</i>&nbsp;分&nbsp;<i>59</i>&nbsp;秒</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--支付平台-->
+    <div class="center otherpay">
+        <div class="pay-title">
+            <i>支付平台</i>
+        </div>
+        <div class="paytype-box">
+            <i class="alipay curr js_paytype" data-value="alipayDirectPlugin"></i>
+            <i class="wechatpay js_paytype" data-value="wxpayPlugin"></i>
+        </div>
+        <div class="submit-box">
+            <!-- 支付表单 -->
+            <form action="http://api.ptisp.daqsoft.com/dsapi/api/ds/qiandnApi/payment-pc/submit.jhtml?siteCode=xadszxw" method="post" id="js_form" target="_blank">
+                <input type="hidden" value="alipayDirectPlugin" name="paymentPluginId" id="paymentPluginId">
+                <input type="hidden" value="payment" name="type">
+                <input type="hidden" value="${data.sn}" name="sn">
+            </form>
+            <a href="javascript:void(0);" class="paynow js_submit">立即支付</a>
+        </div>
+    </div>
+</script>
+<script>
+var food = {
+    init: function () {
+        this.autoCancelTime = 0;
+        this.getOrderDetail();
+        var _this = this;
+        // 立即支付按钮点击
+        $(document).on('click', '.js_submit',function(){
+            if($(this).is('.disabled')){
+                $.toast({
+                    text: '订单已超时，无法继续支付'
+                });
+                return false;
+            }
+            $('#js_form').submit();
+            // 弹框
+            _this.payPop();
+        });
+        // 点击支付方式切换
+        $(document).on('click', '.js_paytype', function () {
+            $(this).addClass('curr').siblings().removeClass('curr');
+            $('#paymentPluginId').val($(this).attr('data-value'));
+        });
+        // 点击订单详情按钮
+        $(document).on('click', '.js_open_detail', function(){
+            if(!$(this).is('.active')) {
+                $('.js_order_open_info').slideDown(400);
+                $(this).html('订单详情 <i class="daq-icon">&#xe6b0;</i>').addClass('active');
+            }else{
+                $('.js_order_open_info').slideUp(400);
+                $(this).html('订单详情 <i class="daq-icon">&#xe6af;</i>').removeClass('active');
+            }
+        });
+    },
+    getOrderDetail: function(){
+        var _this = this;
+        var $tmpl = $('#detailTmpl');
+        var $wrapper = $('.js_pay_wrapper');
+        $wrapper.renderHtml({
+            url:  'ds/qiandnApi/order-pc/pay-order',
+            type: true,
+            loading: true,
+            template: $tmpl,
+            params: {
+                token: tools.getCookie('token'),
+                orderId: tools.getUrlParams('id')
+            },
+            callback: function(data){
+                data = data.order;
+                data.FormatCreateDate = _this.getStartDate(data.createDate);
+                return data;
+            },
+            complete: function(res){
+                if(res.data.order.paymentStatus === 'paid') {
+                    window.location.replace('food-paysuccess.html?id=' + tools.getUrlParams('id'));
+                }
+                _this.nowTime = res.responseTime;
+                _this.getCancelTime(res.data);
+            }
+        });
+
+    },
+    // 获取最小的订单的购买数量
+    getCancelTime: function(data){
+        var datas = data.orders;
+        this.autoCancelTime = data.order.autoCancelTime; // 订单最小的自动取消时间
+        this.createDate = data.order.createDate; // 订单开始时间
+        // 进行倒计时操作
+        this.timeCountdown();
+    },
+    // 获取年月日日期
+    getStartDate: function(time){
+        var date = new Date(time);
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    },
+    // 自动取消订单的倒计时
+    timeCountdown: function(){
+        var _this = this;
+        var nowTime = this.nowTime; // 当前时间  毫秒计数
+        var t = parseInt((nowTime - this.createDate)/1000 - this.autoCancelTime * 60);  // 当前时间 和 订单应该过期时间之间的差值  秒 计数
+        var $btn = $('.js_submit');
+        var $timeBox = $('.js_time');
+        // 当前时间大于订单应该过期的时间  订单过期  不再执行倒计时
+        if(t > 0) {
+            timeIsOut();
+            return false;
+        }
+        // 当前时间小于订单应该过期的时间 订单未超期 进行倒计时
+        t = Math.abs(t);  // 取差值的绝对值
+        timeDown();
+        /**
+         * timeIsOut  倒计时结束  应该执行的操作
+         */
+        function timeIsOut(){
+            this.timeOut = true;
+            $timeBox.html('订单已超时！');
+            $btn.addClass('disabled');
+        }
+        // 对盒子进行赋值
+        function setTimeHtml(){
+            var formatTime = _this.formatSeconds(t);
+            var timeHtml = '';
+            if(formatTime.hour > 0){
+                timeHtml = '<i>'+ formatTime.hour + '</i>&nbsp;时&nbsp;';
+            }
+            if(formatTime.min) {
+                timeHtml += '<i>'+ formatTime.min + '</i>&nbsp;分&nbsp;';
+            }
+            timeHtml += '<i>'+ formatTime.sec + '</i>&nbsp;秒';
+            $timeBox.html(timeHtml);
+        }
+        /**
+         * timeDown 倒计时进行中的函数
+         */
+        function timeDown(){
+            t--;
+            // 订单超时
+            if(t < 0) {
+                timeIsOut();
+                return false;
+            }
+            setTimeHtml();
+            // 循环递归
+            setTimeout(timeDown,1000);
+        }
+    },
+    // 将秒数转换成时分秒
+    formatSeconds: function(value) {
+        var secondTime = parseInt(value);// 秒
+        var result = {};
+        var minuteTime = 0;// 分
+        var hourTime = 0;// 小时
+        if(secondTime > 60) {//如果秒数大于60，将秒数转换成整数
+            //获取分钟，除以60取整数，得到整数分钟
+            minuteTime = parseInt(secondTime / 60);
+            //获取秒数，秒数取佘，得到整数秒数
+            secondTime = parseInt(secondTime % 60);
+            //如果分钟大于60，将分钟转换成小时
+            if(minuteTime > 60) {
+                //获取小时，获取分钟除以60，得到整数小时
+                hourTime = parseInt(minuteTime / 60);
+                //获取小时后取佘的分，获取分钟除以60取佘的分
+                minuteTime = parseInt(minuteTime % 60);
+            }
+        }
+        result.sec = parseInt(secondTime);
+        if(minuteTime > 0) {
+            result.min = parseInt(minuteTime);
+        }
+        if(hourTime > 0) {
+            result.hour = parseInt(hourTime);
+        }
+        return result;
+    },
+    // 立即支付 的提示弹框
+    payPop: function(){
+        $.dialog({
+            title:'温馨提示',
+            message:'<p>请在第三方支付页面完成付款，付款完成前请不要关闭此窗口</p>',
+            width: 420,
+            height:200,
+            mask:true,
+            footer: true,
+            callback:function () {
+                window.location.reload();
+            },
+            buttons: [
+                {
+                    text :'付款成功',
+                    className:'btn-blue',
+                    callback: function(){
+                        window.location.reload();
+                    }
+                },
+                {
+                    text :'付款失败',
+                    className:'btn-gray',
+                    callback: function(){
+                        window.location.reload();
+                    }
+                }
+            ]
+        });
+    }
+};
+$(function(){
+    food.init();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_旅游交通'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--banner-->
+    <div class="d-banner">
+        <div class="banner-img js_towlevelbanner">
+        </div>
+    </div>
+    <!--面包削-->
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <div class="trdetail">
+        <div class="main center overflow detail js_contenttd clearfix">
+        </div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+</body>
+<script type="text/template" id="detailTemp">
+    <ul class="traffic-nav-list">
+        {{each list}}
+        <li class="font-${fcolor} item">
+            <a name="${fcolor}" class="${navName} nav-title">
+                <span class="daq-icon tra-icon">{{html icon}}</span>
+                <span class="tra-tit">${name}</span>
+            </a>
+        </li>
+        {{/each}}
+    </ul>
+    <ul class="traffic-content fl">
+        {{each list}}
+        <li id="${fcolor}" class="contop">
+            <a class="con-tit font-${fcolor}"><span class="daq-icon icon">&#xe622;</span>${name}</a>
+            <div class="content-wrap">{{html content || '暂无数据'}}</div>
+        </li>
+        {{/each}}
+    </ul>
+</script>
+<script>
+    //配置项
+    var trafficList = {
+        // 上级栏目代码
+        channelCode: tools.getUrlParams('channelCode'),
+        // 唯一编号
+        id: tools.getUrlParams('id')
+    };
+    var trafficDetailModule = {
+        detailsModule: function(ele, param, afterRes) {
+            var $listWrapper = $(ele);
+            $($listWrapper).empty();
+            $('.page').empty();
+            var loading = tools.loading($listWrapper);
+            var params=param;
+            var sendParams={
+                url:'traffic/detail',
+                data:params
+            };
+            tools.request(sendParams,function(data){
+                loading.clean();
+                var res=data.data;
+                if(data.code==0){
+                    var icon = ['&#xe75e;', '&#xe75f;', '&#xe75d;', '&#xe760;', '&#xe75c;'];
+                    for (var i = 0; i < res.children.length; i++) {
+                        res.children[i].icon = icon[i];
+                        res.children[i].fcolor = "color" + (i + 1);
+                        res.children[i].navName = "name" + (i + 1);
+                    }
+                    $('#detailTemp').tmpl({list: res.children}).appendTo($listWrapper);
+                    afterRes()
+                }else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            });
+        }
+    };
+    var tdetailsJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.loadContent();
+        },
+        // 页面内容数据模板渲染
+        loadContent: function() {
+            var _this = this;
+            trafficDetailModule.detailsModule('.js_contenttd', trafficList, function() {
+                var name = comm.getUrlParam("anchor");
+                _this.leftnav();
+            });
+        },
+        // 左边导航和滚动条交互效果
+        leftnav: function() {
+            var _offsetT = $(".traffic-nav-list").offset().top,
+                _this = this;
+            _this.navEventClick();
+
+            var topArr = [],
+                $li = $(".traffic-content>li"),
+                $img = $li.find('img'),
+                imgNum = $img.length;
+            if(imgNum){
+                $img.load(function() {
+                    imgNum--;
+                    if (imgNum > 1) {
+                        return;
+                    }
+                    for (var i = 0; i < $li.length; i++) {
+                        topArr.push($li.eq(i).offset().top);
+                    };
+                    $(".traffic-nav-list li").eq(parseInt(comm.getUrlParam("anchor").substring(5)) - 1).trigger('click');
+                });
+            }else{
+                for (var i = 0; i < $li.length; i++) {
+                    topArr.push($li.eq(i).offset().top);
+                };
+                $(".traffic-nav-list li").eq(parseInt(comm.getUrlParam("anchor").substring(5)) - 1).trigger('click');
+            }
+            $(window).on("scroll", function() {
+                var _scrollT = $(document).scrollTop();
+                if (_scrollT >= _offsetT) {
+                    $(".traffic-nav-list").css({
+                        position: "fixed",
+                        top: 0,
+                        "left": ($(window).outerWidth(true) - 1200) / 2
+                    });
+                    $.each(topArr, function(i) {
+                        if (_scrollT > topArr[i] - 40) {
+                            $(".traffic-nav-list li").eq(i).addClass("curr").siblings("li").removeClass("curr");
+                        }
+                    })
+                } else {
+                    $(".traffic-nav-list").css({
+                        position: "absolute",
+                        top: "0px",
+                        "left": "0"
+                    });
+                }
+            });
+
+        },
+        // 详情导航点击事件
+        navEventClick: function() {
+            $(".traffic-nav-list li").on('click', function() {
+                $(this).addClass("curr").siblings("li").removeClass("curr");
+                var href = $(this).find("a").attr("name");
+                var pos = $("#" + href).offset().top;
+                $("html,body").animate({
+                    scrollTop: pos - 35
+                }, 300);
+            })
+        },
+    }
+    $(function () {
+        tdetailsJs.init()
+    })
+</script>
+</html>

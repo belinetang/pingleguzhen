@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_首页'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+    <!--支付流程状态-->
+    <ul class="paytype center clearfix">
+        <li class="paytype1"><i>1</i>填写订单</li>
+        <li class="paytype2 curr"><i>2</i>在线支付</li>
+        <li class="paytype3"><i>3</i>完成</li>
+    </ul>
+    <!--订单信息-->
+    <div class="ticket-payinfo">
+        <div class="top">
+            <div class="pricebox"><span class="font1">应付金额</span><span class="icon">&yen;</span>35.00</div>
+            <div class="openinfo">
+                订单详情 <i class="daq-icon">&#xe6af;</i>
+            </div>
+        </div>
+        <div class="middle">
+            <table>
+                <tr>
+                    <td class="tb1">订单号 : </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tb1">产品名称 : </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="tb1">预订时间 : </td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="bottom">
+            <table>
+                <tr>
+                    <td class="tb1">订单金额 : </td>
+                    <td>&yen; 35.00</td>
+                </tr>
+                <tr>
+                    <td class="tb1">剩余支付时间 : </td>
+                    <td><span>1 </span>时 <span>56 </span>分 <span>30 </span>秒</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!--支付平台-->
+    <div class="center otherpay">
+        <div class="pay-title">
+            <i>支付平台</i>
+        </div>
+        <div class="paytype-box">
+            <i class="alipay curr" data-value="alipayPlugin"></i>
+            <i class="wechatpay" data-value="wxpayPlugin"></i>
+        </div>
+        <form class="submit-box" action="http://api.ptisp.daqsoft.com/dsapi/api/ds/qiandnApi/payment-pc/submit.jhtml?siteCode=hbydzxwz&lang=cn&type=payment" method="post" target="_blank">
+            <input type="text" name="paymentPluginId" id="paymentPluginId" value="">
+            <input type="text" value="" name="type" id="type">
+            <input type="text" value="" name="amount" id="amount">
+            <input type="text" value="" name="sn" id="sn">
+            <button type="submit" class="paynow">立即支付</button>
+        </form>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--订单内容-->
+    <script type="text/template" id="orderTemp">
+        <div class="top">
+            <div class="pricebox"><span class="font1">应付金额</span><span class="icon">&yen;</span>${list.totalAmount}</div>
+            <div class="openinfo">
+                订单详情 <i class="daq-icon">&#xe6af;</i>
+            </div>
+        </div>
+        <div class="middle">
+            <table>
+                <tr>
+                    <td class="tb1">订单号 : </td>
+                    <td>${list.sn}</td>
+                </tr>
+                <tr>
+                    <td class="tb1">产品名称 : </td>
+                    <td>${list.productName}</td>
+                </tr>
+                <tr>
+                    <td class="tb1">预订时间 : </td>
+                    <td>${list.date}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="bottom">
+            <table>
+                <tr>
+                    <td class="tb1">订单金额 : </td>
+                    <td>&yen; ${list.totalAmount}</td>
+                </tr>
+                <tr>
+                    <td class="tb1">剩余支付时间 : </td>
+                    <td class="overtime"><span>1 </span>时 <span>56 </span>分 <span>30 </span>秒</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+<script>
+    var indexJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.getOnlineOrder();
+            this.choicePayType(); //选择支付方式
+        },
+        paymentPluginId:'alipayDirectPlugin',
+        middleType: 0,
+        sn:'',
+        // 打开订单详情
+        openOrderDesc: function () {
+            var _this = this;
+            $('.openinfo').click(function () {
+                if(_this.middleType === 0 ) {
+                    $('.middle').addClass('open');
+                    _this.middleType=1;
+                    $('.openinfo').html('订单详情 <i class="daq-icon">&#xe6b0;</i>')
+                }else{
+                    $('.middle').removeClass('open');
+                    _this.middleType=0;
+                    $('.openinfo').html('订单详情 <i class="daq-icon">&#xe6af;</i>')
+                }
+            })
+        },
+        // 在线支付订单内容查询
+        getOnlineOrder: function () {
+            var _this = this;
+            var $orderTmpl = $("#orderTemp");
+            var $orderWrapper = $('.ticket-payinfo');
+            $orderWrapper.empty();
+            var betoken = tools.getCookie('token')
+            var loading = tools.loading($orderWrapper);
+            var params = {
+                url: 'ds/qiandnApi/order-pc/order-details',
+                type:true,
+                data: {
+                    orderId: tools.getUrlParams('id'),
+                    token: betoken
+                }
+            };
+            if(betoken) {
+                tools.request(params, function(res){
+                    loading.clean();
+                    var data = res.data;
+                    // console.log(data)
+                    //保存订单sn
+                    _this.sn =data.sn;
+                    $orderTmpl.tmpl({list: data}).appendTo($orderWrapper);
+                    _this.openOrderDesc(); // 展开订单详情
+                    // 提交表单的内容部分
+                    $('#paymentPluginId').attr('value',_this.paymentPluginId);
+                    $('#type').attr('value','rechargeAndPay');
+                    $('#amount').attr('value',data.price);
+                    $('#sn').attr('value',data.sn)
+                    //剩余支付时间判断
+                    var countdown = data.autoCancelTime * 60; // 接口返回可用支付总时间
+                    var responseTime = res.responseTime; // 接口返回时间，即当前时间
+                    var createDate = _this.dateToTime(data.createDate)/1000; // 订单生产时间
+                    var nowdate = responseTime/1000;
+                    var min = nowdate - createDate; // 已经过了多长时间
+
+                    if(min < countdown){
+                        _this.timer(countdown-min);
+                    }else{
+                        $.dialog({
+                            title: '温馨提示',
+                            width: 400,
+                            height: 200,
+                            mask:true,
+                            message: '超出支付时间',
+                            footer: false,
+                            buttons: null,
+                            callback: function(){
+                                // window.history.go(-1);
+                            }
+                        });
+                    }
+                    //立即支付
+                    $('.paynow').click(function () {
+                            //剩余支付时间判断
+                        var countdown = data.autoCancelTime * 60; // 接口返回可用支付总时间
+                        var responseTime = res.responseTime; // 接口返回时间，即当前时间
+                        var createDate = _this.dateToTime(data.createDate)/1000; // 订单生产时间
+                        var nowdate = responseTime/1000;
+                        var min = nowdate - createDate; // 已经过了多长时间
+
+                        if(min < countdown){
+                            $.dialog({
+                                title:'温馨提示',
+                                message:'<p>请在第三方支付页面完成付款，付款完成前请不要关闭此窗口</p>',
+                                width: 420,
+                                height:200,
+                                mask:true,
+                                footer: true,
+                                callback:function () {
+                                    window.location.reload();
+                                },
+                                buttons: [
+                                    {
+                                        text :'付款成功',
+                                        className:'btn-blue',
+                                        callback: function(){
+                                            _this.loadPayOrder2();
+                                        }
+                                    },
+                                    {
+                                        text :'付款失败',
+                                        className:'btn-gray',
+                                        callback: function(){
+                                            window.location.reload();
+                                        }
+                                    }
+                                ]
+                            });
+                        }else{
+                            $.dialog({
+                                title: '温馨提示',
+                                width: 400,
+                                height: 200,
+                                mask:true,
+                                message: '超出支付时间',
+                                footer: false,
+                                buttons: null,
+                                callback: function(){
+                                    window.history.go(-1);
+                                }
+                            });
+                        }
+                    })
+
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+        },
+        //日期转时间戳
+        dateToTime: function (date) {
+            date = date.substring(0,19);
+            date = date.replace(/-/g,'/');
+            var timestamp = new Date(date).getTime();
+            return timestamp;
+        },
+        //倒计时
+        timer: function (intDiff) {
+            window.setInterval(function () {
+                var day = 0,
+                    hour = 0,
+                    minute = 0,
+                    second = 0;//时间默认值
+                if (intDiff > 0) {
+                    day = Math.floor(intDiff / (60 * 60 * 24));
+                    hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                    minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                    second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                }
+                if (minute <= 9) minute = '0' + minute;
+                if (second <= 9) second = '0' + second;
+
+                $('.overtime').html("<span>" + hour + "</span>时 <span>" + minute + "</span>分 <span>" + second + " </span>秒");
+                if(intDiff <= 0){
+                    alert("超出支付时间");
+                    window.history.go(-1);
+                }
+                --intDiff;
+            }, 1000);
+        },
+        // 选择支付方式
+        choicePayType: function () {
+            var _this = this;
+            $('.paytype-box').find('i').click(function () {
+                $(this).addClass('curr').siblings().removeClass('curr');
+                _this.paymentPluginId = $(this).attr('data-value')
+                $('#paymentPluginId').val($(this).attr('data-value'));
+            })
+        },
+        //去支付
+        goPlay: function () {
+            var _this= this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'ds/qiandnApi/payment-pc/wxpay.jhtml',
+                type: true,
+                data: {
+                    amount:'0.08',
+                    token:betoken,
+                    type:'rechargeAndPay',
+                    paymentPluginId: _this.paymentPluginId,
+                    sn:_this.sn,
+                    wxOrderUrl:''
+                }
+            };
+            if(betoken) {
+                tools.request(params, function(res){
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>请在第三方支付页面完成付款，付款完成前请不要关闭此窗口</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        callback:function () {
+                            window.location.reload();
+                        },
+                        buttons: [
+                            {
+                                text :'付款成功',
+                                className:'btn-blue',
+                                callback: function(){
+                                    _this.loadPayOrder2();
+                                }
+                            },
+                            {
+                                text :'付款失败',
+                                className:'btn-gray',
+                                callback: function(){
+                                    window.location.reload();
+                                }
+                            }
+                        ]
+                    });
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+
+        },
+        // 支付成功
+        loadPayOrder2: function(){
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'ds/qiandnApi/order-pc/paySuccess',
+                type:true,
+                data: {
+                    token: betoken,
+                    type:'payment',
+                    id: tools.getUrlParams('id')
+                }
+            };
+            if(betoken) {
+                tools.request(params, function(res){
+                    if(res.message === 'success') {
+                        window.location.href = "./ticketpay-success.html?channelCode=jqmp&code=jqmp&id="+res.data.orderJson.id;
+                    }else {
+                        $.dialog({
+                            title: '温馨提示',
+                            width: 400,
+                            height: 200,
+                            mask:true,
+                            message: '订单支付未完成',
+                            footer: false,
+                            buttons: null,
+                            callback: function(){
+                                window.location.reload();
+                            }
+                        });
+                    }
+                })
+            }else {
+                window.location.href = "login.html";
+            }
+
+        },
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

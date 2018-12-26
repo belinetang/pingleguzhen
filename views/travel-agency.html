@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_旅行社查询'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--banner-->
+    <div class="d-banner">
+        <div class="banner-img js_towlevelbanner">
+        </div>
+    </div>
+    <!--面包削-->
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <!--条件筛选-->
+    <div class="selection-conditions1 center clearfix">
+        <!--选择类别-->
+        <div class="type-box clearfix">
+            <label>选择类别</label>
+            <ul class="type clearfix">
+            </ul>
+        </div>
+        <!--选择区域-->
+        <div class="region-box clearfix">
+            <label>选择区域</label>
+            <ul class="region clearfix">
+            </ul>
+        </div>
+    </div>
+    <div class="ta-listbox">
+        <ul class="ta-list clearfix">
+
+        </ul>
+        <div class="page"></div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+</body>
+<!--旅行社列表 S-->
+<script type="text/template" id="agencyListTemp">
+    <ul class=" animate_pic agency_lst clearfix">
+        {{each list}}
+        <li class="transition_time">
+            <h3 class="agency_tit"><i class=""></i>${tools.ellipsisContent(name,28) || '未知'}</h3>
+            <p class="data_info"><i class="icon icon_license"></i>经营许可证：${tools.ellipsisContent(licenseno,30) || '未知'}</p>
+            <p class="data_info"><i class="icon icon_style"></i>旅行社类型：${tools.ellipsisContent(resourceLevel,30) || '未知'}</p>
+            <p class="data_info"><i class="icon icon_phone"></i>旅行社电话：${tools.ellipsisContent(phone,30) || '未知'}</p>
+            <p class="data_info" {{if address}}title="${address}"{{/if}}><i class="icon icon_local"></i>旅行社地址：${tools.ellipsisContent(address,30) || '未知'}</p>
+        </li>
+        {{/each}}
+    </ul>
+    <!-- page start-->
+    <div class="page"></div>
+    <!-- page end-->
+</script>
+<!--区域模板-->
+<script type="text/template" id="regionsTemp">
+    <li class="curr" data-id="">全部</li>
+    {{each list}}
+    <li data-id="${region}">${name}</li>
+    {{/each}}
+</script>
+<!--类别模板-->
+<script type="text/template" id="typeTemp">
+    <li class="curr" data-id="">全部</li>
+    {{each list}}
+    <li data-id="${skey}">${name}</li>
+    {{/each}}
+</script>
+<!--列表模板-->
+<script type="text/template" id="listTemp">
+    {{each(i) list}}
+    {{if i%2 === 0}}
+    <li>
+        <p class="title" title="${name}"><i></i>${tools.ellipsisContent(name,23)}</p>
+        <ul>
+            <li><i class="daq-icon icon1">&#xe61f;</i><span class="listtitle">经营许可证:</span><span class="content">${licenseno || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon2">&#xe620;</i><span class="listtitle">旅行社类型:</span><span class="content">${resourceLevel || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon3">&#xe621;</i><span class="listtitle">旅行社电话:</span><span class="content">${phone || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon4">&#xe71f;</i><span class="listtitle">旅行社地址:</span><span class="content">${address || '暂无数据'}</span></li>
+        </ul>
+    </li>
+    {{else}}
+    <li class="rlist">
+        <p class="title" title="${name}"><i></i>${tools.ellipsisContent(name,23)}</p>
+        <ul>
+            <li><i class="daq-icon icon1">&#xe61f;</i><span class="listtitle">经营许可证:</span><span class="content">${licenseno || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon2">&#xe620;</i><span class="listtitle">旅行社类型:</span><span class="content">${resourceLevel || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon3">&#xe621;</i><span class="listtitle">旅行社电话:</span><span class="content">${phone || '暂无数据'}</span></li>
+            <li><i class="daq-icon icon4">&#xe71f;</i><span class="listtitle">旅行社地址:</span><span class="content">${address || '暂无数据'}</span></li>
+        </ul>
+    </li>
+    {{/if}}
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var indexJs ={
+        init: function () {
+            tools.setTowLevelBanner();
+            this.loadRegions();
+            this.getTravelType();
+            this.getTravelList(); // 获取旅行社列表
+        },
+        tarvelagency_Params:{
+            page:1,
+            limitPage:6,
+        },
+        // 获取地区列表
+        loadRegions: function () {
+            var _this = this;
+            var $listTmpl = $("#regionsTemp");
+            var $listWrapper = $('.region');
+            $listWrapper.empty();
+            var params = {
+                url: 'common/siteRegions',
+                data: {}
+            };
+            tools.request(params, function(res){
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.region li').on('click', function () {
+                    _this.tarvelagency_Params.region = $(this).attr('data-id')
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.getTravelList();
+                })
+            })
+        },
+        // 获取旅行社类型
+        getTravelType: function () {
+            var _this = this;
+            var $listTmpl = $("#typeTemp");
+            var $listWrapper = $('.type');
+            $listWrapper.empty();
+            var params = {
+                url: 'travel/type/list',
+                data: {}
+            };
+            tools.request(params, function(res){
+                $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                $('.type li').on('click', function () {
+                    _this.tarvelagency_Params.resourceLevel = $(this).attr('data-id')
+                    $(this).addClass('curr').siblings().removeClass('curr')
+                    _this.getTravelList();
+                })
+            })
+        },
+        //获取旅行社列表
+        getTravelList: function () {
+            var _this = this;
+            var $listTmpl = $("#listTemp");
+            var $listWrapper = $('.ta-list');
+            $listWrapper.empty();
+            $('.page').empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'travel/list',
+                data: _this.tarvelagency_Params
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        //  初始化分页
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.tarvelagency_Params.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.getTravelList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    }
+    $(function(){
+       indexJs.init();
+    });
+</script>
+</html>

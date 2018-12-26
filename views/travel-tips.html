@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_空模板'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <!--banner-->
+    <div class="d-banner">
+        <div class="banner-img js_towlevelbanner">
+        </div>
+    </div>
+    <!--面包削-->
+    <div class="crumbs">
+        <div class="js_curmbs center"></div>
+    </div>
+    <ul class="tracel-tipslist">
+    </ul>
+    <div class="page"></div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+</body>
+<!--旅游贴士模板-->
+<script type="text/template" id="travelTipsTemp">
+    {{each list}}
+    <li class="laws-item">
+        <a href="news-detail.html?id=${id}&code=lyzs&channelCode=lyzs" >
+            <h4 class="laws-tit" title="${title}"><i></i><i class="line-small"></i>${tools.ellipsisContent(title,35)}</h4>
+            <p class="laws-info"  title="${summary}" >
+                ${tools.ellipsisContent(summary,100) || '暂无数据'}
+            </p>
+        </a>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var tipsJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.getTipsList(); // 获取旅游贴士
+        },
+        tipsParams:{
+            page:1,
+            limitPage:8,
+            channelCode:'lyts'
+        },
+        // 获取小贴士列表
+        getTipsList: function () {
+            var _this = this;
+            var $listTmpl = $("#travelTipsTemp");
+            var $listWrapper = $('.tracel-tipslist');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'news/list',
+                data:_this.tipsParams
+            };
+            tools.request(params, function(res){
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        loading.clean();
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        //  初始化分页
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.tipsParams.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.getTipsList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        }
+    }
+    $(function () {
+        tipsJs.init();
+    })
+</script>
+
+</html>

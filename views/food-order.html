@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_美食填写订单'})%>
+    <!-- 页面设计：陈建波| 页面重构：何小贵 | 前端开发：何小贵 | 创建：2018-8-22 -->
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<!--<%-include("common/nav.html")%>-->
+<!--支付流程状态-->
+<ul class="paytype center clearfix">
+    <li class="paytype1"><i>1</i>填写订单</li>
+    <li class="paytype2"><i>2</i>在线支付</li>
+    <li class="paytype3"><i>3</i>完成</li>
+</ul>
+<!--订单信息-->
+<div class="center ticket-payorder1-info clearfix">
+    <div class="payorder1-left">
+        <div class="title"><i class="daq-icon">&#xe729;</i>预订信息</div>
+        <div class="inroom">
+            购买数量：
+            <p class="daq-inp-operation dio-input mt-10 js_num_op">
+                <input class="wid-138" type="text" value="1" maxlength="3"/>
+                <i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>
+            </p>
+        </div>
+        <div class="title"><i class="daq-icon">&#xe6a1;</i>联系人信息 <span class="tips">温馨提示：您需要填写1个联系人的信息</span></div>
+        <div class="contacts clearfix">
+            <span class="ctitle">常用联系人:</span>
+            <div class="clearfix choose-box js_address">
+
+            </div>
+        </div>
+        <!--联系人信息-->
+        <div class="js_contact1"></div>
+        <!--客人信息-->
+        <div class="js_passenger"></div>
+        <div class="info2">
+            <div id="checkbox1" class="clearfix choose-box ">
+                <input type="checkbox" name="b.multi" value="true" checked="checked" title="同意《平乐古镇·天台山旅游电子商务平台网络产品购买协议》" />
+            </div>
+        </div>
+        <div class="submit-box">
+            <a href="javascript:;" class="paynow js_submit">立即支付</a>
+        </div>
+    </div>
+    <div class="food-order-right js_right">
+
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--demo模板-->
+
+<script type="text/template" id="rightTmpl">
+    <div class="title-box">
+        <div class="imgbox">
+            <img src=" ${ data.cover || 'image/zw.jpg' }" alt="">
+        </div>
+        <div class="fontbox">
+            <p class="title" title="${data.name}">${ tools.ellipsisContent(data.name,18)}</p>
+            <p class="address" title="${data.address}">${tools.ellipsisContent(data.address,11)}</p>
+        </div>
+    </div>
+    <div class="pricebox">
+        <p class="font clearfix">
+            <span class="title">单价</span>
+            <span class="price"><i>&yen;</i>${data.dayPrice.price}</span>
+        </p>
+        <p class="fontf1 clearfix">
+            <span class="title">应付金额</span>
+            <span class="price"><i>&yen;</i><span class="js_amount">${tools.math(data.dayPrice.price, data.quantity).mul}</span></span>
+        </p>
+    </div>
+</script>
+<script type="text/template" id="contactTmpl">
+    <div class="m-o-row clearfix">
+        <div class="m-o-col-l"><i>*&nbsp;</i>姓名：&nbsp;</div>
+        <div class="m-o-col-r">
+            <input type="text" placeholder="请输入联系人姓名" data-type="name" data-name="联系人姓名" class="js_ipt js_order_name"><i>联系人姓名</i>
+        </div>
+    </div>
+    <div class="m-o-row clearfix">
+        <div class="m-o-col-l"><i>*&nbsp;</i>手机号码：&nbsp;</div>
+        <div class="m-o-col-r">
+            <input type="text" placeholder="请输入手机号码" maxlength="11" data-type="phone" data-name="联系人手机号码" class="js_ipt js_order_phone"><i>预订成功后会向您发送短信通知</i>
+        </div>
+    </div>
+    {{if data.isNeedPinyin}}
+    <div class="m-o-row clearfix">
+        <div class="m-o-col-l"><i>*&nbsp;</i>名字拼音：&nbsp;</div>
+        <div class="m-o-col-r">
+            <input type="text" placeholder="请输入联系人名字拼音" data-type="pinyin" data-name="联系人拼音" class="js_ipt js_order_pinyin"><i>联系人名字的全拼</i>
+        </div>
+    </div>
+    {{/if}}
+</script>
+<script type="text/template" id="passengerTmpl">
+    <div class="tourist-information">
+        <span>客人信息</span>
+    </div>
+    <ul class="m-o-plist">
+        {{each(idx,el) data.list}}
+        <li class="m-o-p clearfix js_peo_card">
+            {{if el.name}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l"><i>*&nbsp;</i>姓名：&nbsp;</div>
+                <div class="m-p-r">
+                    <input type="text" data-type="name" data-name="客人${idx + 1}姓名" class="js_ipt js_people_name">
+                </div>
+            </div>
+            {{/if}}
+            {{if el.pinyin}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l"><i>*&nbsp;</i>拼音：&nbsp;</div>
+                <div class="m-p-r">
+                    <input type="text" data-type="pinyin" data-name="客人${idx + 1}拼音" class="js_ipt js_people_pinyin">
+                </div>
+            </div>
+            {{/if}}
+            {{if el.phone}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l"><i>*&nbsp;</i>手机号码：&nbsp;</div>
+                <div class="m-p-r">
+                    <input type="text" max-length="11" data-type="phone" data-name="客人${idx + 1}手机号" class="js_ipt js_people_phone">
+                </div>
+            </div>
+            {{/if}}
+            {{if el.hasCredentials}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l">
+                    <i>*&nbsp;</i>
+                    <span class="select-card js_idcard_select">
+                            <em class="js_idcard_select_txt${idx}">身份证</em>&nbsp;<span class="daq-icon">&#xe6af;</span>&nbsp;
+                            <ul class="s-c-list">
+                                {{each(i,e) hasCredentials.credentialsType}}
+                                <li class="{{if i === 0}}curr{{/if}} js_idcard_type" data-type="${e.type}" data-idx="${idx}">${e.name}</li>
+                                {{/each}}
+                            </ul>
+                        </span>
+                </div>
+                <div class="m-p-r">
+                    <input type="text" data-type="${el.hasCredentials.credentialsType[0].type}" data-name="客人${idx+1}的${el.hasCredentials.credentialsType[0].name}" type="text" class="js_ipt js_people_idcard js_people_idcard_ipt${idx}">
+                </div>
+            </div>
+            {{/if}}
+            {{if el.needPassengerInfoOther1}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l" title="${needPassengerInfoOther1}"><i>*&nbsp;</i>${tools.ellipsisContent(el.needPassengerInfoOther1,10)}：&nbsp;</div>
+                <div class="m-p-r">
+                    <input type="text" class="js_ipt js_people_info1" data-type="needPassengerInfoOther1" data-name="客人${idx + 1}${el.needPassengerInfoOther1}">
+                </div>
+            </div>
+            {{/if}}
+            {{if el.needPassengerInfoOther2}}
+            <div class="m-p-row clearfix">
+                <div class="m-p-l" title="${needPassengerInfoOther2}"><i>*&nbsp;</i>${tools.ellipsisContent(el.needPassengerInfoOther2,10)}：&nbsp;</div>
+                <div class="m-p-r">
+                    <input type="text" class="js_ipt js_people_info2" data-type="needPassengerInfoOther2" data-name="客人${idx + 1}${el.needPassengerInfoOther2}">
+                </div>
+            </div>
+            {{/if}}
+        </li>
+        {{/each}}
+    </ul>
+</script>
+<!--常用联系人列表-->
+<script type="text/template" id="adressListTemp">
+    {{each list}}
+    <div class="fl contact-info" data-name="${name}" data-phone="${mobile}">
+        <span class="contact-info-icon"><i class="daq-icon">&#xe6b6;</i></span>
+        <span class="name">${name}</span>
+    </div>
+    {{/each}}
+</script>
+<script>
+var food = {
+    init: function () {
+        this.pid = tools.getUrlParams('id');
+        this.quantity = tools.getUrlParams('quantity');
+        this.price = '';
+        this.min = 1;
+        this.max = 9999;
+        this.passengerInfoPerNum = 0; // 需要客人信息判断（0 不需要 1 每个人都需要 其他 需要一位）
+        this.passengerInfo = {}; // 每个客人需要填写的信息
+        this.isChecked = false;
+        this.date = this.getDate(); // 日期
+        this.getDetail();
+        this.getContacts(); //获取常用联系人
+        var _this = this;
+
+        // 同意购买协议
+        $("#checkbox1").daqCheckbox({
+            callback: function (data, obj) {
+                _this.isChecked = !data[0];
+                if(data[0]) {
+                    $('.js_submit').removeClass('disabled');
+                } else {
+                    $('.js_submit').addClass('disabled');
+                }
+            }
+        });
+
+        // 立即支付按钮
+        $('.js_submit').on('click', function () {
+            if($(this).is('.disabled')){
+                return false;
+            }
+            _this.saveOrder();
+        });
+
+        // 身份证等证件选项点击
+        $(document).on('click', '.js_idcard_type', function(){
+            var idx = $(this).attr('data-idx');
+            var type = $(this).attr('data-type');
+            var name = $(this).html();
+            // console.log($('.js_idcard_select_txt' + idx))
+            $('.js_idcard_select_txt' + idx).html(name);
+            $(this).addClass('curr').siblings('.js_idcard_type').removeClass('curr');
+            $('.js_people_idcard_ipt' + idx).attr('data-name','客人' + (idx+1) + '的' + name).attr('data-type',type);
+        });
+    },
+    getDetail: function () {
+        var _this = this;
+        var $rightWrapper = $('.js_right');
+        var $rightTmpl = $('#rightTmpl');
+        $rightWrapper.renderHtml({
+            url: 'ds/qiandnApi/team/view',
+            type: true,
+            params: {
+                pid: this.pid
+            },
+            template: $rightTmpl,
+            loading: true,
+            callback: function (data) {
+                data = data.products;
+                if (data.productImages && data.productImages.length > 0) {
+                    data.cover = data.productImages[0].thumbnail;
+                }
+                data.quantity = _this.quantity;
+                return data;
+            },
+            complete: function (res) {
+                var data = res.data.products;
+                _this.price = data.dayPrice.price;
+                _this.min = data.dayPrice.minBuyNum;
+                _this.max = data.dayPrice.maxBuyNum <= data.dayPrice.stock ? data.dayPrice.maxBuyNum : data.dayPrice.stock;
+
+                // 数量加减变化  价格变化
+                _this.changeNum();
+                _this.getFillOrderData();
+            }
+        })
+    },
+    // 数量加减变化  价格变化
+    changeNum: function () {
+        var _this = this;
+        _this.operation = tools.inputCount({
+            el: '.js_num_op',
+            max: _this.max,
+            min: _this.min,
+            default: _this.quantity,
+            change: function (val) {
+                $('.js_amount').html(tools.math(val, _this.price).mul);
+                _this.quantity = val;
+                _this.renderPassengerInfo();
+            }
+        });
+    },
+    // 获取 团购商品 下单需要的信息
+    getFillOrderData: function () {
+        var _this = this;
+        var $contactWrapper = $('.js_contact1');
+        var $contactTmpl = $('#contactTmpl');
+        $contactWrapper.renderHtml({
+            url: 'ds/qiandnApi/team/order',
+            type: true,
+            params: {
+                quantity: _this.quantity,
+                token: tools.getCookie('token'),
+                pid: _this.pid
+            },
+            loading: true,
+            template: $contactTmpl,
+            callback: function (data) {
+                data = data.products;
+                // 判断联系人是否需要拼音字段
+                if (data.needContactInfo.split(',').length === 3) {
+                    data.isNeedPinyin = true;
+                }
+                return data;
+            },
+            complete: function (res) {
+                var data = res.data.products;
+                _this.dataFormat(data);
+            }
+        });
+    },
+    // 处理客人信息
+    dataFormat: function (data) {
+        var _this = this;
+        // 判断单个出行人需要的信息
+        if (data.passengerInfoPerNum) {
+            _this.passengerInfoPerNum = data.passengerInfoPerNum;
+            // 证件类型
+            if (data.credentialsType.length > 0) {
+                _this.passengerInfo.hasCredentials = {};
+                _this.passengerInfo.hasCredentials.credentialsType = data.credentialsType;
+            }
+            if (data.needPassengerInfoOther1) {
+                _this.passengerInfo.needPassengerInfoOther1 = data.needPassengerInfoOther1;
+            }
+            if (data.needPassengerInfoOther2) {
+                _this.passengerInfo.needPassengerInfoOther2 = data.needPassengerInfoOther2;
+            }
+            if (data.needPassengerInfo.indexOf('name') !== -1) {
+                _this.passengerInfo.name = true;
+            }
+            if (data.needPassengerInfo.indexOf('pinyin') !== -1) {
+                _this.passengerInfo.pinyin = true;
+            }
+            if (data.needPassengerInfo.indexOf('phone') !== -1) {
+                _this.passengerInfo.phone = true;
+            }
+        }
+        _this.renderPassengerInfo();
+    },
+    // 加载客人
+    renderPassengerInfo: function () {
+        var _this = this;
+        var $passengerWrapper = $('.js_passenger');
+        var $passengerTmpl = $('#passengerTmpl');
+        var people = {};
+        people.list = [];
+        if (this.passengerInfoPerNum === 0) {// 不需要出行人信息
+            return false;
+        } else if (this.passengerInfoPerNum === 1) {  // 需要所有人的信息
+            for (var i = 0; i < this.quantity; i++) {
+                var data = {};
+                $.extend(true, data, _this.passengerInfo);
+                people.list.push(data);
+                people.list[i].id = i + 1;
+            }
+            $passengerWrapper.html($passengerTmpl.tmpl({data: people}));
+        } else { // 只需要一个人的信息
+            people.list.push(_this.passengerInfo);
+            $passengerWrapper.html($passengerTmpl.tmpl({data: people}));
+        }
+    },
+    // 保存订单
+    saveOrder: function () {
+        var _this = this;
+        var flag = true;
+        $("input.js_ipt").each(function () {
+            var name = $(this).attr('data-type');
+            var val = $(this).val();
+            var word = $(this).attr("data-name");
+            if (!tools.regMatch(val, name)) {
+                $.toast({
+                    text: '请输入正确的' + word,
+                    delay: 2000
+                });
+                flag = false;
+                return false;
+            }
+        });
+        if (flag) {
+            // 客人信息
+            var passengerInfos = [];
+            $('.js_peo_card').each(function (index, el) {
+                var $this = $(this);
+                passengerInfos.push({
+                    name: $.trim($this.find('input.js_people_name').val()),
+                    phone: $.trim($this.find('input.js_people_phone').val()),
+                    pinyin: $.trim($this.find('input.js_people_pinyin').val()),
+                    credentialsType: $.trim($this.find('input.js_people_idcard').attr('data-type')),
+                    credentials: $.trim($this.find('input.js_people_idcard').val()),
+                    define1: $.trim($this.find('.js_people_info1').val()),
+                    define2: $.trim($this.find('.js_people_info2').val())
+                });
+            });
+            // 订单信息
+            var order = {
+                guideName: '',
+                guideIdCard: '',
+                guideNo: '',
+                contactName: $('.js_order_name').val(),
+                contactPhone: $('.js_order_phone').val(),
+                contactPinyin: $('.js_order_pinyin').val(),
+                memo: '',
+                price: _this.price,
+                quantity: _this.quantity,
+                totalAmount: $('.js_amount').html(),
+                date: _this.date,
+                passengerInfos: passengerInfos
+            };
+            var data = {
+                pid: _this.pid,
+                // passengerInfos: JSON.stringify(passengerInfos),
+                orderData: JSON.stringify(order),
+                token: tools.getCookie('token')
+            };
+            _this.saveOrderRequest(data);
+        }
+    },
+    saveOrderRequest: function(data){
+        var _this = this;
+        var params = {
+            url: 'ds/qiandnApi/team/save-order',
+            type: true,
+            data: data
+        };
+        tools.request(params, function(res){
+            if(res.code === 0){
+                window.location.href= 'food-pay.html?id=' + res.data.orderId;
+            } else if (res.code === 1){
+                $.toast({
+                    text: res.message
+                });
+            } else {
+                tools.doLogin();
+            }
+        });
+    },
+    // 获取当天日期
+    getDate: function () {
+        var date = new Date(),
+            yy = date.getFullYear(),
+            mm = date.getMonth() + 1,
+            dd = date.getDate();
+        mm = mm < 10 ? '0' + mm : mm;
+        dd = dd < 10 ? '0' + dd : dd;
+        return yy + '-' + mm + '-' + dd;
+    },
+    // 请求常用联系人
+    getContacts: function () {
+        var _this = this;
+        var loading = tools.loading($('.js_address'));
+        var betoken = tools.getCookie('token')
+        if(betoken) {
+            tools.request({
+                url:'userInfo/getMemberContacts',
+                data: {
+                    token: betoken,
+                    page: 1,
+                    limitPage: 6
+                }
+            },function (result) {
+                loading.clean();
+//                $('.js-address').empty();
+                if(result.code === 0) {
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#adressListTemp').tmpl({list: list}).appendTo('.js_address');
+                        $(".contacts").show()
+                        $(".contact-info-icon").click(function () {
+                            if($(this).hasClass("active")){
+                                $(this).removeClass("active");
+                                $(".js_order_name").val("");
+                                $(".js_order_phone").val("");
+                            } else{
+                                $(this).addClass("active");
+                                $(this).parent().siblings().find(".contact-info-icon").removeClass("active");
+                                var name = $(this).parent().attr("data-name");
+                                var phone = $(this).parent().attr("data-phone");
+                                $(".js_order_name").val(name);
+                                $(".js_order_phone").val(phone);
+                            }
+                        })
+                    }else{
+                        $(".contacts").hide()
+                    }
+                }else{
+                    alert(result.message);
+                }
+            })
+        }else{
+            window.location.href = "login.html";
+        }
+
+    },
+};
+$(function(){
+    food.init();
+});
+</script>
+</body>
+</html>

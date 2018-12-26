@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_搜索'})%>
+    <style>
+        .page{
+            width:870px !important;
+        }
+    </style>
+</head>
+<body>
+    <!--顶部状态-->
+    <div class="g-seach-header clearfix">
+        <a href="index.html" class="s-logo">
+            <img src="./image/global-search-logo.png" alt="河北移动电商">
+        </a>
+        <label class="h-search" for="headerSearch">
+            <input type="text" class="js_ipt" id="headerSearch" value="酒店" placeholder="请输入关键词">
+            <a href="javascript:void(0);" class="daq-icon js_search_btn">&#xe6ae;</a>
+        </label>
+        <div class="login-right">
+            <div class="unlogin-sta js_login_status">
+                <a href="javascript:void(0);" class="js_login">登录</a>
+                <i></i>
+                <a href="./register.html">注册</a>
+            </div>
+            <div class="login-sta js_login_status none">
+                <span>欢迎，<span class="account js_account">152****5388</span></span>
+                <div class="user">
+                    <span>个人中心&nbsp;&nbsp;<i class="daq-icon">&#xe6af;</i></span>
+                    <ul>
+                        <li>
+                            <a href="./personalCenter-index.html ">个人主页</a>
+                        </li>
+                        <li>
+                            <a href="./personalCenter-userinfo.html">账号管理</a>
+                        </li>
+                        <li>
+                            <a href="./personalCenter-allorder.html?type=al">订单管理</a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="js_exit">退出登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--搜索选项卡-->
+    <div class="g-search-wrapper">
+        <ul class="g-types clearfix">
+            <!--<li class="g-type active js_type">全部</li>-->
+            <!--<li class="g-type js_type">目的地</li>-->
+            <!--<li class="g-type js_type active" data-type="scenic">景区</li>-->
+            <li class="g-type js_type active" data-type="hotel">酒店</li>
+            <li class="g-type js_type" data-type="line">线路</li>
+            <li class="g-type js_type" data-type="specialty">特产</li>
+            <li class="g-type js_type" data-type="meal">美食</li>
+            <!--<li class="g-type js_type">旅行社</li>-->
+            <!--<li class="g-type js_type">新闻</li>-->
+            <!--<li class="g-type js_type">导游</li>-->
+        </ul>
+    </div>
+    <!--搜索结果列表-->
+    <div class="g-r-wrapper">
+        <div class="g-r-container js_wrapper"></div>
+    </div>
+    <%-include("common/footer.html")%>
+<script type="text/template" id="sTmpl">
+    {{if data.datas.length}}
+    <h3 class="s-result">以下是为您找到“${data.keywords}”相关结果${data.datas.length}条</h3>
+    <dl class="r-list r-secnie-list">
+        <dt class="r-list-tit">景区门票<a href="scenic-list.html?channelCode=rmjd&code=jqmp" class="r-more-btn">查看景区门票列表</a></dt>
+        <!--重复dd-->
+        <ul class="scenicp-list center">
+            <li class="tr-header">
+                <div class="td1">门票类型</div>
+                <div class="td2">市场价</div>
+                <div class="td3">今日价格</div>
+                <div class="td4"></div>
+            </li>
+            {{each data.datas}}
+            <li class="tr-list">
+                <div class="td1">
+                    <p class="mp-type">${productType}</p>
+                    <p class="font">${productName}</p>
+                </div>
+                <div class="td2">￥${marketPrice}</div>
+                <div class="td3"><span>&yen;</span>${sellPrice}</div>
+                <div class="td4">
+                    <a href="scenic-detail2.html?channelCode=jqmp&code=jqmp&id=${productId}">立即预订</a>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </dl>
+    {{else}}
+    <div class="no-data">很抱歉，暂无数据</div>
+    {{/if}}
+</script>
+<script type="text/template" id="hTmpl">
+    {{if data.list.length}}
+    <h3 class="s-result">以下是为您找到“${data.keywords}”相关结果${data.list.length}条</h3>
+    <dl class="r-list r-hotel-list">
+        <dt class="r-list-tit">酒店住宿<a href="hotel-list.html" class="r-more-btn">查看更多酒店</a></dt>
+        <dd class="clearfix">
+            <!--重复div-->
+            {{each data.list}}
+            <div class="card clearfix">
+                <a href="hotel-detail.html?id=${id}" class="left">
+                    <img src="${picture || './image/zw.jpg'}" alt="${name}">
+                </a>
+                <div class="right">
+                    <h3 class="tit">
+                        <a href="hotel-detail.html?id=${id}" title="${name}">{{html tools.highLight(tools.ellipsisContent(name, 13),data.keywords)}}</a>
+                    </h3>
+                    <div class="s-r-row clearfix">
+                        <div class="s-r-l">酒店设施：</div>
+                        <div class="s-r-r" title="${roomFacilities}">${tools.ellipsisContent(roomFacilities, 13) || '暂无数据'}</div>
+                    </div>
+                    <div class="s-r-row clearfix">
+                        <div class="s-r-l">酒店地址：</div>
+                        <div class="s-r-r" title="${address}">${tools.ellipsisContent(address,13) || '暂无数据'}</div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </dd>
+    </dl>
+    {{else}}
+    <div class="no-data">很抱歉，暂无数据</div>
+    {{/if}}
+</script>
+<script id="mTmpl" type="text/template">
+    {{if data.list.length}}
+    <h3 class="s-result">以下是为您找到“${data.keywords}”相关结果${data.list.length}条</h3>
+    <dl class="r-list r-pic-list">
+        <dt class="r-list-tit">特色美食<a href="food-list.html?channelCode=tsms&code=tsms" class="r-more-btn">查看更多美食</a></dt>
+        <dd class="clearfix js_pic_list">
+            <!--重复div-->
+            {{each data.list}}
+            <div class="card js_pic_card">
+                <a class="top" href="food-detail.html?id=${pid}&channelCode=tsms&code=tsms" title="${name}">
+                    <img src="${logoFourToThree || 'image/zw.jpg'}" alt="${name}">
+                </a>
+                <h3 class="tit text-left">
+                    <a href="food-detail.html?id=${pid}&channelCode=tsms&code=tsms" title="${name}">${ tools.ellipsisContent(name,7)}</a>
+                    {{if minSellPrice}}
+                    <div class="price"><span>&yen;&nbsp;</span>${minSellPrice}</div>
+                    {{/if}}
+                </h3>
+            </div>
+            {{/each}}
+        </dd>
+    </dl>
+    {{else}}
+    <div class="no-data">很抱歉，暂无数据</div>
+    {{/if}}
+
+</script>
+<script id="gTmpl" type="text/template">
+        {{if data.list.length}}
+        <h3 class="s-result">以下是为您找到“${data.keywords}”相关结果${data.list.length}条</h3>
+        <dl class="r-list r-pic-list">
+            <dt class="r-list-tit">特产购物<a href="specialty-list.html?channelCode=tcgw&code=tcgw" class="r-more-btn">查看更多特产</a></dt>
+            <dd class="clearfix js_pic_list">
+                <!--重复div-->
+                {{each data.list}}
+                <div class="card js_pic_card">
+                    <a class="top" href="specialty-detail.html?id=${pid}&channelCode=tcgw&code=tcgw" title="${name}">
+                        <img src="${logoFourToThree || 'image/zw.jpg'}" alt="${name}">
+                    </a>
+                    <h3 class="tit text-left">
+                        <a href="specialty-detail.html?id=${pid}&channelCode=tcgw&code=tcgw" title="${name}">${ tools.ellipsisContent(name,7)}</a>
+                        {{if sellPrice}}
+                        <div class="price"><span>&yen;&nbsp;</span>${sellPrice}</div>
+                        {{/if}}
+                    </h3>
+                </div>
+                {{/each}}
+            </dd>
+        </dl>
+        {{else}}
+        <div class="no-data">很抱歉，暂无数据</div>
+        {{/if}}
+    </script>
+<script id="lTmpl" type="text/template">
+    {{if data.list.length}}
+    <h3 class="s-result">以下是为您找到“${data.keywords}”相关结果${data.list.length}条</h3>
+    <dl class="r-list r-secnie-list">
+        <dt class="r-list-tit">旅游线路<a href="line-list.html?channelCode=lyxl&code=lyxl" class="r-more-btn">查看更多查看更多线路</a></dt>
+        <!--重复dd-->
+        {{each data.list}}
+        <dd>
+            <div class="card clearfix">
+                <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" class="left">
+                    <img src="${ logoFourToThree || 'image/zw.jpg' }" alt="${productName}">
+                </a>
+                <div class="right">
+                    <h3 class="tit">
+                        <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl">{{html tools.highLight(tools.ellipsisContent(productName, 40),data.keywords)}}</a>
+                    </h3>
+                    <div class="s-r-row clearfix">
+                        <div class="s-r-l">服务特色：</div>
+                        <div class="s-r-r" title="${feature}">${tools.ellipsisContent(feature,40) || '暂无数据'}</div>
+                    </div>
+                    <div class="s-r-row clearfix">
+                        <div class="s-r-l">所需时间：</div>
+                        <div class="s-r-r" title="${daysAndNights}">${ tools.ellipsisContent(daysAndNights,40) || '暂无数据'}</div>
+                    </div>
+                </div>
+                <p class="price">
+                    {{if minSellPrice}}
+                    <i>&yen;</i>${minSellPrice}
+                    {{/if}}
+                </p>
+            </div>
+        </dd>
+        {{/each}}
+    </dl>
+    {{else}}
+    <div class="no-data">很抱歉，暂无数据</div>
+    {{/if}}
+</script>
+<script>
+        var search = {
+            init:function() {
+                this.keywords = decodeURI(tools.getUrlParams('keywords'));
+                this.type = 'hotel';
+                this.getHotel();
+                this.searchInit();
+                this.navClick();
+                this.login();
+            },
+            // 右上角状态
+            login: function(){
+                var token = tools.getCookie('token');
+                if(token){
+                    $('.js_login_status').eq(1).removeClass('none').siblings().addClass('none');
+                    $('.js_account').html(tools.getCookie('account').replace(/^(\d{4})\d{4}(\d+)/,"$1****$2"));
+                }
+                $('.js_login').on('click', function(){
+                    tools.doLogin();
+                });
+                $('.js_exit').on('click', function(){
+                    tools.delCookie('token');
+                    window.location.reload(true);
+                });
+            },
+            // 搜索
+            searchInit: function(){
+                $('.js_ipt').val(this.keywords);
+                var _this = this;
+                // input框按回车
+                $('.js_ipt').on('keyup', function(e){
+                    e = e || window.event;
+                    if(e.keyCode === 13) {
+                        var keyword = $(this).val();
+                        if(keyword && $.trim(keyword).length) {
+                            _this.keywords = keyword;
+                            _this.getSearchResult();
+                        }
+                    }
+                });
+                // 搜索按钮
+                $('.js_search_btn').on('click', function(){
+                    var keyword = $('.js_ipt').val();
+                    if(keyword && $.trim(keyword).length) {
+                        _this.keywords = keyword;
+                        _this.getSearchResult();
+                    }
+                });
+            },
+            // 导航点击
+            navClick: function(){
+                var _this = this;
+                $('.js_type').on('click', function(){
+                    $(this).addClass('active').siblings().removeClass('active');
+                    _this.type = $(this).attr('data-type');
+                    _this.getSearchResult();
+                });
+            },
+            getSearchResult: function(){
+              var _this = this;
+                switch  (this.type) {
+                    case 'scenic':
+                        // _this.searchByTypes('sourceType_1', $('#sTmpl'));
+                        _this.getScenic();
+                        break;
+                    case 'hotel':
+                        // _this.searchByTypes('sourceType_2', $('#hTmpl'));
+                        _this.getHotel();
+                        break;
+                    case 'line':
+                        _this.getLine();
+                        break;
+                    case 'specialty':
+                        _this.getSpecialty();
+                        break;
+                    case 'meal':
+                        _this.getMeal();
+                        break;
+                    default:
+                        break;
+                }
+            },
+            // 门票
+            getScenic: function() {
+                var _this = this;
+                $('.js_wrapper').renderHtml({
+                    url: 'sceneryProduct/list',
+                    params: {
+                        name: this.keywords
+                    },
+                    size: 8,
+                    pagination: true,
+                    loading: true,
+                    template: $('#sTmpl'),
+                    callback: function(list){
+                        var data = {
+                            keywords: _this.keywords,
+                            datas: list.products
+                        };
+                        console.log(list)
+                        return data;
+                    }
+                });
+            },
+            // 酒店
+            getHotel: function(){
+                var _this = this;
+                $('.js_wrapper').renderHtml({
+                    url: 'hotel/list',
+                    params: {
+                        region:'',
+                        name: this.keywords
+                    },
+                    size: 8,
+                    pagination: true,
+                    loading: true,
+                    template: $('#hTmpl'),
+                    callback: function(list){
+                        var data = {
+                            keywords: _this.keywords,
+                            list: list
+                        };
+                        return data;
+                    }
+                });
+            },
+            // 线路
+            getLine: function(){
+                var _this = this;
+                $('.js_wrapper').renderHtml({
+                    url: 'line/pclist',
+                    params: {
+                        name: this.keywords
+                    },
+                    size: 8,
+                    pagination: true,
+                    loading: true,
+                    template: $('#lTmpl'),
+                    callback: function(list){
+                        var data = {
+                            keywords: _this.keywords,
+                            list: list
+                        };
+                        return data;
+                    }
+                });
+            },
+            // 美食
+            getMeal: function(){
+                var _this = this;
+                $('.js_wrapper').renderHtml({
+                    url: 'ds/qiandnApi/team/teamProductAll',
+                    type: true,
+                    params: {
+                        searchValue: this.keywords
+                    },
+                    size: 8,
+                    pagination: true,
+                    loading: true,
+                    template: $('#mTmpl'),
+                    callback: function(list){
+                        var data = {
+                            keywords: _this.keywords,
+                            list: list
+                        };
+                        return data;
+                    }
+                });
+            },
+            // 特产
+            getSpecialty: function(){
+                var _this = this;
+                $('.js_wrapper').renderHtml({
+                    url: 'ds/qiandnApi/specialty/list',
+                    type: true,
+                    params: {
+                        searchValue: this.keywords
+                    },
+                    size: 8,
+                    pagination: true,
+                    loading: true,
+                    template: $('#gTmpl'),
+                    callback: function(list){
+                        var data = {
+                            keywords: _this.keywords,
+                            list: list
+                        };
+                        return data;
+                    }
+                });
+            }
+        };
+        $(function(){
+            search.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_用户登录'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!-- 导航 -->
+    <%-include("common/nav.html")%>
+    <div class="login-indexbody">
+        <div class="center">
+            <div class="login-box">
+                <p class="topcolumn">账号登录</p>
+                <ul class="list">
+                    <li class="full">
+                        <input type="text" placeholder="请输入你的手机号" class="pagephone"><i class="daq-icon">&#xe720;</i>
+                    </li>
+                    <li class="full">
+                        <input type="password" placeholder="请输入密码" maxlength="18" class="pagepwd"><i class="daq-icon">&#xe66b;</i>
+                    </li>
+                    <li class="short">
+                        <input type="text" placeholder="请输入验证码" class="pagevcode">
+                        <div class="vcode-box">
+                            <img src="" alt="" class="login-vcode">
+                        </div>
+                    </li>
+                    <li class="set">
+                        <div id="checkbox2" class="clearfix choose-box ">
+                            <input class="js_logAc" type="checkbox" name="b.multi" value="30day" title="30天内自动登录" />
+                        </div>
+                        <a href="retrievepassword.html" class="forget-pwd">忘记密码</a>
+                    </li>
+                    <li class="submit">
+                        <a href="javascript:;" class="loginin">登 录</a>
+                    </li>
+                </ul>
+                <!--<ul class="other">-->
+                    <!--<li class="beother"><i class="daq-icon qq">&#xe62d;</i>QQ</li>-->
+                    <!--<li class="beother"><i class="daq-icon wx">&#xe68f;</i>微信</li>-->
+                    <!--<li class="register"><a href="register.html"><i class="daq-icon icon-register">&#xe6b1;</i>立即注册</a></li>-->
+                <!--</ul>-->
+                <div class="other">
+                    <a href="register.html" class="fr"><i class="daq-icon icon-register">&#xe6b1;</i>立即注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--demo模板-->
+    <script  type="text/javascript" src="/js/lib/aes.js"></script>
+<script>
+    var loginJs = {
+        init:function () {
+            this.doLogin();
+            // 极客system 开关样式
+            $("#checkbox2").daqCheckbox({
+                labelSize: true,
+                callback: function (data, obj) {
+                    // console.log(data);
+                    // console.log(obj);
+                }
+            });
+            this.getConfig(); // 获取config配置
+            this.userLogin();
+            this.loginBgAdv('.login-indexbody', 'login_bg'); //获取背景图  广告位
+            this.setLoginBodyHeight();
+        },
+        _config: {}, //config 配置
+        userInfo:{
+            userPhone: '',
+            userPwd: '',
+            userVcode: ''
+        },
+        vcodetype:0,
+        // 根据浏览器高度
+        setLoginBodyHeight: function() {
+            // console.log($(window).height())
+            var minbody = $(window).height()-32-102-50-85-105
+            console.log(minbody)
+            $('.login-indexbody').css("height",'564px')
+            // $(window).resize(function() {
+            //     $('.login-indexbody').css("height",minbody+'px')
+            // })
+        },
+        //判断是否登陆
+        doLogin: function () {
+            var _this = this;
+            if(tools.getCookie('token')){
+                tools.request({
+                    url: 'userInfo/getUserInfo',
+                    data: {
+                        token: tools.getCookie('token')
+                    }
+                },function (result) {
+                    if(result.code === 0){
+                        window.location.href = "personalCenter-index.html"
+                    }else{
+                        tools.delCookie('token');
+                        _this.AcLogin();
+                    }
+                })
+            }else{
+                _this.AcLogin();
+            }
+        },
+        //获取config配置
+        getConfig: function () {
+            var _this = this;
+            var sendParams = {
+                url: 'config/config',
+                data: {}
+            };
+            tools.request(sendParams, function (data) {
+                _this._config = data;
+                //刷新图片验证码
+                $('.login-vcode').on("click",function () {
+                    $(this).attr('src', _this._config.serverUrl+ 'member/getKaptchaImage?siteCode=plgzdspt&'+Math.random());
+                    setTimeout(function () {
+                        _this.kaptChat();
+                    },100)
+                });
+                // 获取图片验证码
+                $('.login-vcode').click();
+            });
+        },
+        //用户登录
+        userLogin: function () {
+            var _this = this;
+            $('.loginin').click(function () {
+                //获取页面填写信息
+                _this.userInfo.userPhone = $('.pagephone').val();
+                _this.userInfo.userPwd = tools.AESEncrypt($('.pagepwd').val());
+                _this.userInfo.userVcode = $('.pagevcode').val();
+                // 验证输入
+                if (!_this.userInfo.userPhone || _this.userInfo.userPhone.trim() === '' || _this.userInfo.userPhone === '请输入你的手机号') {
+                    //提示输入账号
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请输入您的注册手机号码</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                }
+                            }
+                        ]
+
+                    });
+                    return;
+                }else if(!/^1\d{10}$/.test(_this.userInfo.userPhone)){
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请正确输入手机号码</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                }
+                            }
+                        ]
+
+                    });
+                    return;
+                }
+                if (!_this.userInfo.userPwd || _this.userInfo.userPwd.trim() === '' || _this.userInfo.userPwd === '请输入密码') {
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请输入密码</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                }
+                            }
+                        ]
+
+                    });
+                    return;
+                }else if(_this.userInfo.userPwd.length<6){
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">密码不能少于6位</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                }
+                            }
+                        ]
+
+                    });
+                    return;
+                }
+                if (!_this.userInfo.userVcode || _this.userInfo.userVcode.trim() === '' || _this.userInfo.userVcode === '请输入验证码') {
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请输入验证码</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                }
+                            }
+                        ]
+
+                    });
+                    return;
+                }else if(_this.userInfo.userVcode !== _this.vcodetype) {
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">验证码错误</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                    $('.login-vcode').attr('src', _this._config.serverUrl+ 'member/getKaptchaImage?siteCode=plgzdspt&'+Math.random());
+                                    setTimeout(function () {
+                                        _this.kaptChat();
+                                    },100)
+                                }
+                            }
+                        ]
+
+                    });
+
+                    return;
+                }
+                tools.request({
+                    url:'member/login',
+                    data: {
+                        account: _this.userInfo.userPhone,
+                        password: _this.userInfo.userPwd,
+                        // authCode:_this.userInfo.userVcode,
+                        ignoreCode: 1
+                    }
+                    },function (result) {
+                    if(result.code === 0){
+                        if(tools.getUrlParams("redirect")){
+                            window.location.href = tools.getUrlParams("redirect");
+                        }else{
+                            window.history.go(-2);
+                        }
+                        var cookieData = {
+                            name:'token',
+                            value:result.data.token,
+                            hour:2,
+                            expires:result.data.expires
+                        },cookieaccount={
+                            name:'account',
+                            value:result.data.account,
+                            day:7
+                        },cookiename={
+                            name:'name',
+                            value:result.data.name,
+                            day:7
+                        },cookiehead={
+                            name:'head',
+                            value:result.data.head,
+                            day:7
+                        },cookielogin={
+                            name:'login_Ac',
+                            value:_this.userInfo.userPwd,
+                            day:30
+                        }
+                        tools.setCookie(cookieData);
+                        tools.setCookie(cookieaccount);
+                        tools.setCookie(cookiename);
+                        tools.setCookie(cookiehead);
+                        if($('#checkbox2 input').attr('checked')){
+                            tools.setCookie(cookielogin);
+                        }
+                    }else{
+                        $.dialog({
+                            title: '温馨提示',
+                            message: '<p style="font-size:14px;color:#666;">'+result.message+'</p>',
+                            width: 300,
+                            height: 200,
+                            mask: true,
+                            footer: true,
+                            buttons: [
+                                {
+                                    text :'确定',
+                                    className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                    callback:function(){
+                                    }
+                                }
+                            ]
+
+                        });
+                    }
+                })
+            })
+            $('.pagevcode').bind('keypress',function(event){//监听sim卡回车事件
+                if(event.keyCode == "13"){
+                    $('.loginin').click();
+                }
+            });
+            $('.pagepwd').bind('keypress',function(event){//监听sim卡回车事件
+                if(event.keyCode == "13"){
+                    $('.loginin').click();
+                }
+            });
+        },
+        // 背景广告图
+        loginBgAdv: function (element,code) {
+            var _this = this;
+            var navParams = {
+                url: 'siteAd/list',
+                data:{
+                    adCode:code,
+                }
+            };
+            tools.request(navParams,function (result) {
+                if (result.code === 0) {
+                    if(result.datas && result.datas.length>0) {
+                        $(element).css("background",'url('+result.datas[0].pics+') center').css('background-size','cover')
+                    }else{
+                        $(element).css("background",'url(image/zw.jpg) center')
+                    }
+                } else {
+                    $(element).html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        kaptChat: function () {
+            var _this = this;
+            $.ajax({
+                url: _this._config.serverUrl + 'member/getKaptchaText?siteCode='+_this._config.siteCode,
+                type: 'GET',//GET PUT POST DELETE
+                data: {},
+                dataType: "jsonp",
+                jsonp: 'callback',
+                success: function(data) {
+                    // console.log(data)
+                    _this.vcodetype = data.data
+                }
+            });
+        },
+        AcLogin: function () {
+            if(tools.getCookie('login_Ac')){
+                tools.request({
+                    url:'/member/login',
+                    data:{
+                        account: tools.getCookie('account'),
+                        password: tools.getCookie('login_Ac'),
+                        // authCode:_this.userInfo.userVcode,
+                        ignoreCode: 1
+                    }
+                },function (result) {
+                    if(result.code === 0){
+                        if(tools.getUrlParams("redirect")){
+                            window.location.href = tools.getUrlParams("redirect");
+                        }else{
+                            window.history.go(-1);
+                        }
+                        var cookieData = {
+                            name:'token',
+                            value:result.data.token,
+                            hour:2,
+                            expires:result.data.expires
+                        },cookieaccount={
+                            name:'account',
+                            value:result.data.account,
+                            day:7
+                        },cookiename={
+                            name:'name',
+                            value:result.data.name,
+                            day:7
+                        },cookiehead={
+                            name:'head',
+                            value:result.data.head,
+                            day:7
+                        }
+                        tools.setCookie(cookieData);
+                        tools.setCookie(cookieaccount);
+                        tools.setCookie(cookiename);
+                        tools.setCookie(cookiehead);
+                    }else{
+                        $.dialog({
+                            title: '温馨提示',
+                            message: '<p style="font-size:14px;color:#666;">'+result.message+'</p>',
+                            width: 300,
+                            height: 200,
+                            mask: true,
+                            footer: true,
+                            buttons: [
+                                {
+                                    text :'确定',
+                                    className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                    callback:function(){
+                                    }
+                                }
+                            ]
+
+                        });
+                    }
+                })
+            }
+        }
+
+    }
+    $(function () {
+        loginJs.init();
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_首页'})%>
+</head>
+<body>
+    <!--页头-->
+    <%-include("common/header.html")%>
+    <!--当前位置-->
+    <div class="current-position">
+        <div class="center">
+            <span>您所在的位置 : </span><a href="javascript:;">网站首页</a>- <a href="javascript:;">智游赛里木湖</a> - <span>购在赛里木湖</span>
+        </div>
+    </div>
+    <!--筛选模块-->
+    <div class="goods-screen-box">
+        <!--类型选择-->
+        <ul class="columntype clearfix">
+            <li><a href="javascript:;">景区门票</a></li>
+            <li><a href="javascript:;">宜居住宿</a></li>
+            <li><a href="javascript:;">精选线路</a></li>
+            <li class="curr"><a href="javascript:;">饕餮美食</a></li>
+        </ul>
+        <!--条件筛选-->
+        <div class="selection-conditions center clearfix">
+            <!--商品类别-->
+            <div class="region-box clearfix">
+                <label>商品类别</label>
+                <ul class="region clearfix">
+                    <li><i class="curr">全部</i></li>
+                    <li><i>茗茶名酒</i></li>
+                    <li><i>野生特产</i></li>
+                    <li><i>滋补保健</i></li>
+                    <li><i>工艺礼品</i></li>
+                    <li><i>土特产</i></li>
+                    <li><i>休闲食品</i></li>
+                    <li><i>生鲜果蔬</i></li>
+                    <li><i>方便食品</i></li>
+                </ul>
+            </div>
+            <!--价格选择-->
+            <div class="price-box clearfix">
+                <label>价格选择</label>
+                <ul class="price clearfix">
+                    <li><i class="curr">全部</i></li>
+                    <li><i>&yen;0-100</i></li>
+                    <li><i>&yen;100-300</i></li>
+                    <li><i>&yen;300以上</i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--排序-->
+    <div class="goods-sort center">
+        <span class="curr">综合排序</span>
+        <span>销量</span>
+        <span>价格</span>
+    </div>
+    <!--特产列表-->
+    <ul class="goods-list clearfix">
+
+    </ul>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+    <!--特产列表模板-->
+    <script type="text/template" id="listTmpl">
+        <!--特产列表 + 分页 -->
+        <ul class="goods-list clearfix" style="left:0px">
+            {{each list}}
+            <li>
+                <div class="imgbox">
+                    <a href="javascript:;">
+                        <img src="${cover || 'image/zw.jpg'}" alt="">
+                    </a>
+                </div>
+                <p class="title">
+                    <a href="javascript:;">
+                        ${tools.ellipsisContent(name, 10)}
+                    </a>
+                </p>
+                <p class="font clearfix"><span class="price">&yen;<span>23.9</span></span><!--<span class="buyed">已售153</span>--></p>
+            </li>
+            {{/each}}
+        </ul>
+        <!--分页 S-->
+        <div class="page">
+            <a class="first-page">首页</a>
+            <a class="page-up">上一页</a>
+            <a class="curr">1</a>
+            <a>2</a>
+            <a>3</a>
+            <a>4</a>
+            <a class="page-down">下一页</a>
+            <a class="last-page">末页</a>
+        </div>
+        <!--分页 E-->
+    </script>
+<script>
+    var indexJs = {
+        init: function () {
+            this.goodsParams = {
+                page: 1,
+                limitPage: 12,
+            };
+            this.setGeekerLayDate();
+            this.loadList(); //获取特产列表
+        },
+        // 设置时间选择控件
+        setGeekerLayDate: function () {
+            var start =  laydate.render({
+                elem: '#start',
+                change: function () {
+                    alert('sdxc')
+                },
+                done: function(value, date){
+                    if(value !== ''){
+                        end.config.min.year = date.year;
+                        end.config.min.month = date.month-1;
+                        end.config.min.date = date.date;
+                    }else{
+                        end.config.min.year = '';
+                        end.config.min.month = '';
+                        end.config.min.date = '';
+                    }
+                }
+            });
+            var end = laydate.render({
+                elem: '#end',
+                change: function () {
+                    alert('asd')
+                },
+                done: function(value, date){
+                    if (value !== ''){
+                        start.config.max.year = date.year;
+                        start.config.max.month = date.month-1;
+                        start.config.max.date = date.date;
+                    } else {
+                        start.config.max.year = '';
+                        start.config.max.month = '';
+                        start.config.max.date = '';
+                    }
+                }
+            });
+
+            //当前时间
+            // 获取当前时间转换成标准时间格式
+            var mydate = dateToString(new Date());
+
+            function dateToString(now){
+                var year = now.getFullYear();
+                var month =(now.getMonth() + 1).toString();
+                var day = (now.getDate()).toString();
+                var hour = (now.getHours()).toString();
+                var minute = (now.getMinutes()).toString();
+                var second = (now.getSeconds()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                if (hour.length == 1) {
+                    hour = "0" + hour;
+                }
+                if (minute.length == 1) {
+                    minute = "0" + minute;
+                }
+                if (second.length == 1) {
+                    second = "0" + second;
+                }
+//            var dateTime = year + "-" + month + "-" + day +" "+ hour +":"+minute+":"+second;
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            }
+        },
+        // 获取特产列表
+        loadList: function(){
+            var _this = this;
+            var _self = this;
+            var $listTmpl = $("#listTmpl");
+            var $listWrapper = $('.goods-list');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'goods/list',
+                data: this.goodsParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                        //  初始化分页
+                        var option = {
+                            total: res.page.totalPage,
+                            currPage: res.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _self.goodsParams.page = data.page;
+                                $(window).scrollTop(0);
+                                _self.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                    } else {
+                        $listWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $listWrapper.html(tools.TRY_REFRESH);
+                }
+            });
+        },
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

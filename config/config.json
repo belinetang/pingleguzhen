@@ -1,0 +1,47 @@
+{
+    "serverUrl": "http://ptisp.daqsoft.com/scapi/api/scapi/web/",
+    "serverRetailersUrl": "http://api.ptisp.daqsoft.com/dsapi/api/",
+    "weatherServer": "http://weather.service.geeker.com.cn/",
+    "siteCode": "plgzdspt",
+    "region": "130000",
+    "port": "4000",
+    "lang": "cn",
+    "secret": "533aaaf35c5f55dd6b006f8b",
+    "cookie": "user_sid",
+    "uploadDirName": "/attached",
+    "page": {
+        "index":{
+            "Column_introduction": {
+                "scenicTicket": "丰富多彩的创意行程 让您的旅途更加有趣",
+                "hotel": "意想不到的惊喜优惠 让您high不停",
+                "food": "邂逅的不止美景，还有旅途中的饕餮盛宴",
+                "good": "万水千山总是情，西青杨柳土品乡产伴君行",
+                "line": "非常特色的主题旅游 为您带来更多的美好体验",
+                "strategy": "好线路那么多，我们为你精选，我们会越来越懂你",
+                "destination": "值得前去看看，邂逅的不止美景，还有旅途中的朋友",
+                "mlhb": "兼高原、山地、丘陵、平原、湖泊和海滨的福地"
+            }
+        },
+        "header": {
+            "serach_keyword_tips": [
+                {
+                    "title": "酒店住宿",
+                    "url": "hotel-list.html?channelCode=jdzs&code=jdzs"
+                },{
+                    "title": "景区门票",
+                    "url": "scenic-list.html?channelCode=jqmp&code=jqmp"
+                },
+                {
+                    "title": "特色美食",
+                    "url": "food-list.html?channelCode=tsms&code=tsms"
+                }
+            ]
+        },
+        "retrievepassword":{
+            "phone": "0909-2319567"
+        }
+    }
+}
+
+
+

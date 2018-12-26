@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content no-br">
+            <div class="nearorder bg-w">
+                <div class="person-title mar18 clearfix">
+                    <h3 class="fl">
+                        我的点赞
+                    </h3>
+                    <!--<span class="fr">-->
+                        <!--<a href="javascript:;" class="all-btn"><i class="icon-all"></i>全选</a>-->
+                        <!--<a href="javascript:;">删除</a>-->
+                    <!--</span>-->
+                </div>
+
+                <div class="state-list clearfix">
+                    <a href="javascript:;" class="curr">全部<i class="icon-line"></i></a>
+                    <!--<a href="javascript:;" data-type="sourceType_1">门票<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="sourceType_2">酒店<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="line">路线<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="sourceType_5">美食<i class="icon-line"></i></a>-->
+                    <!--<a href="javascript:;" data-type="sourceType_7">特产<i class="icon-line"></i></a>-->
+                </div>
+            </div>
+            <div class="collect-box">
+                <ul class="js_list">
+
+                </ul>
+            </div>
+            <div class="page">
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+
+<script type="text/template" id="listTmp">
+    {{each list}}
+    <li class="noprice">
+            {{if sourceType==='ticket'}}
+            <a class="js_btn" href="scenic-detail2.html?rid=${reId}&channelCode=jqmp&code=jqmp">
+            {{else sourceType==='sourceType_2'}}
+            <a class="js_btn" href="hotel-detail.html?id=${reId}&channelCode=jdzs&code=jdzs">
+            {{else sourceType==='destination'}}
+            <a class="js_btn" href="destination-detail.html?channelCode=mdd&id=${reId}&code=mdd">
+            {{else sourceType==='travel_strategy'}}
+            <a class="js_btn" href="note-detail.html?id=${reId}&code=yjgl&channelCode=yjgl">
+            {{else sourceType==='line'}}
+            <a class="js_btn" href="line-detail.html?id=${reId}&channelCode=lyxl&code=lyxl">
+            {{else sourceType==='video'}}
+            <a class="js_btn js_video" data-id="${reId}">
+            {{else}}
+            <a class="js_btn" href="javascript:;">
+            {{/if}}
+            <div class="img_box">
+            <img src="${image || 'image/zw.jpg'}" alt="${target}">
+            </div>
+            <div class="content_box">
+                <p class="title js_title" title="${target}">${tools.ellipsisContent(target,21)}</p>
+                <span class="type {{if sourceType==='sourceType_1'}}mp{{else sourceType==='sourceType_2'}}jd{{else sourceType==='line'}}lyxl{{else sourceType==='sourceType_5'}}ms{{else sourceType==='sourceType_7'}}tcmp{{else sourceType==='destination'}}mdd{{else sourceType==='travel_strategy'}}lygl{{else sourceType==='video'}}sp{{/if}}">${ sourceTypeName }</span>
+            </div>
+            <span class="del" data-id="${id}"><i class="daq-icon close">&#xe672;</i></span>
+        </a>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var collect = {
+        init: function () {
+            this.parmas = {
+                page: 1,
+                limitPage: 10,
+                token: tools.getCookie('token'),
+                sourceType: ''
+            };
+            this.loadList();
+        },
+        eventBind: function () {
+            var _this = this;
+            //取消点赞
+            $('.del').click(function () {
+                var id = $(this).attr('data-id');
+                $.dialog({
+                    title: '取消点赞',
+                    message: '<p style="font-size:14px;color:#666;">确认要取消点赞吗？</p>',
+                    width: 300,
+                    height: 200,
+                    mask: true,
+                    footer: true,
+                    buttons: [
+                        {
+                            text :'确定',
+                            className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                            callback:function(){
+                                _this.deleteEnshrineId(id);
+                            }
+                        },
+                        {
+                            text :'取消',
+                            className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                            callback: function(){}
+                        }
+                    ]
+
+                });
+                return false;
+            });
+            //播放视频
+            $('.js_video').click(function () {
+                var id = $(this).attr('data-id');
+                _this.getVideo(id);
+            })
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_list');
+            $box.empty();
+            var loading = tools.loading($box);
+            tools.request({
+                url: 'thumb/getThumbByAccount',
+                data: _this.parmas
+            },function (result) {
+                loading.clean();
+                $box.empty();
+                if(result.code === 0){
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#listTmp').tmpl({list: list}).appendTo($box);
+                        //  初始化分页
+                        var option = {
+                            total: result.page.totalPage,
+                            currPage: result.page.currPage,
+                            click: function (data) {
+                                page = data.page;
+                                _this.parmas.page = data.page;
+                                $(window).scrollTop(0);
+                                _this.loadList();
+                            }
+                        };
+                        tools.pageTurn(option);
+                        _this.eventBind();
+                    }else{
+                        $box.html(tools.NO_DATA1);
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH1);
+                }
+            })
+        },
+        deleteEnshrineId: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'thumb/deleteThumbById',
+                data: {
+                    id: id,
+                    token: tools.getCookie('token')
+                }
+            },function (result) {
+                _this.loadList();
+            })
+        },
+        getVideo: function (id) {
+            var _this = this;
+            tools.request({
+                url: 'sitevideo/getDetailById',
+                data: {
+                    id: id
+                }
+            },function (result) {
+                if(result.code === 0){
+                    var video_src = result.data.upload,
+                        video_img = result.data.coverpicture,
+                        video_title = result.data.title;
+                    _this.videoPlay(video_src, video_img, video_title);
+                }
+
+            })
+        },
+        // 点击播放视频
+        videoPlay: function(video_src, video_img, video_title){
+            function closeDIV() {
+                $(".popup-video").remove();
+            }
+
+            $('body').on('click', '.popup-video .pop-remove', function () {
+                closeDIV();
+            });
+            var vedio_src = video_src;
+            var imgSrc = video_img;
+            var tit = video_title;
+
+            var layer = '<div class="popup-video"><div class="opa80 pop-remove"></div>' +
+                '<a class="pop-close pop-remove"></a>' +
+                '<div class="video-box">' +
+                '<div class="video-cont">' +
+                '<div id="vedio" style="opacity:0; filter:alpha(opacity=0); -webkit-opacity:0; -moz-opacity:0;"></div>' +
+                '<div class="vpro"></div>' +
+                '</div>' +
+                '<div class="video-tit">' +
+                '<span>' + tit + '</span>' +
+                // '<p><a class="share-video bds-more bdsharebuttonbox bdshare-button-style0-16" title="" data-cmd="more" style="position: absolute;top: 0; z-index:99; margin:0;padding:0;right: 0;width:32px; height:32px; display:inline-block; " data-bd-bind="1452487568673"></a></p>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            $(document.body).append(layer);
+
+            var _wid = $(".video-cont").width();
+            var _hei = $(".video-cont").height();
+            var s1 = new SWFObject("./flvplayer.swf", "single", _wid, _hei, "7");
+            s1.addParam("allowfullscreen", "true");
+            s1.addParam("wmode", "opaque");
+            s1.addVariable("autostart", "true");	//打开时自动播放
+            s1.addVariable("backcolor", "0x000000");
+            s1.addVariable("frontcolor", "0xCCCCCC");
+            s1.addVariable("file", vedio_src);
+            s1.addVariable("image", imgSrc);	//封面图片的调用
+            s1.addVariable("width", _wid);
+            s1.addVariable("height", _hei);
+            s1.write("vedio");
+            $(".opa80").animate({opacity: 1}, 200);
+            setTimeout(function () {
+                $(".pop-close").animate({opacity: 1}, 200)
+            }, 100);
+            setTimeout(function () {
+                $(".video-box").animate({opacity: 1}, 200)
+            }, 100);
+            setTimeout(function () {
+                $(".vpro").animate({left: 0}, 500).fadeOut();
+            }, 200);
+            setTimeout(function () {
+                $("#vedio").animate({opacity: 1}, 500)
+            }, 800);
+        }
+    }
+    $(function () {
+        collect.init();
+    })
+</script>
+</body>
+</html>

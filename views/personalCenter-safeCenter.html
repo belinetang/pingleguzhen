@@ -1,0 +1,39 @@
+<!-- 页面设计：陈建波| 页面重构：龚小虎 | 前端开发：胡琳浚 | 创建：2018-8-20 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content bg-w min680">
+            <div class="nearorder p18">
+                <div class="person-title mar24 clearfix">
+                    <h3 class="fl">
+                        修改登录密码
+                    </h3>
+                </div>
+                <div class="safe-center">
+                    <div class="suggest">
+                        <img src="image/safe-icon.png" alt="">
+                        <span>建议您启用安全设置，以保障您的账户安全！</span>
+                    </div>
+                    <div class="login-password">
+                        <i class="daq-icon">&#xe6b6;</i>
+                        <span class="login">登录密码</span>
+                        <span>为了保障您的账户安全，建议您定期修改登陆密码</span>
+                        <a href="personalCenter-changePassword.html?html=personalCenter-safeCenter.html">修改登录密码>></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+</body>
+</html>

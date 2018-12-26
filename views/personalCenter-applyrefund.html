@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content bg-f">
+            <div class="nearorder js_refund p18">
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script type="text/template" id="refundTmp1">
+    <div class="person-title mar24 clearfix">
+        <h3 class="fl">
+            退款管理
+        </h3>
+    </div>
+    <table class="applay-progress">
+        <tr>
+            <td class="td1 td-start">
+                <p class="line line1 done">
+                    <i>1</i>
+                </p>
+            </td>
+            <td class="td1 td-middle">
+                <p class="line">
+                    <i>2</i>
+                </p>
+            </td>
+            <td class="td1 td-end">
+                <p class="line line2">
+                    <i>3</i>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td class="td2 done">买家申请退款</td>
+            <td class="td2">卖家处理退款申请</td>
+            <td class="td2">退款完成</td>
+        </tr>
+    </table>
+
+    <table class="ordertable mar30">
+        <thead>
+        <tr>
+            <th class="w408 text-left p20">订单信息</th>
+            <th>订单编号</th>
+            <th>数量</th>
+            <th>金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="order-info">
+                <a href="javascript:;" class="img-box"><img src="${data.thumbnail || 'image/zw.jpg'}" alt="${data.fullName}"></a>
+                <div>
+                    <p title="${data.fullName}">${tools.ellipsisContent(data.fullName,50)}</p>
+                </div>
+            </td>
+            <td>${data.orderSn}</td>
+            <td>
+                {{if data.child}}
+                成人：${data.quantity} 儿童：${data.child}
+                {{else}}
+                ${data.quantity}
+                {{/if}}
+            </td>
+            <td class="amount glay">￥${data.amount}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="apply">
+        <tr>
+            <td class="left-td">
+                <span>*</span>退款原因
+            </td>
+            <td>
+                <div id="select1" class="daq-select wid-198 fl mtr-5">
+                    <select name="select1">
+                        <option value="">请选择</option>
+                        <option value="1">买多了</option>
+                        <option value="2">买错了</option>
+                        <option value="3">不想买了</option>
+                        <option value="4">重新买</option>
+                        <option value="5">交易关闭</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="left-td left-td1 p-t-20">
+                <p><span>*</span>退款说明</p>
+            </td>
+            <td class="p-t-20">
+                <textarea placeholder="请填写你的退款说明" class="js_refund_sm" maxlength="50"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="left-td left-td1 p-t-30">
+            </td>
+            <td class="p-t-30 p-b-116">
+                <a href="javascript:;" class="submit-btn" data-quantity="${data.quantity}" data-child="${data.child}">提交申请</a> <a href="javascript:;" class="cancel-btn">取消并返回</a>
+            </td>
+        </tr>
+    </table>
+</script>
+<script type="text/template" id="refundTmp2">
+
+    <div class="person-title mar24 clearfix">
+        <h3 class="fl">
+            退款管理
+        </h3>
+    </div>
+    <table class="applay-progress">
+        <tr>
+            <td class="td1 td-start">
+                <p class="line line1 done">
+                    <i>1</i>
+                </p>
+            </td>
+            <td class="td1 td-middle">
+                <p class="line done">
+                    <i>2</i>
+                </p>
+            </td>
+            <td class="td1 td-end">
+                <p class="line line2">
+                    <i>3</i>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td class="td2 done">买家申请退款</td>
+            <td class="td2 done">卖家处理退款申请</td>
+            <td class="td2">退款完成</td>
+        </tr>
+    </table>
+
+    <table class="ordertable mar30">
+        <thead>
+        <tr>
+            <th class="w408 text-left p20">订单信息</th>
+            <th>订单编号</th>
+            <th>数量</th>
+            <th>金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="order-info">
+                <a href="javascript:;" class="img-box"><img src="${data.thumbnail || 'image/zw.jpg'}" alt="${data.fullName}"></a>
+                <div>
+                    <p title="${data.fullName}">${tools.ellipsisContent(data.fullName,50)}</p>
+                </div>
+            </td>
+            <td>${data.orderSn}</td>
+            <td>
+                {{if data.child}}
+                成人：${data.quantity} 儿童：${data.child}
+                {{else}}
+                ${data.quantity}
+                {{/if}}
+            </td>
+            <td class="amount glay">￥${data.amount}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="refund2">
+        <h3>请等待商家处理</h3>
+        <p>·卖家同意在24小时内进行处理，系统将退款给您；</p>
+        <p>·如果卖家已经发货，本次申请将关闭，如果还有问题，您可以再次发起申请；</p>
+        <p>·如果有人以“卡单、系统有问题”为由给您发送退款相关链接，请勿相信，以免欠款被骗。</p>
+    </div>
+
+    <div class="refundinfo clearfix">
+        <!--<a class="avator fl">-->
+            <!--<img src="./image/head-no.png" alt="">-->
+        <!--</a>-->
+        {{each data.refunds}}
+        <div class="txt-con">
+            <p class="txt clearfix">
+                <span class="name">${name}</span>
+                <span class="action">${modifyDate} <i>发起了退款申请</i>；</span>
+                <span class="number">退款编号：<i>${sn}</i>；</span>
+                <span class="state">货物状态：<i>{{if shippingStatus==='shipped'}}已发货{{else shippingStatus==='unshipped'}}未发货{{/if}}</i>；</span>
+                <span class="reason">原因：<i>${memo}</i></span>
+            </p>
+            <!--<p class="txt">说明：不好意思啊，手滑拍错了，给我退款吧，谢谢。</p>-->
+        </div>
+        {{/each}}
+    </div>
+</script>
+<script type="text/template" id="refundTmp3">
+    <div class="person-title mar24 clearfix">
+        <h3 class="fl">
+            退款管理
+        </h3>
+    </div>
+    <table class="applay-progress">
+        <tr>
+            <td class="td1 td-start">
+                <p class="line line1 done">
+                    <i>1</i>
+                </p>
+            </td>
+            <td class="td1 td-middle">
+                <p class="line done">
+                    <i>2</i>
+                </p>
+            </td>
+            <td class="td1 td-end">
+                <p class="line line2 done">
+                    <i>3</i>
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td class="td2">买家申请退款</td>
+            <td class="td2">卖家处理退款申请</td>
+            <td class="td2 done">退款完成</td>
+        </tr>
+    </table>
+    <div class="refund-ok">
+        <i class="refund-ok-icon"></i>恭喜，您已成功退款！
+    </div>
+    <table class="ordertable mar30">
+        <thead>
+        <tr>
+            <th class="w408 text-left p20">订单信息</th>
+            <th>订单编号</th>
+            <th>数量</th>
+            <th>金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="order-info">
+                <a href="javascript:;" class="img-box"><img src="${data.thumbnail || 'image/zw.jpg'}" alt="${data.fullName}"></a>
+                <div>
+                    <p title="${data.fullName}">${tools.ellipsisContent(data.fullName,50)}</p>
+                </div>
+            </td>
+            <td>${data.orderSn}</td>
+            <td>
+                {{if data.child}}
+                成人：${data.quantity} 儿童：${data.child}
+                {{else}}
+                ${data.quantity}
+                {{/if}}
+            </td>
+            <td class="amount glay">￥${data.amount}</td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ordertable">
+        <thead>
+        <tr>
+            <th class="long1">退款单号</th>
+            <th class="long2">原因</th>
+            <th class="long3">货物状态</th>
+            <th class="long3">退款明细</th>
+            <th>金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{each data.refunds}}
+        <tr class="refund-t">
+            <td class="ordernumber">${sn}</td>
+            <td>${memo}</td>
+            <td>
+                {{if shippingStatus==='shipped'}}
+                已发货
+                {{else shippingStatus==='unshipped'}}
+                未发货
+                {{/if}}
+            </td>
+            <td>${method}</td>
+            <td>￥${amount}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    </div>
+</script>
+<script>
+    var refund = {
+        init: function () {
+            this.loadOrder();
+        },
+        eventBind: function () {
+            var _this = this,
+                refund_why = '';
+            $("#select1").daqSelect({
+                value: 0,
+                callback: function (data) {
+                    refund_why = data.text;
+                }
+            });
+            //返回
+            $('.cancel-btn').click(function () {
+                window.history.go(-1);
+            });
+            //提交申请
+            $('.submit-btn').click(function () {
+                var _self = $(this);
+                if(refund_why === ''){
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请选择退款原因</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+
+                                }
+                            }
+                        ]
+
+                    });
+                    return false;
+                }
+                if(!tools.validate($('.js_refund_sm').val(),'require')){
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">请填写退款说明</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+
+                                }
+                            }
+                        ]
+
+                    });
+                    return false;
+                }
+                _this.refunds({
+                    orderId: tools.getUrlParams('orderId'),
+                    summary: $('.js_refund_sm').val(),
+                    memo1: refund_why,
+                    quantity: _self.attr('data-quantity'),
+                    child:_self.attr('data-child') || '',
+                    token: tools.getCookie('token')
+                })
+            })
+        },
+        loadOrder: function () {
+            var $box = $('.js_refund'),
+                _this = this;
+            var loading = tools.loading($box);
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/refundsOrderDetail',
+                data: {
+                    token: tools.getCookie('token'),
+                    orderId: tools.getUrlParams('orderId')
+                },
+                type: true
+            },function (result) {
+                $box.empty();
+                loading.clean();
+                if(result.code === 0){
+                    var data = result.data;
+                    if(data.refundStatus === 'noRefund' || data.refundStatus === 'partialRefunds'){
+                        $('#refundTmp1').tmpl({data: data}).appendTo($box);
+                        _this.eventBind();
+                    }else if(data.refundStatus === 'refunded'){
+                        $('#refundTmp3').tmpl({data: data}).appendTo($box);
+                    }else if(data.refundStatus === 'applied'){
+                        $('#refundTmp2').tmpl({data: data}).appendTo($box);
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH1);
+                }
+            })
+        },
+        refunds: function (option) {
+            var _this = this;
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/refunds',
+                data: option,
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $.dialog({
+                        title: '温馨提示',
+                        message: '<p style="font-size:14px;color:#666;">退款申请提交成功</p>',
+                        width: 300,
+                        height: 200,
+                        mask: true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'确定',
+                                className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                callback:function(){
+                                    window.location.reload();
+                                }
+                            }
+                        ]
+
+                    });
+                    _this.loadOrder();
+                }else{
+                    alert(result.message)
+                }
+            })
+        }
+    };
+    $(function () {
+        refund.init();
+    })
+</script>
+</body>
+</html>

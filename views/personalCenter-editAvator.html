@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content bg-w">
+            <div class="nearorder p18">
+                <div class="person-title edit-css clearfix">
+                    <h3 class="fl">头像设置 <span class="person-title-tip">&nbsp;&nbsp;（仅支持 jpg、png格式，且小于2M）</span></h3>
+                </div>
+                <div class="edit-avator clearfix">
+                    <div class="edit-box">
+                        <div class="upload-img">
+                            <img src="" alt="">
+                            <a href="javascript:void(0);" class="upload-btn-edit">上传照片</a>
+                        </div>
+                        <div class="btn-wrapper">
+                            <a href="javascript:void(0);" class="upload-btn-1 upload-btn-save">保存</a>
+                            <a href="javascript:void(0);" class="upload-btn-1 upload-btn-cancel">取消</a>
+                        </div>
+                    </div>
+                    <div class="edit-box box1">
+                        <div class="sec-box-img1">
+                            <img src="./image/edit-avator-default.png" alt="">
+                        </div>
+                        <p class="edit-box-tip">130 * 130像素</p>
+                    </div>
+                    <div class="edit-box box2">
+                        <div class="sec-box-img2">
+                            <img src="./image/edit-avator-default.png" alt="">
+                        </div>
+                        <p class="edit-box-tip">90 * 90像素</p>
+                    </div>
+                    <div class="edit-box box3">
+                        <div class="sec-box-img3">
+                            <img src="./image/edit-avator-default.png" alt="">
+                        </div>
+                        <p class="edit-box-tip">27 * 27像素</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script src="http://filealiyun.geeker.com.cn/ued/webupload/js/webuploader.js"></script>
+<script>
+    var upload = {
+        params : {
+            head: '',
+            token: tools.getCookie('token')
+        },
+        init: function () {
+            this.uploadImg('.upload-btn-edit');
+            this.eventBind();
+        },
+        eventBind: function () {
+            var _this = this;
+            $('.upload-btn-save').click(function () {
+                if(_this.params.head){
+                    _this.updateUser();
+                }else{
+                    alert('请先上传照片')
+                }
+            });
+            //取消
+            $('.upload-btn-cancel').click(function () {
+                window.location.href = "personalCenter-userinfo.html";
+            })
+        },
+        uploadImg: function (obj) {
+            var btnObj = $(obj),_this = this;
+            // 初始化WebUploader
+            var imgUploader = WebUploader.create({
+                // 选完文件后，是否自动上传。
+                auto: true,
+                // swf文件路径
+                swf: 'http://filealiyun.geeker.com.cn/ued/webupload/js/Uploader.swf',
+                // 文件接收服务端。
+                server: 'http://file.geeker.com.cn/uploadOSS',
+                //设置文件上传域的name
+                fileVal: 'Filedata',
+                //文件上传参数表
+                formData: {
+                    path: 'test/img'
+                },
+                // 选择文件的按钮。可选。
+                // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+                pick: {
+                    id: btnObj,
+                    multiple: false  //设置是否支持多文件上传
+                },
+                fileSingleSizeLimit: 2*1024*1024,
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/jpg,image/jpeg,image/bmp,image/png'
+                },
+                compress:false
+            });
+            imgUploader.on('fileQueued', function () {
+                imgUploader.refresh(); // 当文件上传结构加载出来后执行该命令，刷新一下文件上传结构，防止上传按钮宽高1px问题导致点不到问题
+                $.daqMessage({
+                    icon: {
+                        text: ''
+                    },
+                    text: '上传中！',
+                    skin: 1,
+                    time: ''
+                });
+            });
+            imgUploader.on('error', function (file) {
+                if (file == 'Q_TYPE_DENIED') {
+                    $.daqMessage({
+                        icon: {
+                            text: ''
+                        },
+                        text: '不支持改文件类型！',
+                        skin: 1,
+                        time: 2000
+                    });
+                } else if (file == 'Q_EXCEED_NUM_LIMIT') {
+                    $.daqMessage({
+                        icon: {
+                            text: ''
+                        },
+                        text: '超出文件上传的数量限制！',
+                        skin: 1,
+                        time: 2000
+                    });
+                } else if (file == "F_DUPLICATE") {
+                    $.daqMessage({
+                        icon: {
+                            text: ''
+                        },
+                        text: '该文件已上传！',
+                        skin: 1,
+                        time: 5000
+                    });
+                } else if (file == 'Q_EXCEED_SIZE_LIMIT' || file == 'F_EXCEED_SIZE') {
+                    $.daqMessage({
+                        icon: {
+                            text: ''
+                        },
+                        text: '文件大小超出限制！',
+                        skin: 1,
+                        time: 2000
+                    });
+                }
+            });
+            // 文件上传成功，给item添加成功class, 用样式标记上传成功。
+            imgUploader.on('uploadSuccess', function (file, response) {
+                $('.daq-feedback').remove();
+                $.daqMessage({
+                    icon: {
+                        text: ''
+                    },
+                    text: '上传成功！',
+                    skin: 1,
+                    time: 2000
+                });
+                var datas = response.datas;
+                _this.params.head = response.url;
+                if (datas) {
+                    var showDom = '<div class="media-pic-preview" title="' + file.name + '"><img src="' + response.url + '" />' +
+                        '<div class="box-mask media-show-pic">' +
+                        '<p class="media-operate"><i class="sysfont js-img-enlarge"></i></p>' +
+                        '<p class="pics-item-name">' + file.name + '</p>' +
+                        '</div>' +
+                        '<label class="media-show-close"></label></div>';
+                    btnObj.siblings('.upload-default-box').addClass('upload-show-box').html(showDom);
+                    btnObj.find('.webuploader-pick').html('重新上传');
+                    $('.upload-img>img,.sec-box-img1 > img,.sec-box-img2 > img,.sec-box-img3 > img').attr('src',response.url)
+                    $('.upload-img').addClass('upload-ok');
+                }
+
+            });
+
+            // 文件上传失败，显示上传出错。
+            imgUploader.on('uploadError', function (file) {
+                $.daqMessage({
+                    icon: {
+                        text: ''
+                    },
+                    text: '上传失败！',
+                    skin: 1,
+                    time: 2000
+                });
+            });
+        },
+        updateUser: function () {
+            var _this = this;
+            tools.request({
+                url: 'userInfo/updateUserInfo',
+                data:{
+                    head: _this.params.head,
+                    token: _this.params.token
+                }
+            },function (result) {
+                if(result.code === 0){
+                    alert('修改成功');
+                    window.location.href = "personalCenter-userinfo.html";
+                }else{
+                    alert(result.message)
+                }
+            })
+        }
+    }
+    $(function () {
+        upload.init();
+    })
+</script>
+</body>
+</html>

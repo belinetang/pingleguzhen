@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'平乐古镇·天台山旅游电子商务平台_酒店预订1'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<!--<%-include("common/nav.html")%>-->
+<!--面包削-->
+<!--<div class="crumbs">-->
+    <!--<div class="js_curmbs center"></div>-->
+<!--</div>-->
+    <!--支付流程状态-->
+    <ul class="paytype center clearfix">
+        <li class="paytype1"><i>1</i>填写订单</li>
+        <li class="paytype2"><i>2</i>在线支付</li>
+        <li class="paytype3"><i>3</i>完成</li>
+    </ul>
+    <!--订单信息-->
+    <div class="center payorder1-info clearfix">
+        <div class="payorder1-left">
+            <div class="title"><i class="daq-icon">&#xe6dc;</i>预订信息</div>
+            <div class="ydinfo">
+                入住时间：
+                <div class="daq-date">
+                    <input class="date" id="start" placeholder="请选择日期"/>
+                    <i class="sysfont date-icon"></i>
+                </div>
+                退房日期：
+                <div class="daq-date">
+                    <input class="date" id="end" placeholder="请选择日期"/>
+                    <i class="sysfont date-icon"></i>
+                </div>
+            </div>
+            <div class="inroom">
+                房间数量：
+                <p class="daq-inp-operation dio-input mt-10">
+
+                    <input class="wid-138" type="text" value="0" maxlength="6"/>
+                    <i class="sysfont inp-subtract dio-left dio-disable"></i><i class="sysfont dio-font"></i>
+                </p>
+            </div>
+            <div class="title"><i class="daq-icon">&#xe6a1;</i>联系人信息 <span class="tips">温馨提示: 请入住客人携带好相关身份证件</span></div>
+            <div class="contacts clearfix">
+                <span class="ctitle">常用联系人:</span>
+                <div class="clearfix choose-box js_address">
+
+                </div>
+            </div>
+            <div class="info1 mt-40">
+                <i>*</i><span class="infotitle">入住姓名:</span><input type="text" placeholder="请输入入住人姓名" class="inroomname"> 所填姓名需与入住时所持证件一致
+            </div>
+            <div class="info1">
+                <i>*</i><span class="infotitle">手机号码:</span><input type="text" placeholder="请输入手机号码" class="inroomphone"> 预订成功后会向您发送短信通知
+            </div>
+            <div class="info1 none pinyinbox">
+                <i>*</i><span class="infotitle">姓名拼音:</span><input type="text" placeholder="请输入姓名拼音" class="pinyin"> 请添加姓名的全拼
+            </div>
+            <!--<div class="info1 mt-10"><span class="infotitle2">其他要求:</span><a href="javascript:;" class="instructions">补充说明</a></div>-->
+            <div class="info2">
+                <div id="checkbox2" class="clearfix choose-box ">
+                    <input type="checkbox" checked name="b.multi" value="1" title="同意《平乐古镇·天台山旅游电子商务平台网络产品购买协议》" />
+                </div>
+            </div>
+            <div class="submit-box">
+                <a href="javascript:;" class="paynow">立即支付</a>
+            </div>
+        </div>
+        <div class="payorder1-right">
+
+        </div>
+    </div>
+    <!--页尾-->
+    <%-include("common/footer.html")%>
+<!--常用联系人列表-->
+<script type="text/template" id="adressListTemp">
+    {{each list}}
+    <div class="fl contact-info" data-name="${name}" data-phone="${mobile}">
+        <span class="contact-info-icon"><i class="daq-icon">&#xe6b6;</i></span>
+        <span class="name">${name}</span>
+    </div>
+    {{/each}}
+</script>
+    <!--酒店介绍-->
+    <script type="text/template" id="hotelTemp">
+        <div class="title-box">
+            <div class="imgbox">
+                <img src="${list.productImages[0].thumbnail || 'image/zw.jpg'}" alt="">
+            </div>
+            <div class="fontbox">
+                <p class="title">${list.hotelname}</p>
+                <p class="address">${list.hoteladdress}</p>
+            </div>
+        </div>
+        <div class="infobox">
+            <p class="title">${list.name}</p>
+            <table>
+                <tr>
+                    <td>房型: ${list.pruductRoomType.roomType}</td>
+                    <td>楼层: ${list.pruductRoomType.storey}层</td>
+                </tr>
+                <tr>
+                    <td>宽带: ${list.pruductRoomType.wifi}</td>
+                    <td>可住:${list.pruductRoomType.num}人</td>
+                </tr>
+                <tr>
+                    <!--<td>早餐: 无</td>-->
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="pricebox">
+            <p class="font clearfix">
+                <span class="title">房费总价</span>
+                <span class="price"><i>&yen;</i>${list.dayPrice}</span>
+            </p>
+            <!--<p class="font clearfix">-->
+                <!--<span class="title">酒店促销</span>-->
+                <!--<span class="price"><i>- &yen;</i>0.00</span>-->
+            <!--</p>-->
+            <p class="font1 clearfix">
+                <span class="title">应付金额</span>
+                <span class="price"><i>&yen;</i>${list.dayPrice}</span>
+            </p>
+        </div>
+    </script>
+<script>
+    var indexJs = {
+        init: function () {
+            tools.setTowLevelBanner();
+            this.setCheckBox();
+            this.getAddress(); //获取常用联系人
+            this.getRoomDetail();  // 获取产品详情
+        },
+        // 是否显示姓名拼音的状态 0 不显示 1显示
+        pinyinType:0,
+        //入住时间 退房时间
+        roomDate:{
+            inroom:{
+                min:'',
+                max:''
+            },
+            outroom:{
+                min:'',
+                max:''
+            }
+        },
+        tongyixieyi:'1',  //0未勾选协议 1勾选协议
+        // 产品详情数据保存
+        product: {},
+        //页面提交配置
+        pageParams:{
+            id:'', // 产品ID
+            quantity:'', // 购买数量
+            name:'', // 入住人姓名
+            phone: '', // 联系手机
+            startDate:'', //入住时间
+            endDate: '' // 退房时间
+        },
+        // 设置时间选择控件
+        setGeekerLayDate: function () {
+            var _this = this;
+            var start = laydate.render({
+                elem: '#start',
+                showBottom: false,
+                min: _this.roomDate.inroom.min,
+                max: _this.roomDate.inroom.max,
+                change: function (date) {
+
+                    // alert('sdxc')
+                },
+                done: function (value, date) {
+                    if (value !== '') {
+                        end.config.min.year = date.year;
+                        end.config.min.month = date.month - 1;
+                        end.config.min.date = date.date+1;
+                        _this.pageParams.startDate= date.year+'-'+ _this.beNum(date.month) +'-'+ _this.beNum(date.date);
+                        _this.countOrderPrice()  //计算价格
+                    } else {
+                        end.config.min.year = '';
+                        end.config.min.month = '';
+                        end.config.min.date = '';
+                    }
+                }
+            });
+            var end = laydate.render({
+                min: _this.roomDate.outroom.min,
+                max: _this.roomDate.outroom.max,
+                elem: '#end',
+                showBottom: false,
+                change: function () {
+                },
+                done: function (value, date) {
+                    if (value !== '') {
+                        start.config.max.year = date.year;
+                        start.config.max.month = date.month - 1;
+                        start.config.max.date = date.date-1;
+                        _this.pageParams.endDate= date.year+'-'+  _this.beNum(date.month) +'-'+  _this.beNum(date.date);
+                        _this.countOrderPrice()  //计算价格
+                    } else {
+                        start.config.max.year = '';
+                        start.config.max.month = '';
+                        start.config.max.date = '';
+                    }
+                }
+            });
+        },
+        //  实例化运算输入框
+        newCountInput: function () {
+            var _this = this;
+            // 实例化运算输入框对象
+            tools.inputCount({
+                el: '.daq-inp-operation',
+                max: _this.product.maxBuyNum,
+                min: _this.product.minBuyNum,
+                change: function (data) {
+                    _this.pageParams.quantity = data;
+                    var price = _this.product.dayPrice * data
+                    _this.countOrderPrice()  //计算价格
+                }
+            })
+        },
+        // 小号复选框
+        setCheckBox: function () {
+            var _this = this;
+            $("#checkbox2").daqCheckbox({
+                labelSize: true,
+                callback: function (data, obj) {
+                    if(data[0]==='1') {
+                        _this.tongyixieyi = "1";
+                    }else{
+                        _this.tongyixieyi = "0";
+                    }
+                }
+            });
+        },
+        // 请求常用联系人
+        getAddress: function () {
+            var _this = this;
+            var loading = tools.loading($('.js_address'));
+            var betoken = tools.getCookie('token')
+            if(betoken) {
+                tools.request({
+                    url:'userInfo/getMemberContacts',
+                    data: {
+                        token: betoken,
+                        page: 1,
+                        limitPage: 6
+                    }
+                },function (result) {
+                    loading.clean();
+//                $('.js-address').empty();
+                    if(result.code === 0) {
+                        var list = result.datas;
+                        if(list.length > 0){
+                            $('#adressListTemp').tmpl({list: list}).appendTo('.js_address');
+                            $(".contacts").show()
+                            $(".contact-info-icon").click(function () {
+                                if($(this).hasClass("active")){
+                                    $(this).removeClass("active");
+                                    $(".inroomname").val("");
+                                    $(".inroomphone").val("");
+                                } else{
+                                    $(this).addClass("active");
+                                    $(this).parent().siblings().find(".contact-info-icon").removeClass("active");
+                                    var name = $(this).parent().attr("data-name");
+                                    var phone = $(this).parent().attr("data-phone");
+                                    $(".inroomname").val(name);
+                                    $(".inroomphone").val(phone);
+                                }
+                            })
+                        }else{
+                            $(".contacts").hide()
+                        }
+                    }else{
+                        alert(result.message);
+                    }
+                })
+            }else{
+                window.location.href = "login.html";
+            }
+
+        },
+        // 获取产品详情
+        getRoomDetail: function () {
+
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            var params = {
+                url: 'hotel/productDetail',
+                data: {
+                    token: betoken,
+                    id: tools.getUrlParams('productId')
+                }
+            };
+            if (betoken) {
+                tools.request(params, function (res) {
+                    console.log(res, 111)
+                    _this.pageParams.id = res.data.product.pid;
+                    _this.pageParams.quantity = res.data.product.minBuyNum;
+                    // 根据后台配置判断是否显示拼音输入框
+                    for(var i = 0; i<res.data.product.contactInfo.contactInfos.length; i++) {
+                        if(res.data.product.contactInfo.contactInfos[i].name === 'pinyin') {
+                            $('.pinyinbox').removeClass('none');
+                            _this.pinyinType = 1;
+                        }
+                    }
+
+                    // 保存获取到的产品详情
+                    _this.product = res.data.product
+                    // 设置时间控件  最大,最小值
+                    _this.countMaxAndMinDate(res.data.product.beginDate,res.data.product.endDate, res.data.product.endDate);
+                    _this.setGeekerLayDate();
+                    //根据前一页选择的入住时间和退订时间初始化
+                    if(decodeURI(tools.getUrlParams('stime')) !== 'undefined'){
+                        $("#start").val(decodeURI(tools.getUrlParams('stime')))
+                    }
+                    if(decodeURI(tools.getUrlParams('etime')) !== 'undefined') {
+                        $("#end").val(decodeURI(tools.getUrlParams('etime')))
+                    }
+                    if(decodeURI(tools.getUrlParams('stime')) !== 'undefined' && decodeURI(tools.getUrlParams('etime')) !== 'undefined'){
+                        setTimeout(function () {
+                            _this.countOrderPrice();
+                        },0)
+
+                    }
+
+                    // 实例化运算框
+                    _this.newCountInput();
+                    // 酒店产品右侧表单
+                    res.data.product.hotelname = decodeURI(tools.getUrlParams('hotelname'))
+                    res.data.product.hoteladdress = decodeURI(tools.getUrlParams('hoteladdress'))
+                    $('#hotelTemp').tmpl({list: res.data.product}).appendTo($('.payorder1-right'));
+                    //提交保存订单
+                    _this.saveOrder(betoken, res.data.product.pid);
+                })
+            } else {
+                window.location.href = "login.html";
+            }
+        },
+        //获取当前时间
+        stringToDate: function (str) {
+            var date = new Date(str);
+            // 有三种方式获取
+            var time1 = date.getTime();
+            return time1;
+        },
+        // 处理入住时间和退房时间的最大和最小
+        countMaxAndMinDate: function (min,max,systemMax) {
+            var _this = this;
+            // 设置最大购买日期
+
+            // 设置入住时间范围
+            _this.roomDate.inroom.min = min;
+            _this.roomDate.inroom.max = max;
+            // 设置退房时间范围
+            var testDate = new Date(min);
+            testDate = testDate.getTime();
+            testDate += 86400000;
+            testDate = new Date(testDate);
+            _this.roomDate.outroom.min = testDate.getFullYear()+'-'+(testDate.getMonth()+1)+'-'+testDate.getDate()
+            var testDate = new Date(max);
+            testDate = testDate.getTime();
+            testDate += 86400000;
+            testDate = new Date(testDate);
+            _this.roomDate.outroom.day = testDate.getDate();
+            _this.roomDate.outroom.month = testDate.getMonth()+1;
+            _this.roomDate.outroom.year = testDate.getFullYear();
+            _this.roomDate.outroom.max = testDate.getFullYear()+'-'+(testDate.getMonth()+1)+'-'+testDate.getDate()
+            console.log(new Date(_this.roomDate.outroom.max).getTime(), '传入结束时间')
+            console.log(_this.roomDate.outroom.max, '传入结束时间字符串')
+            console.log(new Date(systemMax).getTime(), '当前产品限制购买时间')
+            console.log(systemMax, '当前产品限制购买时间字符串')
+        },
+        // 提交保存订单
+        saveOrder: function (betoken,pid) {
+            var _this = this;
+            $('.paynow').click(function () {
+                _this.pageParams.name = $('.inroomname').val();
+                _this.pageParams.phone = $('.inroomphone').val();
+                if($('#start').val() !== '') {
+                    _this.pageParams.startDate =$('#start').val()
+                }
+                if($('#end').val() !== '') {
+                    _this.pageParams.endDate =$('#end').val()
+                }
+                // 检查入住时间
+                if (!_this.pageParams.startDate  || _this.pageParams.startDate.trim() === '' || _this.pageParams.startDate  === '请输入入住人姓名') {
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请选择入住时间',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                // 检查退房时间
+                if (!_this.pageParams.endDate  || _this.pageParams.endDate.trim() === '' || _this.pageParams.endDate  === '请输入入住人姓名') {
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请输入退房时间',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                // 检查联系人名字
+                if (!_this.pageParams.name  || _this.pageParams.name.trim() === '' || _this.pageParams.name  === '请输入入住人姓名') {
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请输入入住人姓名',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                // 检查手机号码
+                if (!_this.pageParams.phone  || _this.pageParams.phone.trim() === '' || _this.pageParams.phone  === '请输入手机号码') {
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请输入入手机号码',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }else if(!/^1\d{10}$/.test(_this.pageParams.phone)){
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请输入正确的手机号码',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                // 检查拼音输入
+                if(_this.pinyinType === 1){
+                    _this.pageParams.pinyin = $('.pinyin').val();
+                    if (!_this.pageParams.pinyin  || _this.pageParams.pinyin === '' || _this.pageParams.pinyin  === '请输入姓名拼音') {
+                        $.dialog({
+                            title: '友情提示',
+                            message: '请输入姓名拼音',
+                            width: 400,
+                            height: 200,
+                            mask: true,
+                            footer: false
+                        });
+                        return;
+                    }
+                }
+                // 检查是否同意协议
+                if (_this.tongyixieyi !== '1') {
+                    $.dialog({
+                        title: '友情提示',
+                        message: '需要同意购买协议',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                _this.pageParams.token = betoken;
+                var params = {
+                    url: 'hotel/saveOrder',
+                    data: _this.pageParams
+                };
+                tools.request(params, function(res){
+                    if(res.code === 0 ){
+                        $('input').val('')
+                        window.location.href = "hotelonline-payment.html?channelCode=jdzs&code=wzhb&orderId="+res.data.orderId+"";
+                    }else{
+                        $.dialog({
+                            title: '错误提示',
+                            message: res.message,
+                            width: 400,
+                            height: 200,
+                            mask: true,
+                            footer: false
+                        });
+                    }
+                })
+            })
+        },
+        // 计算订单价格
+        countOrderPrice: function () {
+            var _this = this;
+            var betoken = tools.getCookie('token')
+            if($('#start').val()!=='' && $('#end').val()!=='') {
+                if(betoken) {
+                    var params = {
+                        url: 'hotel/getMoney',
+                        data: {
+                            id:_this.product.pid,
+                            token:betoken,
+                            startDate: $('#start').val(),
+                            endDate: $('#end').val(),
+                            quantity: $('.daq-inp-operation input').val()
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.data.money){
+                            $('.payorder1-right').find('.font1 .price').html('<i>&yen;</i>'+ res.data.money +'')
+                        }else {
+                            $.dialog({
+                                title: '错误提示',
+                                message: '您选择的日期已超出系统设定范围,请重新选择后下单',
+                                width: 400,
+                                height: 200,
+                                mask: true,
+                                footer: false
+                            });
+                        }
+
+                    })
+                }else {
+                    window.location.href = "login.html";
+                }
+
+            }
+        },
+        beNum: function (num) {
+            if(num<10) {
+                return '0'+num
+            }else {
+                return num;
+            }
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

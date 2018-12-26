@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_酒店详情'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<!-- 导航 -->
+<%-include("common/nav.html")%>
+<!--面包削-->
+<div class="crumbs">
+    <div class="js_curmbs center"></div>
+</div>
+<div class="daq-hotel-detail">
+    <div class="center">
+        <!--酒店图片-->
+        <div class="hotel-detail-top">
+
+        </div>
+        <!--房型介绍-->
+        <div class="hotel-detail-price">
+            <ul class="detail-nav">
+                <li class="active">
+                    <a href="javascript:;" data-type="price">房型价格</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="intro">酒店介绍</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="facility">酒店设施</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="tips">小贴士</a>
+                </li>
+                <li>
+                    <a href="javascript:;" data-type="trafiic">交通信息</a>
+                </li>
+                <!--<li>-->
+                    <!--<a href="javascript:;" data-type="around">交通及周边</a>-->
+                <!--</li>-->
+                <li>
+                    <a href="javascript:;" data-type="comment">点评(条)</a>
+                </li>
+            </ul>
+            <div class="hotel-date" id="price">
+                <span>入住:</span>
+                <input type="text" class="set-date" id="stime" placeholder="请选择入住日期"/>
+                <span>退房:</span>
+                <input type="text" class="set-date" id="etime" placeholder="请选择退房日期"/>
+                <span class="time">请选择入住日期和退房日期</span>
+            </div>
+        </div>
+        <!-- 房间列表-->
+        <ul class="hotel-rooms-list">
+
+        </ul>
+        <!-- 酒店介绍 -->
+        <div class="hotel-detail-intro hotel-summary" id="intro">
+
+        </div>
+        <!-- 酒店设施 -->
+        <div class="hotel-facility" id="facility">
+            <h2 class="title">酒店设施</h2>
+            <ul class="facility-icon clearfix">
+                <li class="fl" data-code="SpecialService_01">
+                    <span class="daq-icon">&#xe711;</span>
+                    <p>免费WiFi</p>
+                </li>
+                <li class="fl" data-code="SpecialService_02">
+                    <span class="daq-icon">&#xe70b;</span>
+                    <p>接机服务</p>
+                </li>
+                <li class="fl " data-code="ServicesItem_01">
+                    <span class="daq-icon">&#xe713;</span>
+                    <p>商务服务</p>
+                </li>
+                <li class="fl " data-code="SpecialService_03">
+                    <span class="daq-icon">&#xe704;</span>
+                    <p>餐厅</p>
+                </li>
+                <li class="fl" data-code="Recreation_02">
+                    <span class="daq-icon">&#xe70d;</span>
+                    <p>运动健身</p>
+                </li>
+                <li class="fl" data-code="CateringServices_02">
+                    <span class="daq-icon">&#xe71b;</span>
+                    <p>西餐厅</p>
+                </li>
+                <li class="fl" data-code="CateringServices_01">
+                    <span class="daq-icon">&#xe71e;</span>
+                    <p>中餐厅</p>
+                </li>
+                <li class="fl" data-code="CateringServices_03">
+                    <span class="daq-icon">&#xe70e;</span>
+                    <p>咖啡厅</p>
+                </li>
+                <li class="fl" data-code="Recreation_01">
+                    <span class="daq-icon">&#xe710;</span>
+                    <p>卡拉OK</p>
+                </li>
+                <li class="fl" data-code="Recreation_03">
+                    <span class="daq-icon">&#xe705;</span>
+                    <p>按摩室</p>
+                </li>
+                <li class="fl" data-code="RoomFacilities_01">
+                    <span class="daq-icon">&#xe70f;</span>
+                    <p>国内长途</p>
+                </li>
+                <li class="fl" data-code="RoomFacilities_02">
+                    <span class="daq-icon">&#xe70a;</span>
+                    <p>国际长途</p>
+                </li>
+                <li class="fl" data-code="SpecialService_04">
+                    <span class="daq-icon">&#xe71c;</span>
+                    <p>游泳池</p>
+                </li>
+                <li class="fl" data-code="SpecialService_05">
+                    <span class="daq-icon">&#xe717;</span>
+                    <p>停车场</p>
+                </li>
+                <li class="fl" data-code="ServicesItem_02">
+                    <span class="daq-icon">&#xe706;</span>
+                    <p>大堂吧</p>
+                </li>
+            </ul>
+            <ul class="facility-list">
+
+            </ul>
+        </div>
+        <!-- 小贴士 -->
+        <div class="hotel-detail-intro" id="tips">
+
+        </div>
+        <!-- 交通信息 -->
+        <div class="hotel-detail-intro hotel-map" id="trafiic">
+            <h2 class="title">交通信息</h2>
+            <div class="detail daq-map" id="daq-map">
+            </div>
+        </div>
+        <!-- 交通信息 -->
+        <!--<div class="hotel-detail-intro" id="around">-->
+            <!--<h2 class="title">交通及周边</h2>-->
+            <!--<div class="daq-around">-->
+                <!--<div class="left-map" id="map-around">-->
+
+                <!--</div>-->
+                <!--<div class="right-name">-->
+                    <!--<div class="title">-->
+                        <!--<ul class="around-ul">-->
+                            <!--<li class="active"  data-type="">-->
+                                <!--<i class="daq-icon">&#xe63a;</i>-->
+                                <!--<p>全部</p>-->
+                            <!--</li>-->
+                            <!--<li data-type="2">-->
+                                <!--<i class="daq-icon">&#xe6dc;</i>-->
+                                <!--<p>酒店</p>-->
+                            <!--</li>-->
+                            <!--<li data-type="4">-->
+                                <!--<i class="daq-icon">&#xe6d4;</i>-->
+                                <!--<p>购物</p>-->
+                            <!--</li>-->
+                            <!--<li data-type="3">-->
+                                <!--<i class="daq-icon">&#xe71b;</i>-->
+                                <!--<p>餐饮</p>-->
+                            <!--</li>-->
+                            <!--<li data-type="5">-->
+                                <!--<i class="daq-icon">&#xe710;</i>-->
+                                <!--<p>娱乐</p>-->
+                            <!--</li>-->
+                            <!--<li data-type="1">-->
+                                <!--<i class="daq-icon">&#xe6da;</i>-->
+                                <!--<p>景区</p>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                        <!--<div class="intro-up"><span></span></div>-->
+                        <!--<div class="intro-down"><span></span></div>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+                <!--<div class="around-hotel">-->
+                    <!--<div class="top-title">-->
+                        <!--<span>距该景区</span>-->
+                        <!--<i class="active" data-value="5">5km</i>-->
+                        <!--<i data-value="10">10km</i>-->
+                        <!--<i data-value="15">15km</i>-->
+                        <!--<i data-value="20">20km</i>-->
+                    <!--</div>-->
+                    <!--<ul class="bottom-hotel-name">-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!-- 点评 -->
+        <div class="daq-comment" id="comment">
+            <h2 class="title">点评</h2>
+            <div class="comment-content">
+                <textarea name="" id="" cols="20" rows="10" placeholder="请输入评论内容..." class="write-comment" maxlength="255"></textarea>
+                <div class="my-comment">
+                    <p class="sub-comment">
+                        <span>我要评论</span>
+                        <span>
+                               <i class="daq-icon" data-value="1">&#xe67c;</i>
+                                <i class="daq-icon" data-value="2">&#xe67c;</i>
+                                <i class="daq-icon" data-value="3">&#xe67c;</i>
+                                <i class="daq-icon" data-value="4">&#xe67c;</i>
+                                <i class="daq-icon" data-value="5">&#xe67c;</i>
+                            </span>
+                    </p>
+                    <div class="sub-right">
+                        <!--<input type="text" placeholder="验证码" class="sub-y">-->
+                        <!--<span><img src="image/yzm.jpg" alt=""></span>-->
+                        <button class="btn updateCall">提交</button>
+                    </div>
+                </div>
+                <div class="all-comment">
+                    <p class="all-title">所有评论（共<span class="num"></span>条）</p>
+                    <ul class="comment-list">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--地图-->
+<p class="cover maskes mapnone cover01"></p>
+<div class="cover-content-box mapnone cover-content-word">
+    <h3 class="hide cover-content-tit"><i></i>
+        <span class="cover-tit">凯里主题公园游乐场</span>
+
+        <a href="javascript:;" class="close-cover">×</a>
+    </h3>
+    <div id="buyMap" class="cover-con"></div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<script src="http://filealiyun.geeker.com.cn/ued/BD-echarts/v3.8.4/echarts.min.js"></script>
+<script src="http://filealiyun.geeker.com.cn/ued/geek-widget/v1.0.0/platform-tool.js"></script>
+<script src="http://filealiyun.geeker.com.cn/ued/geek-echarts/v1.0.0/geek-echarts.js"></script>
+<!--酒店详情模板-->
+<script type="text/template" id="topTemp">
+    <h2 class="name">${list.name}</h2>
+    <div class="hotel-dis clearfix">
+        <div class="hotel-dis-left fl clearfix">
+            <div class="big-img fl">
+                {{if list.imgList.length > 0}}
+                <img src="${list.imgList[0].imgPath || 'image/zw.jpg'}" alt="">
+                {{else}}
+                <img src="image/zw.jpg" alt="">
+                {{/if}}
+                {{if list.hotel720}}
+                <a class="qj-icon" href="${list.hotel720}" target="_blank">
+                    <i class="daq-icon">&#xe6e8;</i>
+                    <p>全景</p>
+                </a>
+                {{/if}}
+            </div>
+            <div class="all-img fl">
+                <div class="inside-div">
+                    <ul>
+                        {{each(i) list.imgList}}
+                        <li><img src="${imgPath}" alt=""></li>
+                        {{/each}}
+                    </ul>
+                    <div class="top daq-icon">&#xe6b0;</div>
+                    <div class="bottom daq-icon">&#xe6af;</div>
+                </div>
+            </div>
+        </div>
+        <div class="hotel-dis-right fr">
+            <div class="right-top clearfix">
+                <span class="circle">
+                     <span class="circle"><span class="in">${list.commentLevel}<i>分</i></span></span>
+                </span>
+                <div class="star">
+                    <span>${list.startName}</span>
+                    <p class="daq-icon right-icon">
+                        {{each(i) list.startNum}}
+                        ${list.startNum[i]}
+                        {{/each}}
+                    </p>
+                </div>
+                <p class="num">共有评论 <span>${list.commentNum || 0 }</span>条</p>
+            </div>
+            <div class="hotel-add">
+                <!--<p>-->
+                    <!--开放时间：<span>${tools.ellipsisContent(list.opentime,30) || '暂无数据'}</span>-->
+                <!--</p>-->
+                <!--<p>-->
+                    <!--建议游玩时间：<span>${tools.ellipsisContent(list.advicedate,24) || '暂无数据'}</span>-->
+                <!--</p>-->
+                <p>
+                    酒店地址：<span>${tools.ellipsisContent(list.address,24) || '暂无数据'}</span>
+                    <a href="javascript:;">查看地图</a>
+                </p>
+            </div>
+            <div class="hotel-intro">
+                <span>酒店简介：</span>
+                <p>${tools.ellipsisContent(list.intro,90)}<a href="javascript:;" class="seefullsummary">查看全文</a></p>
+            </div>
+            <ul class="hotel-bom-icon">
+                <li class="p1_recommend" data-value="${list.name}"  data-id="${list.id}" data-hnum="${list.commendNum}" data-title="${list.name}">
+                    <span class="daq-icon">&#xe623;</span>
+                    <p data-hnum="${list.commendNum}">推荐(<span class="num" data-hnum="${list.commendNum}">${list.commendNum}</span>)</p>
+                </li>
+                <li class="pl_praised" data-id="${list.id}" data-hnum="${list.praise}"  data-value="${list.name}" data-title="${list.name}">
+                    <span class="daq-icon">&#xe643;</span>
+                    <p>点赞 (<span class="num">${list.praise}</span>)</p>
+                </li>
+                <li class="enshrinebtn" data-id="${list.id}" data-title="${list.name}" data-content="地址：${ list.address || '暂无数据' }" data-value="${list.vo.enshrine}" >
+                    <span class="daq-icon">&#xe67c;</span>
+                    <p>收藏 (<span class="num">${list.collection}</span>)</p>
+                </li>
+                <li class="pl_share">
+                    <span class="daq-icon">&#xe652;</span>
+                    <p>分享</p>
+                    <label class="bdsharebuttonbox bdshare_t bds_tools_32" style="position: absolute;z-index: 10; top: -6px; display:  block; left: 0; width:0px; height:0px;" data-bd-bind="1471256152095">
+                        <a class="bds_more" title="" data-img="" data-cmd="more" style="position: absolute;z-index:10; margin:0;padding:0;background: transparent;left: 0;top:0px;width:90px;height:40px; display:inline-block; border: 0"></a>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>
+<!--酒店介绍-->
+<script type="text/template" id="introTemp">
+    <h2 class="title">酒店介绍</h2>
+        <div class="detail">
+        {{html list.content || '暂无数据'}}
+        </div>
+</script>
+<!--酒店设施-->
+<script type="text/template" id="facilitiesTemp">
+    <li>
+        <span><i class="daq-icon">&#xe71b;</i> 主要菜系</span>
+        <p>${list.cuisine || '暂无数据'}</p>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe644;</i> 联系电话</span>
+        <p>${list.phone || '暂无数据'}</p>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe717;</i> 停车场</span>
+        <p>${list.park || '暂无数据'}</p>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe644;</i> 官网</span>
+        <p>${list.site || '暂无数据'}</p>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe704;</i> 餐饮服务</span>
+        <ul class="check-service">
+            {{each list.diningServerCode}}
+            <li>
+                <i class="daq-icon">&#xe6b6;</i>
+                <span>${name}</span>
+            </li>
+            {{/each}}
+        </ul>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe71d;</i> 交通服务</span>
+        <ul class="check-service">
+            {{if list.trafficServerCode.length > 0}}
+            {{each list.trafficServerCode}}
+            <li>
+                <i class="daq-icon">&#xe6b6;</i>
+                <span>${name}</span>
+            </li>
+           {{/each}}
+            {{else}}
+            <li>
+                暂无数据
+            </li>
+            {{/if}}
+        </ul>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe706;</i> 前台服务</span>
+        <ul class="check-service">
+            {{if list.receptionServerCode.length > 0}}
+            {{each list.receptionServerCode}}
+            <li>
+                <i class="daq-icon">&#xe6b6;</i>
+                <span>${name}</span>
+            </li>
+            {{/each}}
+            {{else}}
+            <li>暂无数据</li>
+            {{/if}}
+        </ul>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe697;</i> 服务包含</span>
+        <ul class="check-service">
+            {{each list.serverIncludeCode}}
+            <li>
+                <i class="daq-icon">&#xe6b6;</i>
+                <span>${name}</span>
+            </li>
+            {{/each}}
+        </ul>
+    </li>
+    <li>
+        <span><i class="daq-icon">&#xe711;</i> 网络</span>
+        <ul class="check-service">
+            {{if list.networkCode.length > 0}}
+            {{each list.networkCode}}
+            <li>
+                <i class="daq-icon">&#xe6b6;</i>
+                <span>${name}</span>
+            </li>
+            {{/each}}
+            {{else}}
+            <li>暂无数据</li>
+            {{/if}}
+        </ul>
+    </li>
+</script>
+<!--小贴士模板-->
+<script type="text/template" id="tipsTemp">
+    <h2 class="title">小贴士</h2>
+    {{each(i) list}}
+        {{html content}}
+    {{/each}}
+</script>
+<!--周边    -->
+<script type="text/template" id="aroundTemp">
+    {{each list}}
+    <li data-long="${lon}" data-lat="${lat}" data-name="${name}" data-logo="${logo}" data-phone="${phone}">
+        <div class="around-hotel-name">
+            <p>${name}</p>
+            <span>距该景区${distance}KM</span>
+        </div>
+        <div class="hotel-phone">
+            <i class="daq-icon">&#xe644;</i>
+            <span>电话： ${phone || '暂无数据'}</span>
+        </div>
+        <div class="hotel-address">
+            <i class="daq-icon">&#xe690;</i>
+            <span>地址：${tools.ellipsisContent(address,16) || '暂无数据'}</span>
+        </div>
+    </li>
+    {{/each}}
+</script>
+<!--评论列表    -->
+<script type="text/template" id="commentTemp">
+    <ul class="comment-list">
+        {{each(i) list}}
+        <li class="item">
+            <div class="user-head"><img src="${headPath || 'image/zw.jpg'}" alt=""></div>
+            <div class="comment">
+                <div class="title-cont">
+                    <p class="name">${name || '暂无'}</p>
+                    <p class="comment-star">
+                        {{each(i) startNum}}
+                        <i class="daq-icon">${startNum[i]}</i>
+                        {{/each}}
+                    </p>
+                </div>
+                <div class="time">${time || '暂无'}</div>
+                <div class="content-dis">
+                    ${comment || '暂无数据'}
+                </div>
+            </div>
+        </li>
+        {{/each}}
+    </ul>
+    <div class="page"></div>
+</script>
+<!--酒店产品列表-->
+<script type="text/template" id="roomListTemp">
+    {{each list}}
+    <li class="rooms">
+        <div class="top-img clearfix">
+            <div class="img">
+                <img src="${roomTypeImages[0] ||  'image/zw.jpg'}" alt="">
+            </div>
+            <div class="top-intro">
+                <p>${roomType}</p>
+                <ul class="rooms-facility">
+                    <li>窗户:${window}</li>
+                    <li>房间大小:${acreage}</li>
+                    <!--<li>所在楼层:12</li>-->
+                    <li>床型:${bedType}</li>
+                    <li>入住人数:${num}</li>
+                    <li>wifi(宽带):${wifi}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="rooms-name">
+            <div class="title">
+                <p class="r1">房型名称</p>
+                <p class="r2">床型</p>
+                <p class="r3">早餐</p>
+                <p class="r4">宽带</p>
+                <p class="r5">取消政策</p>
+                <p class="r6">日均价(含服务费)</p>
+            </div>
+            {{each products}}
+            <div class="title intro">
+                <p class="r1" title="${name}">${tools.ellipsisContent(name,12)}</p>
+                <p class="r2">单床</p>
+                <p class="r3">${breakfast || '暂无数据'}</p>
+                <p class="r4">${wifi || '赞无数据'}</p>
+                <p class="r5" title="${refundRule}">${tools.ellipsisContent(refundRule,12)}</p>
+                <p class="r6">¥<span>${dayPrice}</span></p>
+                <p class="r7">
+                    <a href="hotelpay-order.html?channelCode=jdzs&code=jdzs&productId=${productId}&hotelname=${hotelname}&hoteladdress=${hoteladdress}&stime=${stime}&etime=${etime}" class="reserve">预订</a>
+                    <a href="hotelpay-order.html?channelCode=jdzs&code=jdzs&productId=${productId}&hotelname=${hotelname}&hoteladdress=${hoteladdress}&stime=${stime}&etime=${etime}" class="pay-line">在线付</a>
+                </p>
+            </div>
+            {{/each}}
+        </div>
+    </li>
+    {{/each}}
+</script>
+<script>
+    var indexJs = {
+        init:function () {
+            tools.setTowLevelBanner();
+            this.getHotelDetail();// 获取酒店详情
+            this.praiseClick();//点赞
+            this.recommendClick();//推荐
+            this.enshrineClick();//收藏
+        },
+
+        //设置酒店入住时间和退房时间
+        setInRoom: function(name,address) {
+            var _this = this;
+            var getDate = new Date()
+            var nowDate = getDate.getFullYear()+"-" + (getDate.getMonth()+1) + "-" + getDate.getDate();
+            var start = laydate.render({
+                elem: '#stime',
+                min: nowDate,
+                showBottom: false,
+                change: function (date) {
+                },
+                done: function (value, date) {
+                    end.config.min.year = date.year;
+                    end.config.min.month = date.month - 1;
+                    end.config.min.date = date.date+1;
+                    // console.log(value)
+                    var stime = $('#stime').val()
+                    var etime = $('#etime').val()
+                    if(stime !== '' && etime != '') {
+                        _this.roomParams.startDate = stime;
+                        _this.roomParams.endDate = etime;
+                        stime = new Date(stime);
+                        stime = new Date(stime).getTime();
+                        etime = new Date(etime);
+                        etime = new Date(etime).getTime();
+                        var inRoomTime = etime -stime
+                        inRoomTime = inRoomTime/86400000
+                        $('.hotel-date .time').html('共'+inRoomTime+'晚')
+
+                        _this.getHotelRoomList(name,address,_this.roomParams.startDate,_this.roomParams.endDate)
+                    }
+                }
+            });
+            var end = laydate.render({
+                elem: '#etime',
+                showBottom: false,
+                change: function (date) {
+                },
+                done: function (value, date) {
+                    start.config.max.year = date.year;
+                    start.config.max.month = date.month - 1;
+                    start.config.max.date = date.date-1;
+                    var stime = $('#stime').val()
+                    var etime = $('#etime').val()
+                    if(stime !== '' && etime != '') {
+                        _this.roomParams.startDate = stime;
+                        _this.roomParams.endDate = etime;
+                        stime = new Date(stime);
+                        stime = new Date(stime).getTime();
+                        etime = new Date(etime);
+                        etime = new Date(etime).getTime();
+                        var inRoomTime = etime -stime
+                        inRoomTime = inRoomTime/86400000
+                        $('.hotel-date .time').html('共'+inRoomTime+'晚')
+
+                        _this.getHotelRoomList(name,address,_this.roomParams.startDate,_this.roomParams.endDate)
+                    }
+                }
+            });
+        },
+        //酒店基本信息
+        hotel:{
+            id:tools.getUrlParams('id') || '',
+            resourcecode:tools.getUrlParams('rid'),
+            hotelInfo: {}
+        },
+        // 周边信息配置
+        around: {
+            distance: 5, // 距离
+            latitude: '', // 经度
+            longitude: '', // 纬度
+            sourceType:'' //资源类型
+        },
+        // 评论列表配置
+        paramscomment:{
+            page:1,
+            limitPage:10,
+            sourceType: 'sourceType_2',
+            reId:tools.getUrlParams('id') || tools.getUrlParams('rid')
+        },
+        // 提交评论配置:
+        updataComment: {
+            star:0,
+        },
+        // 酒店产品配置
+        roomParams:{
+            resourcecode:'',
+            resourcecode:tools.getUrlParams('id') || tools.getUrlParams('rid'),
+            startDate:'',
+            endDate:''
+
+        },
+        //页面功能(龚小虎)
+        setPageFunction: function () {
+            $('.bottom').on('click',function () {
+                var $box = $('.inside-div')
+                var leng = $('.inside-div li').length
+                var $h = parseInt($box.css('marginTop'))
+                if($h == -(leng-5)*88 || leng <= 5 ){
+                    return false
+                }
+                $box.stop().css('marginTop',$h-88 + 'px').css("transition","all .1s");
+            });
+            $('.top').on('click',function () {
+                var $box = $('.inside-div')
+                var $h = parseInt($box.css('marginTop'))
+                var leng = $('.inside-div li').length
+                if($h == 0){
+                    return false
+                }
+                if(leng <= 5 ){
+                    return false
+                }
+                $box.stop().css('marginTop',$h+88 + 'px').css("transition","all .1s");
+            });
+            $(".inside-div li").mouseover(function () {
+                var $src = $(this).find("img").attr("src")
+                $(".big-img").find("img").attr("src",$src)
+            });
+
+//周边点击事件
+            $('.intro-down').on('click',function () {
+                var $box = $('.around-ul')
+                var leng = $('.around-ul li').length
+                var $h = parseInt($box.css('marginTop'))
+                if($h == -(leng-5)*92){
+                    return false
+                }
+                $box.stop().css('marginTop',$h-92 + 'px').css("transition","all .1s");
+                $(".intro-up").show()
+            });
+            // 监控滚动条 选中对应栏目
+            var detailnav = [];
+            for(var i =0;i<$('.detail-nav li').length;i++) {
+                detailnav.push($('.detail-nav li').eq(i).find('a').attr('data-type'))
+            }
+            $(window).scroll(function () {
+                bescroll = $(window).scrollTop();
+                for(var i= 0;i < detailnav.length; i++) {
+                    if(bescroll > $('#'+detailnav[i]).offset().top-120) {
+                        $('.detail-nav li').eq(i).addClass("active").siblings().removeClass('active')
+                    }
+                }
+            });
+
+            $('.intro-up').on('click',function () {
+                var $box = $('.around-ul')
+                var $h = parseInt($box.css('marginTop'))
+                var leng = $('.around-ul li').length
+                if($h == 0){
+                    return false
+                }
+                $box.stop().css('marginTop',$h+92 + 'px').css("transition","all .1s");
+            });
+            $(".around-ul li").mouseover(function () {
+                $(this).addClass('active').siblings().removeClass("active")
+            })
+
+
+
+
+//点击到指定位置
+            var needPos = $(".detail-nav li");
+            needPos.click(function () {
+                needPos.removeClass("active");
+                $(this).addClass("active");
+                var dataType = $(this).find('a').attr("data-type");
+                if($('.detail-nav').hasClass("curr")){
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-46}, 200);
+                }else{
+                    $('html,body').animate({scrollTop: $("#" + dataType + "").offset().top-92}, 200);
+                }
+            });
+            /*详情页面内容tit滚动判断固定位置*/
+            var Scrolltop = $(".detail-nav").offset().top;
+            $(window).scroll(function(){
+                var bodyScrolltop = document.documentElement.scrollTop + document.body.scrollTop;
+                if(bodyScrolltop >= Scrolltop){
+                    $(".detail-nav").addClass('curr');
+                }else if(bodyScrolltop < Scrolltop){
+                    $(".detail-nav").removeClass('curr');
+                }
+            });
+        },
+        // 获取酒店详情
+        getHotelDetail: function () {
+            var _this = this;
+            var $topTmpl = $("#topTemp");
+            var $topWrapper = $('.hotel-detail-top');
+            $topWrapper.empty();
+            var loading = tools.loading($topWrapper);
+            var params = {
+                url: 'hotel/detail',
+                data: {
+                    id: _this.hotel.id,
+                    resourcecode: _this.hotel.resourcecode
+                }
+            };
+            tools.request(params, function(res) {
+                console.log(res)
+                _this.paramscomment.reId = res.data.id
+                _this.hotel.id = res.data.id
+                loading.clean();
+                _this.hotel.hotelInfo = res.data;
+                res.data.startNum= ['&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;'];
+                // 酒店产品列表需要的资源编码
+                _this.roomParams.resourcecode = res.data.resourcecode
+                // 设置页面点评条数
+                $('a[data-type=comment]').html('点评('+res.data.commentNum+')')
+                //设置入住筛选
+                _this.setInRoom(res.data.name,res.data.address);
+                // 获取产品列表
+                _this.getHotelRoomList(res.data.name,res.data.address); //酒店产品列表
+                for(var i=0; i< parseInt(res.data.commentLevel); i++) {
+                    res.data.startNum[i]='&#xe62c;'
+                }
+                switch(parseInt(res.data.commentLevel))
+                {
+                    case 0:
+                        res.data.startName = '不满意'
+                        break;
+                    case 1:
+                        res.data.startName = '不满意'
+                        break;
+                    case 2:
+                        res.data.startName = '不满意'
+                        break;
+                    case 3:
+                        res.data.startName = '一般'
+                        break;
+                    case 4:
+                        res.data.startName = '非常满意'
+                        break;
+                    case 5:
+                        res.data.startName = '非常满意'
+                        break;
+                    default:
+                        res.data.startName = '暂无数据'
+                        break;
+                }
+                // 添加周边信息配置
+                _this.around.latitude = _this.hotel.hotelInfo.latitude
+                _this.around.longitude = _this.hotel.hotelInfo.longitude
+                $topTmpl.tmpl({list: res.data}).appendTo($topWrapper);
+                // 酒店介绍
+                $('#introTemp').tmpl({list: res.data}).appendTo($('#intro'));
+                // 酒店设施
+                for(var i= 0; i<res.data.roomFacilitiesCode.length; i++) {
+                    $('.facility-icon').find("li[data-code="+res.data.roomFacilitiesCode[i].code+"]").addClass("active")
+                }
+                $('#facilitiesTemp').tmpl({list: res.data}).appendTo($('.facility-list'));
+                /*分享*/
+                tools.share();
+                //收藏
+               /* $('.enshrinebtn').click(function(){
+                    var $this = $(this);
+                    tools.setCollect({
+                        selector:$this,
+                        id: $this.attr('data-id'),
+                        type: 'sourceType_2',
+                        content: $this.attr("data-content"),
+                        title: $this.attr("data-title"),
+                        active:"active",
+                        num:$this.parent().find('.num')
+                    });
+                });
+                //点赞
+                var betoken = tools.getCookie('token')
+                $('.pl_praised').click(function(){
+                    var selector = $(this).eq(0);
+                    var type = "praise";
+                    var resourceType = 'sourceType_2';
+                    var resourceId = $(this).attr("data-id");
+                    var total=$(this).attr("data-hnum");
+                    var title = $(this).attr('data-value')
+                    var options = {
+                        selector:selector,
+                        total:total,
+                        sourceType : resourceType,
+                        reId : resourceId,
+                        target :title,
+                        token:betoken
+                    };
+                    tools.getInteraction(options,"en");
+                });
+                // 推荐
+                $('.p1_recommend').click(function(){
+                    var selector = $(this).eq(0);
+                    var resourceType = 'sourceType_2';
+                    var resourceId = $(this).attr("data-id");
+                    var total=$(this).attr("data-hnum");
+                    var title = $(this).attr('data-value')
+                    console.log(total)
+                    var options = {
+                        total:total,
+                        selector:selector,
+                        sourceType : resourceType,
+                        reId : resourceId,
+                        target :title,
+                        token:betoken
+                    };
+                    tools.getRecommend(options,"en");
+                });*/
+                _this.setPageFunction();// 页面功能
+                _this.getHotelTips(); // 小贴士
+                _this.setBaiduMap(); // 设置百度地图
+                _this._mapEventBind(); //查看地图点击事件
+                _this.seeFullSummary(); //查看景区简介全部
+                // _this.setAroundMap(); //设置周边地图
+                // _this._getNearListInfo(); //设置周边资源
+                _this.updateCall(); //提交用户评论
+                _this.getComment();// 评论列表
+            })
+
+        },
+        //点赞{gxh修改}
+        praiseClick: function(){
+            $(document).on('click', '.pl_praised', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'thumb/saveThumb',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'sourceType_2',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '点赞成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        //推荐
+        recommendClick: function(){
+            $(document).on('click', '.p1_recommend', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'recommended/saveRecommend',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'sourceType_2',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '推荐成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        //收藏{gxh end}
+        enshrineClick: function(){
+            $(document).on('click', '.enshrinebtn', function(){
+                var token = tools.getCookie('token');
+                var $t = $(this);
+                var $num = $(this).find('.num');
+                if(token) {
+                    var params = {
+                        url: 'enshrine/saveEnshrine',
+                        data: {
+                            reId: $(this).attr('data-id'),
+                            target: $(this).attr('data-title'),
+                            sourceType: 'sourceType_2',
+                            token: token,
+                            content: ''
+                        }
+                    };
+                    tools.request(params, function(res){
+                        if(res.code === 0) {
+                            var num = $num.html() - 0;
+                            num++;
+                            $num.html(num);
+                            $t.addClass('active');
+                            $.toast({
+                                text: '收藏成功'
+                            })
+                        } else {
+                            $.toast({
+                                text: res.message
+                            })
+                        }
+                    });
+                } else {
+                    $.dialog({
+                        title:'温馨提示',
+                        message:'<p>当前站点为会员模式，请先登录</p>',
+                        width: 420,
+                        height:200,
+                        mask:true,
+                        footer: true,
+                        buttons: [
+                            {
+                                text :'去登录',
+                                className:'btn-blue',
+                                callback: function(){
+                                    tools.doLogin();
+                                }
+                            },
+                            {
+                                text :'取消',
+                                className:'btn-gray',
+                                callback: function(){}
+                            }
+                        ]
+                    });
+                }
+            });
+        },
+        // 设置百度地图
+        setBaiduMap: function () {
+            // 百度地图API功能
+            var map = new BMap.Map("daq-map");
+            var point = new BMap.Point(this.hotel.hotelInfo.longitude,this.hotel.hotelInfo.latitude);
+            map.centerAndZoom(point, 18);
+            map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            // 将标注添加到地图中
+            var opts = {
+                position : point,    // 指定文本标注所在的地理位置
+                offset   : new BMap.Size(0, -20)    //设置文本偏移量
+            };
+            var label = new BMap.Label("<div style='color: #fff;background:url(image/icon-bg.png);width: 110px;height: 30px;line-height: 30px;padding-left: 22px;'>"+tools.ellipsisContent(this.hotel.hotelInfo.name,6)+"</div>", opts);  // 创建文本标注对象
+            label.setStyle({
+                color : "#fff",
+                fontSize : "14px",
+//            height : "30px",
+//            width:"100px",
+                background:"rgba(255,255,255,0)",
+                border:"none",
+                fontFamily:"微软雅黑"
+            });
+            map.addOverlay(label);
+            //创建新图标
+            var myIcon = new BMap.Icon("image/add-icon.png", new BMap.Size(26,34));
+            var marker2 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+            map.addOverlay(marker2);
+        },
+        // 地图事件
+        _mapEventBind: function () {
+            var _this = this;
+            // 地图
+            $(".hotel-add").on("click", "a", function () {
+                $(".cover01,.cover-content-box").show();
+                var long = _this.hotel.hotelInfo.longitude;
+                var lat = _this.hotel.hotelInfo.latitude;
+                var name = _this.hotel.hotelInfo.name;;
+                $('.cover-tit').html(name);
+                _this._setMap(long, lat, name);
+            });
+            $(".cover-content-box .close-cover,.cover01").click(function () {
+                $(".cover01,.cover-content-box").hide();
+            });
+        },
+        // 设置地图  地址查看地图
+        _setMap: function (long, lat, address) {
+            // 百度地图API功能
+            var map = new BMap.Map("buyMap", {
+                enableMapClick: false
+            });
+            map.centerAndZoom(new BMap.Point(long, lat), 18);
+            map.enableScrollWheelZoom();
+            // 复杂的自定义覆盖物
+            function ComplexCustomOverlay(point, text) {
+                this._point = point;
+                this._text = text;
+            }
+
+            ComplexCustomOverlay.prototype = new BMap.Overlay();
+            ComplexCustomOverlay.prototype.initialize = function (map) {
+                this._map = map;
+                var div = this._div = document.createElement("div");
+                div.className = "map-icon-add maskes";
+                div.style.position = "absolute";
+                div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+                div.style.border = "none";
+                div.style.color = "white";
+                div.style.height = "18px";
+                div.style.whiteSpace = "nowrap";
+                div.style.MozUserSelect = "none";
+                div.style.fontSize = "12px";
+                div.setAttribute("title", this._text);
+                var span = this._span = document.createElement("span");
+                span.setAttribute("class", "hide");
+                div.appendChild(span);
+                span.appendChild(document.createTextNode(this._text));
+                var arrow = this._arrow = document.createElement("div");
+                arrow.style.background = "url(image/tri.png) no-repeat";
+                arrow.style.position = "absolute";
+                arrow.style.width = "10px";
+                arrow.style.height = "5px";
+                arrow.style.bottom = "-5px";
+                arrow.style.left = "50%";
+                arrow.style.marginLeft = "-5px";
+                arrow.style.overflow = "hidden";
+                div.appendChild(arrow);
+                map.getPanes().labelPane.appendChild(div);
+
+                return div;
+            };
+            ComplexCustomOverlay.prototype.draw = function () {
+                var map = this._map;
+                var pixel = map.pointToOverlayPixel(this._point);
+                this._div.style.left = (pixel.x - 25) - parseInt(this._arrow.style.left) + "px";
+                this._div.style.top = pixel.y - 55 + "px";
+            };
+            var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(long, lat), address);
+
+            map.addOverlay(myCompOverlay);
+            function addMarker(point) {
+                var myIcon = new BMap.Icon("image/buy-point.png", new BMap.Size(26, 32), {
+                    anchor: new BMap.Size(0, 0)
+                });
+                var marker = new BMap.Marker(point, {icon: myIcon});
+                map.addOverlay(marker);
+            }
+            var markPoint = new BMap.Point(long, lat);
+            addMarker(markPoint);
+        },
+        // 设置周边地图
+        setAroundMap: function () {
+            // 百度地图API功能
+            var map = new BMap.Map("map-around");
+            var point = new BMap.Point(this.hotel.hotelInfo.longitude,this.hotel.hotelInfo.latitude);
+            map.centerAndZoom(point, 18);
+            map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            // 将标注添加到地图中
+            var opts = {
+                position : point,    // 指定文本标注所在的地理位置
+                offset   : new BMap.Size(0, -20)    //设置文本偏移量
+            };
+            var label = new BMap.Label("<div style='color: #fff;background:url(image/icon-bg.png);width: 110px;height: 30px;line-height: 30px;padding-left: 22px;'>"+tools.ellipsisContent(this.hotel.hotelInfo.name,6)+"</div>", opts);  // 创建文本标注对象
+            label.setStyle({
+                color : "#fff",
+                fontSize : "14px",
+                background:"rgba(255,255,255,0)",
+                border:"none",
+                fontFamily:"微软雅黑"
+            });
+            map.addOverlay(label);
+            //创建新图标
+            var myIcon = new BMap.Icon("image/add-icon.png", new BMap.Size(26,34));
+            var marker2 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+            map.addOverlay(marker2);
+        },
+        //查看景区简介全部
+        seeFullSummary: function () {
+            var _this = this;
+            $('.seefullsummary').click(function () {
+                $.dialog({
+                    title: _this.hotel.hotelInfo.name,
+                    message: _this.hotel.hotelInfo.intro,
+                    width: 700,
+                    height: 300,
+                    mask: true,
+                    footer: false
+                });
+            })
+        },
+        //获取景区小贴士
+        getHotelTips: function () {
+            var _this = this;
+            var $tipsTmpl = $("#tipsTemp");
+            var $tipsWrapper = $('#tips');
+            $tipsWrapper.empty();
+            var loading = tools.loading($tipsWrapper);
+            var params = {
+                url: 'hotel/listTip',
+                data: {
+                    resourceId: _this.hotel.id,
+                }
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $tipsTmpl.tmpl({list: res.datas}).appendTo($tipsWrapper);
+                    } else {
+                        $tipsWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $tipsWrapper.html(tools.TRY_REFRESH);
+                }
+            })
+        },
+        // 请求周边信息列表
+        _getNearListInfo: function () {
+            var _this = this;
+            var $aroundTemp = $("#aroundTemp");
+            var $aroundWrapper = $('.bottom-hotel-name');
+            $aroundWrapper.empty();
+            var loading = tools.loading($aroundWrapper);
+            var params = {
+                url: 'scenery/around',
+                data: this.around
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                if (res.code === 0) {
+                    if (res.datas && res.datas.length > 0) {
+                        $aroundTemp.tmpl({list: res.datas}).appendTo($aroundWrapper);
+                    } else {
+                        $aroundWrapper.html(tools.NO_DATA);
+                    }
+                } else {
+                    $aroundWrapper.html(tools.TRY_REFRESH);
+                }
+
+                /**
+                 * 点击资源,地图显示对应的地点
+                 */
+                $(".bottom-hotel-name>li").on('click',function () {
+                    $(this).addClass('curr').siblings().removeClass('curr');
+                    var long = $(this).attr("data-long");
+                    var lat = $(this).attr("data-lat");
+                    var name = $(this).attr("data-name");
+                    $(this).parent("li").addClass("curr").siblings("li").removeClass("curr");
+                    _this.setMap(long,lat,name,'map-around');
+                });
+                /**
+                 * 点击距离,筛选资源
+                 */
+                $('.top-title>i').off().on('click', function () {
+                    var scenicKm = $(this).attr('data-value')
+                    $(this).addClass('active').siblings().removeClass('active')
+                    _this.around.distance = scenicKm;
+                    _this._getNearListInfo();
+                })
+                /**
+                 * 点击类型 筛选资源
+                 */
+                $('.around-ul>li').off().on('click',function () {
+                    $(this).addClass('active').siblings().removeClass('active');
+                    var scenicType = $(this).attr('data-type');
+                    _this.around.sourceType = scenicType;
+                    _this._getNearListInfo();
+                })
+                /**
+                 * 周边资源类型 上下选择
+                 */
+                $('.right-name .intro-down').on('click',function () {
+                    $('.around-ul').css('marginTop','-93px');
+                    $(this).css('display','none');
+                    $('.right-name .intro-up').css('display','block');
+                });
+                $('.right-name .intro-up').on('click',function () {
+                    $('.around-ul').css('marginTop','0px');
+                    $(this).css('display','none');
+                    $('.right-name .intro-down').css('display','block');
+                });
+            })
+        },
+        // 设置地图 在地图上放置图标
+        setMap: function(long, lat, name, mapname) {
+            // 百度地图API功能
+            var map = new BMap.Map(mapname);
+            var point = new BMap.Point(long,lat);
+            map.centerAndZoom(point, 18);
+            map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+            // 将标注添加到地图中
+            var opts = {
+                position : point,    // 指定文本标注所在的地理位置
+                offset   : new BMap.Size(0, -20)    //设置文本偏移量
+            };
+            var label = new BMap.Label("<div style='color: #fff;background:url(image/icon-bg.png);width:110px;height: 30px;line-height: 30px;padding-left: 22px;'>"+tools.ellipsisContent(name,6)+"</div>", opts);  // 创建文本标注对象
+            label.setStyle({
+                color : "#fff",
+                fontSize : "14px",
+//            height : "30px",
+//            width:"100px",
+                background:"rgba(255,255,255,0)",
+                border:"none",
+                fontFamily:"微软雅黑"
+            });
+            map.addOverlay(label);
+            //创建新图标
+            var myIcon = new BMap.Icon("image/add-icon.png", new BMap.Size(26,34));
+            var marker2 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
+            map.addOverlay(marker2);
+        },
+        // 提交用户评论
+        updateCall: function() {
+            var $submit = $('.updateCall');
+            var _this = this;
+            var star = 0
+            _this.setCommentStar();// 设置评论等级
+            $submit.click(function () {
+                var $content =$('.write-comment').val();
+                if($content === ''){
+                    $.dialog({
+                        title: '友情提示',
+                        message: '请填写评论内容',
+                        width: 400,
+                        height: 200,
+                        mask: true,
+                        footer: false
+                    });
+                    return;
+                }
+                // 获取用户登录的token
+                var betoken = tools.getCookie('token')
+                if(betoken) {
+                    tools.request({
+                        url:'/comment/saveComment',
+                        data:{
+                            sourceType:'sourceType_2',
+                            reId: _this.hotel.id,
+                            comment:$content,
+                            target:_this.hotel.hotelInfo.name,
+                            token:tools.getCookie('token'),
+                            star:_this.updataComment.star,
+                            // pics:pics
+                        }
+                    },function(result){
+                        if(result.code === 0){
+                            $.dialog({
+                                title: '评论成功',
+                                message: '评论成功,等待审核',
+                                width: 400,
+                                height: 200,
+                                mask: true,
+                                footer: false
+                            });
+                            $('.opabox').css('display','none');
+                            $('.comment-content').find('textarea').val('')
+                            $('.sub-comment').find('span').eq(1).html('<i class="daq-icon" data-value="1"></i><i class="daq-icon" data-value="2"></i><i class="daq-icon" data-value="3"></i><i class="daq-icon" data-value="4"></i><i class="daq-icon" data-value="5"></i>')
+                        }else{
+                            $.dialog({
+                                title: '友情提示',
+                                message: result.message,
+                                width: 400,
+                                height: 200,
+                                mask: true,
+                                footer: false
+                            });
+                            $('.comment-content').find('textarea').val('')
+                            $('.sub-comment').find('span').eq(1).html('<i class="daq-icon" data-value="1"></i><i class="daq-icon" data-value="2"></i><i class="daq-icon" data-value="3"></i><i class="daq-icon" data-value="4"></i><i class="daq-icon" data-value="5"></i>')
+                        }
+                    })
+                }else {
+                    window.location.href = "login.html";
+                }
+            })
+        },
+        // 设置评论等级 星星
+        setCommentStar: function () {
+            /**
+             * 选择评论星级
+             */
+            var _this = this;
+            $('.sub-comment i').on('click',function () {
+                var starNum = $(this).attr('data-value')
+                _this.updataComment.star = starNum;
+                switch (starNum) {
+                    case '1':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '2':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '3':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe67c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '4':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe67c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                    case '5':
+                        $('.sub-comment').html('<span>我要评论</span>\n' +
+                            '                            <span>\n' +
+                            '                                <i class="daq-icon" data-value="1">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="2">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="3">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="4">&#xe62c;</i>\n' +
+                            '                                <i class="daq-icon" data-value="5">&#xe62c;</i>\n' +
+                            '                            </span>')
+                        _this.setCommentStar();
+                        break;
+                }
+            })
+        },
+        //获取评论列表
+        getComment:function() {
+            var _this = this;
+            var $commentTmpl = $("#commentTemp");
+            var $commentWrapper = $('.comment-list');
+            $commentWrapper.empty();
+            var loading = tools.loading($commentWrapper);
+            var sendParams={
+                url:'comment/getCommentInfo',
+                data:_this.paramscomment,
+                method: 'GET'
+            };
+            tools.request(sendParams,function(res){
+                loading.clean();
+                if(res.code===0){
+                    if(res.datas.length>0){
+                        $(".all-comment .num").html(res.datas.length)
+                        for(var i = 0; i< res.datas.length; i++) {
+                            res.datas[i].startNum= ['&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;','&#xe67c;'];
+                            for(var j=0; j< parseInt(res.datas[i].star); j++) {
+                                res.datas[i].startNum[j]='&#xe62c;'
+                            }
+                        }
+
+                        $commentTmpl.tmpl({list: res.datas}).appendTo($commentWrapper);
+                        //分页
+                        var totalPage = 1;
+                        if(res.page){
+                            totalPage = res.page.totalPage;
+                        }
+                        tools.pageTurn({
+                            selector: '.page',
+                            total: totalPage,
+                            currPage: _this.paramscomment.page,
+                            limits: 3,
+                            click: function(paramscomment){
+                                $("body,html").scrollTop(0);
+                                getComment(paramscomment);
+                            },
+                            paramscomment:_this.paramscomment
+                        });
+                    }else{
+                        $(".all-comment .num").html(0)
+                        $commentWrapper.html(tools.NO_DATA);
+                    }
+                }else{
+                    $commentWrapper.html(tools.TRY_REFRESH);
+                }
+
+            })
+        },
+        // 获取酒店产品列表
+        getHotelRoomList: function (hotelname,hoteladdress,stime,etime) {
+            var _this = this;
+            var $listTmpl = $("#roomListTemp");
+            var $listWrapper = $('.hotel-rooms-list');
+            $listWrapper.empty();
+            var loading = tools.loading($listWrapper);
+            var params = {
+                url: 'hotel/productList',
+                data: this.roomParams
+            };
+            tools.request(params, function(res){
+                loading.clean();
+                // console.log(res,777)
+                if(res && res.datas.length>0){
+                    for(var i = 0; i< res.datas.length; i++) {
+                        res.datas[i].hotelname=encodeURI(encodeURI(hotelname))
+                        res.datas[i].hoteladdress=encodeURI(encodeURI(hoteladdress))
+                        res.datas[i].stime=encodeURI(encodeURI(stime))
+                        res.datas[i].etime=encodeURI(encodeURI(etime))
+                    }
+                    $listTmpl.tmpl({list: res.datas}).appendTo($listWrapper);
+                }else{
+                    $listWrapper.html(tools.NO_DATA);
+                }
+
+            })
+        }
+    }
+    $(function() {
+        indexJs.init();
+    })
+</script>
+</body>
+</html>

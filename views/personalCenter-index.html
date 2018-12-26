@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include("common/headinfo.html",{h_tit:'河北旅游电商资讯网_个人中心'})%>
+</head>
+<body>
+<!--页头-->
+<%-include("common/header.html")%>
+<div class="personalCenter-max personalCenter">
+    <div class="center clearfix">
+        <%-include("common/personal-nav.html")%>
+        <div class="person-content no-br">
+            <div class="info clearfix">
+                <div class="left clearfix js_info">
+
+                </div>
+                <div class="right js_orderNum">
+
+                </div>
+            </div>
+            <div class="nearorder bt20">
+                <div class="person-title clearfix">
+                    <h3 class="fl">
+                        近期订单
+                    </h3>
+                    <a href="personalCenter-allorder.html?type=all" class="fr">查看全部订单<i class="icon-more"></i></a>
+                </div>
+
+                <table class="ordertable">
+                    <thead>
+                    <tr>
+                        <th class="w408 text-left p20">产品信息</th>
+                        <th>购买日期</th>
+                        <th>数量</th>
+                        <th>总金额</th>
+                        <th>订单状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="js_orderList">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--页尾-->
+<%-include("common/footer.html")%>
+<!--个人资料-->
+<script type="text/template" id="infoTemp">
+    <p class="avator">
+        <img src="${ data.head || 'image/user-head.png'}" alt="${ data.nickname || data.account }">
+        <i></i>
+    </p>
+    <div class="userinfo">
+        <p class="name">
+            <span>${ data.nickname || data.account }</span>
+            <a href="personalCenter-userinfo.html">个人信息</a>
+        </p>
+        <p class="phone">
+            <span><i class="icon-phone"></i>已绑定手机：${ data.phone }</span>
+        </p>
+    </div>
+</script>
+<!--订单数量详情-->
+<script type="text/template" id="orderNumTemp">
+    <div class="item clearfix">
+        <i class="icon"></i>
+        <p class="num">${data.allOrder}</p>
+        <p class="name">全部订单</p>
+    </div>
+    <div class="item clearfix">
+        <i class="icon icon2"></i>
+        <p class="num num2">${data.initedOrder}</p>
+        <p class="name">待使用</p>
+    </div>
+    <div class="item clearfix">
+        <i class="icon icon3"></i>
+        <p class="num num3">${data.unpaidOrder}</p>
+        <p class="name">待付款</p>
+    </div>
+</script>
+<!--订单列表-->
+<script type="text/template" id="orderListTemp">
+    {{each list}}
+    <tr>
+        <td class="order-info">
+            <a href="javascript:;" class="img-box"><img src="${thumbnail || 'image/zw.jpg'}" alt="${ fullName }"></a>
+            <div>
+                <p class="txt1">订单号：${sn}</p>
+                <p>产品名称：
+                        {{if isMarketable}}
+                        {{if category === 'ticket'}}
+                        <a href="scenic-detail2.html?id=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }">
+                        {{else category === 'room'}}
+                        <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }">
+                        {{else category === 'line'}}
+                        <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }">
+                        {{else category === 'specialty'}}
+                        <a href="specialty-detail.html?id=${productId}&channelCode=tcgw&code=tcgw" title="${ fullName }">
+                        {{else category === 'team'}}
+                        <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }">
+                        {{/if}}
+                        {{else}}
+                        <a href="javascript:;" class="lowerFrame" title="${ fullName }">
+                        {{/if}}
+                        ${ tools.ellipsisContent(fullName,36) }</a></p>
+            </div>
+        </td>
+        <td class="time">${createDate}</td>
+        <td>
+            {{if child}}
+            成人：${quantity}  儿童：${child}
+            {{else}}
+            ${quantity}
+            {{/if}}
+        </td>
+        <td class="amount">￥${amount}</td>
+        <td>
+            ${orderStatus}
+        </td>
+        <td>
+            {{if orderStatus==="待付款"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                <a href="ticketonline-payment.html?id=${id}" class="cancel-btn">
+                {{else}}
+                <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                去付款</a>
+            </p>
+            <p class="btn-box">
+                <a href="javascript:;" data-sn="${sn}" class="cancel-btn js_close">取消订单</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="未发货"}}
+            <p class="btn-box">
+                <a href="personalCenter-applyrefund.html?orderId=${id}" class="cancel-btn">申请退款</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="已发货"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                {{if category === 'ticket'}}
+                <a href="scenic-detail2.html?id=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }" class="cancel-btn">
+                {{else category === 'room'}}
+                <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }" class="cancel-btn">
+                {{else category === 'line'}}
+                <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }" class="cancel-btn">
+                {{else category === 'specialty'}}
+                <a href="specialty-detail.html?id=${productId}&channelCode=tcgw&code=tcgw" title="${ fullName }" class="cancel-btn">
+                {{else category === 'team'}}
+                <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }" class="cancel-btn">
+                {{/if}}
+                {{else}}
+                <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                再次购买</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="待使用" || orderStatus === "已支付"}}
+            <p class="btn-box">
+                <a href="personalCenter-applyrefund.html?orderId=${id}" class="cancel-btn">申请退款</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{else orderStatus==="已退款" || orderStatus==="已取消" || orderStatus==="待评价" || orderStatus==="已消费" || orderStatus==="已签收"}}
+            <p class="btn-box">
+                {{if isMarketable}}
+                {{if category === 'ticket'}}
+                <a href="scenic-detail2.html?id=${productId}&channelCode=jqmp&code=jqmp" title="${ fullName }" class="cancel-btn">
+                {{else category === 'room'}}
+                <a href="hotel-detail.html?rid=${resourceCode}&channelCode=jdzs&code=jdzs" title="${ fullName }" class="cancel-btn">
+                {{else category === 'line'}}
+                <a href="line-detail.html?id=${productId}&channelCode=lyxl&code=lyxl" title="${ fullName }" class="cancel-btn">
+                {{else category === 'specialty'}}
+                <a href="specialty-detail.html?id=${productId}&channelCode=tcgw&code=tcgw" title="${ fullName }" class="cancel-btn">
+                {{else category === 'team'}}
+                <a href="food-detail.html?id=${productId}&channelCode=tsms&code=tsms" title="${ fullName }" class="cancel-btn">
+                {{/if}}
+                {{else}}
+                <a href="javascript:;" class="cancel-btn lowerFrame">
+                {{/if}}
+                再次购买</a>
+            </p>
+            <p class="btn-box">
+                <a href="personalCenter-orderdesc.html?orderId=${id}" class="cancel-btn">查看订单</a>
+            </p>
+            {{/if}}
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<script>
+    var infoJs = {
+        params : {
+          token: tools.getCookie('token')
+        },
+        init: function () {
+            this.loadInfo();
+            this.orderNumInfo();
+            this.loadList();
+        },
+        eventBind: function () {
+
+        },
+        loadList: function () {
+            var _this = this,
+                $box = $('.js_orderList');
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/orderList',
+                data: {
+                    token: _this.params.token,
+                    page: 1,
+                    limitPage: 6
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $box.empty();
+                    var list = result.datas;
+                    if(list.length > 0){
+                        $('#orderListTemp').tmpl({list: list}).appendTo($box);
+                    }else{
+                        $box.html("<tr><td colspan='6'>"+tools.NO_DATA+"</td></tr>")
+                    }
+                }else{
+                    $box.html(tools.TRY_REFRESH)
+                }
+            })
+        },
+        loadInfo: function () {
+            var _this = this,
+                $box = $('.js_info');
+            tools.request({
+                url: 'userInfo/getUserInfo',
+                data: {
+                    token: _this.params.token
+                }
+            },function (result) {
+                if(result.code === 0){
+                    $box.empty();
+                    var data = result.data;
+                    $('#infoTemp').tmpl({data: data}).appendTo($box);
+                    //下架判定
+                    $('.lowerFrame').off().click(function () {
+                        $.dialog({
+                            title: '温馨提示',
+                            message: '<p style="font-size:14px;color:#666;">商品已经下架</p>',
+                            width: 300,
+                            height: 200,
+                            mask: true,
+                            footer: true,
+                            buttons: [
+                                {
+                                    text :'确定',
+                                    className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                    callback:function(){
+
+                                    }
+                                }
+                            ]
+
+                        });
+                    });
+                    //取消订单
+                    $('.js_close').off().click(function () {
+                        var sn = $(this).attr('data-sn');
+                        $.dialog({
+                            title: '取消订单',
+                            message: '<p style="font-size:14px;color:#666;">确认要取消当前订单吗？</p>',
+                            width: 300,
+                            height: 200,
+                            mask: true,
+                            footer: true,
+                            buttons: [
+                                {
+                                    text :'确定',
+                                    className: 'cart-dialog-btn cart-dialog-btn-confirm',
+                                    callback:function(){
+                                        tools.request({
+                                            url: 'ds/qiandnApi/order-pc/cancel-order',
+                                            data:{
+                                                sn: sn,
+                                                token: tools.getCookie('token')
+                                            },
+                                            type: true
+                                        },function (result) {
+                                            if(result.code === 0){
+                                                _this.loadList();
+                                            }else{
+                                                alert(result.message);
+                                            }
+                                        })
+                                    }
+                                },
+                                {
+                                    text :'取消',
+                                    className: 'cart-dialog-btn cart-dialog-btn-cancel',
+                                    callback: function(){}
+                                }
+                            ]
+
+                        });
+                    })
+                }else{
+                    $box.html(tools.TRY_REFRESH)
+                }
+            })
+        },
+        orderNumInfo: function () {
+            var _this = this,
+                $box = $('.js_orderNum');
+            tools.request({
+                url: 'ds/qiandnApi/order-pc/orderCount',
+                data: {
+                    token: _this.params.token
+                },
+                type: true
+            },function (result) {
+                if(result.code === 0){
+                    $box.empty();
+                    var data = result.data;
+                    $('#orderNumTemp').tmpl({data: data}).appendTo($box);
+                }else{
+                    $box.html(tools.TRY_REFRESH)
+                }
+            })
+        }
+    };
+    $(function () {
+        infoJs.init();
+    })
+</script>
+</body>
+</html>
